@@ -1,6 +1,7 @@
 var express = require('express');
 var index = require('./mobile-routes/index');
 var path = require('path');
+var login = require('./mobile-routes/login');
 const dotenv = require('dotenv');
 
 dotenv.config();
@@ -14,6 +15,7 @@ app.set('views', path.join(__dirname, 'mobile-views'));
 app.set('view engine', 'ejs');
 
 app.use(index);
+app.use('/login', login);
 
 app.listen(Port, (err) => {
     if (err)

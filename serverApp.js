@@ -15,5 +15,5 @@ app.listen(Port, (err) => {
     if (err)
         console.log(err);
     else
-        console.log("mobile app is listening on port: "+Port);
+        console.log("server app is listening on port: "+Port);
 })
