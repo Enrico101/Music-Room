@@ -1,8 +1,12 @@
 var express = require('express');
 var index = require('./mobile-routes/index');
+const dotenv = require('dotenv');
 
+dotenv.config();
+
+var serverAppPort = process.env.SERVER_APP_PORT;
 var secretString = Math.floor((Math.random() * 10000) + 1);
-var Port = 3003;
+var Port = serverAppPort;
 var app = express();
 
 app.set('view engine', 'ejs');
