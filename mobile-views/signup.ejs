@@ -31,8 +31,8 @@
             <hr>
             <div class="row">
                 <div class="col-sm-" style="margin: auto;">
-                    <p style="font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; color: black">
-                        To continue, log in to Music Room.
+                    <p style="font-weight: bold; font-size: larger;font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; color: black">
+                        Sign up to start listening.
                     </p>
                 </div>
             </div>
@@ -51,40 +51,48 @@
                     <button style="width: 250px; border-radius: 20px; background-color: white; border-color: #333333; color: #333333;" type="button" class="btn btn-primary">GOOGLE</button>
                 </div>
             </div>
-            <div class="row" style="margin-bottom: 10px;">
+            <div class="row" style="margin-bottom: -7px;">
                 <div class="col-sm-" style="margin: auto;">
                    <p style="font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; color: black">OR</p>
                 </div>
             </div>
-            <div class="row" style="margin-bottom: 10px;">
-                <div class="col-sm-" style="margin: auto;">
-                   <form action="">
-                        <p style="font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; color: black; margin-bottom: 5px;">
-                            Email address or username
-                        </p>
-                        <input type="text" style="width: 300px; margin-bottom: 10px;" placeholder="Email address or username">
-                        <p style="font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; color: black; margin-bottom: 5px;">
-                            Passowrd
-                        </p>
-                        <input type="text" style="width: 300px; margin-bottom: 12px;" placeholder="Password">
-                        <div style="margin: auto; margin-bottom: 15px;">
-                            <a style="color: grey; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;" href="">Forgot your password?</a>
-                        </div>
-                        <input class="btn btn-outline-primary" type="text" style="margin-left: 22px;color: white; width: 250px; border-radius: 20px; background-color: #AA076B; border-color: #AA076B;" value="LOGIN">
-                   </form>
-                </div>
-            </div>
-            <hr>
             <div class="row">
                 <div class="col-sm-" style="margin: auto;">
                     <p style="font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; color: black">
-                        Don't have an account?
+                        Sign up with your email address
                     </p>
                 </div>
             </div>
-            <div class="row" style="margin-bottom: 15px;">
+            <div class="row" style="margin-bottom: 10px;">
                 <div class="col-sm-" style="margin: auto;">
-                    <a style="width: 250px; border-radius: 20px; background-color: white; border-color: #333333; color: #333333;" type="button" class="btn btn-primary" href="/signup">SIGNUP FOR MUSIC ROOM</a>
+                   <form action="/signup" method="POST">
+                        <p style="font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; color: black; margin-bottom: 5px;">
+                            What is your username?
+                        </p>
+                        <input type="text" name="username" style="width: 300px; margin-bottom: 10px;" placeholder="Enter your username" required>
+                        <p style="font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; color: black; margin-bottom: 5px;">
+                            What is your email?
+                        </p>
+                        <input type="email" name="email" style="width: 300px; margin-bottom: 10px;" placeholder="Enter your email" required>
+                        <p style="font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; color: black; margin-bottom: 5px;">
+                            Confirm your email
+                        </p>
+                        <input type="email" name="emailConfirm" style="width: 300px; margin-bottom: 10px;" placeholder="Enter your email again." required>
+                        <p style="font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; color: black; margin-bottom: 5px;">
+                            Passowrd
+                        </p>
+                        <input type="password" name="password" style="width: 300px; margin-bottom: 12px;" placeholder="Password" required>
+                        <div style="margin: auto; margin-bottom: 15px;">
+                        </div>
+                        <input class="btn btn-outline-primary" type="submit" style="margin-left: 22px;color: white; width: 250px; border-radius: 20px; background-color: #AA076B; border-color: #AA076B;" value="SIGNUP">
+                   </form>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-" style="margin: auto;">
+                    <p style="font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; color: black">
+                        Have an account? <a href="/login" style="font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; color: #AA076B">Log in.</a>
+                    </p>
                 </div>
             </div>
         </div>

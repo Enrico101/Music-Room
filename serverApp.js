@@ -1,5 +1,6 @@
 var express = require('express');
 var index = require('./mobile-routes/index');
+var newUser = require('./server-routes/newUser');
 const dotenv = require('dotenv');
 
 dotenv.config();
@@ -10,6 +11,7 @@ var Port = serverAppPort;
 var app = express();
 
 app.set('view engine', 'ejs');
+app.use('/newUser', newUser);
 
 app.listen(Port, (err) => {
     if (err)

@@ -2,6 +2,7 @@ var express = require('express');
 var index = require('./mobile-routes/index');
 var path = require('path');
 var login = require('./mobile-routes/login');
+var signup = require('./mobile-routes/signup');
 const dotenv = require('dotenv');
 
 dotenv.config();
@@ -16,6 +17,7 @@ app.set('view engine', 'ejs');
 
 app.use(index);
 app.use('/login', login);
+app.use('/signup', signup);
 
 app.listen(Port, (err) => {
     if (err)
@@ -23,3 +25,6 @@ app.listen(Port, (err) => {
     else
         console.log("mobile app is listening on port "+Port);
 })
+
+//ngrok for public server
+
