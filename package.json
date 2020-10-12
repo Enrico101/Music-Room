@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/Enrico101/Music-Room#readme",
   "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
     "dotenv": "^8.2.0",
     "ejs": "^3.1.5",
     "express": "^4.17.1",
@@ -26,6 +27,7 @@
     "mysql": "^2.18.1",
     "ngrok": "^3.3.0",
     "serve": "^11.3.2",
+    "socket.io": "^2.3.0",
     "unirest": "^0.6.0",
     "validator": "^13.1.17"
   },

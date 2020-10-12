@@ -20,6 +20,94 @@
   </head>
   <body>
         <div class="container-fluid">
+            <%
+                console.log("hello: "+typeof signupInfo);
+                if (typeof signupInfo !== 'undefined')
+                {
+                    console.log("errors occred");
+                    if (signupInfo == "missing fields")
+                    {
+            %>
+                        <div class="alert alert-danger alert-dismissible fade show">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <strong>Registration failed!</strong> There are missing fields.
+                        </div>
+            <%
+                    }
+                    else if (signupInfo == "An unkown error occured")
+                    {
+            %>
+                        <div class="alert alert-danger alert-dismissible fade show">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <strong>Registration failed!</strong> An unkonw error occured.
+                        </div>
+            <%
+                    }
+                    else if (signupInfo == "Password format is incorrect")
+                    {
+            %>
+                        <div class="alert alert-danger alert-dismissible fade show">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <strong>Registration failed!</strong> Password format is incorrect.
+                        </div>
+            <%
+                    }
+                    else if (signupInfo == "Username format is incorrect")
+                    {
+            %>
+                        <div class="alert alert-danger alert-dismissible fade show">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <strong>Registration failed!</strong> Username format is incorrect.
+                        </div>
+            <%
+                    }
+                    else if (signupInfo == "Emails do not match")
+                    {
+            %>
+                        <div class="alert alert-danger alert-dismissible fade show">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <strong>Registration failed!</strong> Emails do not match.
+                        </div>
+            <%
+                    }
+                    else if (signupInfo == "Incorrect email format")
+                    {
+            %>
+                        <div class="alert alert-danger alert-dismissible fade show">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <strong>Registration failed!</strong> Incorrect email format.
+                        </div>
+            <%
+                    }
+                    else if (signupInfo == "There are missing fields")
+                    {
+            %>
+                        <div class="alert alert-danger alert-dismissible fade show">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <strong>Registration failed!</strong> There are missing fields.
+                        </div>
+            <%
+                    }
+                    else if (signupInfo == "Email already exists")
+                    {
+            %>
+                        <div class="alert alert-danger alert-dismissible fade show">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <strong>Registration failed!</strong> Email already exists.
+                        </div>
+            <%
+                    }
+                    else if (signupInfo == "Username already exists")
+                    {
+            %>
+                        <div class="alert alert-danger alert-dismissible fade show">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <strong>Registration failed!</strong> Username already exists.
+                        </div>
+            <%
+                    }
+                }
+            %>
             <div class="row">
                 <div class="sm-col-" style="margin: auto;">
                     <div style="margin-top: 10px;">
@@ -38,7 +126,7 @@
             </div>
             <div class="row" style="margin-bottom: 8px;">
                 <div class="col-sm-" style="margin: auto;">
-                    <button style="width: 250px; border-radius: 20px; background-color: #0047b3; border-color: #0047b3;" type="button" class="btn btn-primary">FACEBOOK</button>
+                    <a style="width: 250px; border-radius: 20px; background-color: #0047b3; border-color: #0047b3;" type="button" class="btn btn-primary" href="/signup/auth/facebook">FACEBOOK</a>
                 </div>
             </div>
             <div class="row" style="margin-bottom: 8px;">

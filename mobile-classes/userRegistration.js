@@ -19,7 +19,7 @@ class userRegistration {
                 {
                     if (validator.isAlpha(this.username))
                     {
-                        if (validator.isAlphanumeric(this.password) && validator.isByteLength(this.email, {min: 6, max: 50}))
+                        if (validator.isAlphanumeric(this.password) && validator.isByteLength(this.password, {min: 6, max: 50}))
                         {
                             return {bool: true, reason: "all fields are correct"};
                         }

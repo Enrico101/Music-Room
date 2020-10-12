@@ -20,6 +20,47 @@
   </head>
   <body>
         <div class="container-fluid">
+        <%
+            if (typeof info !== 'undefined')
+            {
+                if (info == "user signed up")
+                {
+        %>
+                    <div class="alert alert-success alert-dismissible fade show">
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        <strong>Registration success!</strong>.
+                    </div>
+        <%
+                }                    
+                else if (info == "Incorrect password")
+                {
+        %>
+                    <div class="alert alert-danger alert-dismissible fade show">
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        <strong>Login failed!</strong> Incorrect password.
+                    </div>
+        <%
+                }                    
+                else if (info == "No user found")
+                {
+        %>
+                    <div class="alert alert-danger alert-dismissible fade show">
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        <strong>Login failed!</strong> Credentials provided does not exist.
+                    </div>
+        <%
+                }
+                else if (info == "Empty fields")
+                {
+        %>
+                    <div class="alert alert-danger alert-dismissible fade show">
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        <strong>Login failed!</strong> Missing fields.
+                    </div>
+        <%
+                }
+            }
+        %>
             <div class="row">
                 <div class="sm-col-" style="margin: auto;">
                     <div style="margin-top: 10px;">
@@ -58,19 +99,19 @@
             </div>
             <div class="row" style="margin-bottom: 10px;">
                 <div class="col-sm-" style="margin: auto;">
-                   <form action="">
+                   <form action="/login/verify" method="POST">
                         <p style="font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; color: black; margin-bottom: 5px;">
-                            Email address or username
+                            Username
                         </p>
-                        <input type="text" style="width: 300px; margin-bottom: 10px;" placeholder="Email address or username">
+                        <input type="text" style="width: 300px; margin-bottom: 10px;" name="username" placeholder="Username">
                         <p style="font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; color: black; margin-bottom: 5px;">
-                            Passowrd
+                            Password
                         </p>
-                        <input type="text" style="width: 300px; margin-bottom: 12px;" placeholder="Password">
+                        <input type="password" style="width: 300px; margin-bottom: 12px;" name="password" placeholder="Password">
                         <div style="margin: auto; margin-bottom: 15px;">
                             <a style="color: grey; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;" href="">Forgot your password?</a>
                         </div>
-                        <input class="btn btn-outline-primary" type="text" style="margin-left: 22px;color: white; width: 250px; border-radius: 20px; background-color: #AA076B; border-color: #AA076B;" value="LOGIN">
+                        <input class="btn btn-outline-primary" type="submit" style="margin-left: 22px;color: white; width: 250px; border-radius: 20px; background-color: #AA076B; border-color: #AA076B;" value="LOGIN">
                    </form>
                 </div>
             </div>
