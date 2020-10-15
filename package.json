@@ -5,8 +5,8 @@
   "main": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "cross-env NODE_ENV=production node mobileApp.js and node serverApp.js",
-    "dev": "cross-env NODE_ENV=development nodemon mobileApp.js and nodemon serverApp.js",
+    "start": "cross-env NODE_ENV=production node mobileApp.js & node serverApp.js",
+    "dev": "cross-env NODE_ENV=development nodemon mobileApp.js & nodemon serverApp.js",
     "devServ": "nodemon serverApp.js",
     "devMob": "nodemon mobileApp.js"
   },

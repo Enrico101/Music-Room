@@ -9,7 +9,7 @@ var session = require('express-session');
 const MySQLStore = require('express-mysql-session')(session);
 
 dotenv.config();
-var passportSetUp = require('./server-routes/passportAuth');
+var passportSetUp = require('./mobile-routes/passportAuth');
 var eventEmitter = new events.EventEmitter();
 var mobileAppPort = process.env.MOBILE_APP_PORT || 5001;
 var secretString = Math.floor((Math.random() * 10000) + 1);
