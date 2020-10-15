@@ -14,12 +14,7 @@ router = express.Router();
 //     extended: 'true'
 // }));
 
-<<<<<<< HEAD
-router.get('/', (req, res) => {
-    console.log("userInbfo: "+req.session.userInfo);
-=======
 router.get('/', redirectLogin, (req, res) => {
->>>>>>> 90bf530aec4d532df58662c5a0be11bb2bbd8028
     var myEventEmitter = req.app.get('myEventEmitter'); //Getting the same event emitter instance from the mobileApp.js
     var url = "https://api.deezer.com/chart/0/tracks";
     var url_2 = "https://api.deezer.com/chart/0/albums";

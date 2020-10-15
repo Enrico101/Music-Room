@@ -10,13 +10,8 @@ router = express.Router();
 //     extended: 'true'
 // }));
 
-<<<<<<< HEAD
-router.get('/', (req, res) => {
-        res.render('search');
-=======
 router.get('/', redirectLogin, (req, res) => {
     res.render('search');
->>>>>>> 90bf530aec4d532df58662c5a0be11bb2bbd8028
 })
 
 router.get('/results', (req, res) => {

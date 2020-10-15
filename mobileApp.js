@@ -1,16 +1,5 @@
 var express = require('express');
 var path = require('path');
-<<<<<<< HEAD
-var login = require('./mobile-routes/login');
-var signup = require('./mobile-routes/signup');
-var home = require('./mobile-routes/home');
-var deezer_auth = require('./mobile-routes/deezer_auth');
-var search = require('./mobile-routes/search');
-var album = require('./mobile-routes/album');
-var music_player = require('./mobile-routes/music_player');
-var channel = require('./mobile-routes/channel');
-=======
->>>>>>> 90bf530aec4d532df58662c5a0be11bb2bbd8028
 var socket = require('socket.io');
 var events = require('events');
 const passport = require('passport');
@@ -22,7 +11,7 @@ const MySQLStore = require('express-mysql-session')(session);
 dotenv.config();
 var passportSetUp = require('./server-routes/passportAuth');
 var eventEmitter = new events.EventEmitter();
-var mobileAppPort = process.env.MOBILE_APP_PORT;
+var mobileAppPort = process.env.MOBILE_APP_PORT || 5001;
 var secretString = Math.floor((Math.random() * 10000) + 1);
 var Port = mobileAppPort;
 var app = express();
@@ -68,6 +57,9 @@ var auth = require('./mobile-routes/oauth');
 var logout = require('./mobile-routes/logout');
 var search = require('./mobile-routes/search');
 var index = require('./mobile-routes/index');
+var album = require('./mobile-routes/album');
+var music_player = require('./mobile-routes/music_player');
+var channel = require('./mobile-routes/channel');
 
 
 app.use(index);
@@ -86,8 +78,9 @@ var server = app.listen(Port, (err) => {
     if (err)
         console.log(err);
     else
-        console.log("mobile app is listening on port "+Port);
+        console.log(`Server running in ${process.env.NODE_ENV} mode on port ${Port}`);
 })
+
 
 //socket io
 var io = socket(server);

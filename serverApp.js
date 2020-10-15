@@ -8,7 +8,7 @@ dotenv.config();
 
 var serverAppPort = process.env.SERVER_APP_PORT;
 var secretString = Math.floor((Math.random() * 10000) + 1);
-var Port = serverAppPort;
+var Port = serverAppPort || 5000;
 var app = express();
 app.set('view engine', 'ejs');
 app.use('/newUser', newUser);
@@ -18,5 +18,5 @@ app.listen(Port, (err) => {
     if (err)
         console.log(err);
     else
-        console.log("server app is listening on port: "+Port);
+        console.log(`Server running in ${process.env.NODE_ENV} mode on port ${Port}`);
 })
