@@ -1,22 +1,16 @@
 var express = require('express');
-var session = require('express-session');
-var bodyParser = require('body-parser');
-var db = require('../database')
+// var bodyParser = require('body-parser');
+var db = require('../database');
+const {redirectLogin, redirectDashboard} = require('./accessControls');
 var validator = require('validator');
 var unirest = require('unirest');
 
 router = express.Router();
-var secretString = Math.floor((Math.random() * 10000) + 1);
-router.use(session({
-    secret: secretString.toString(),
-    resave: true,
-    saveUninitialized: true
-}));
-router.use(bodyParser.urlencoded({
-    extended: 'true'
-}));
+// router.use(bodyParser.urlencoded({
+//     extended: 'true'
+// }));
 
-router.get('/', (req, res) => {
+router.get('/', redirectLogin, (req, res) => {
     var myEventEmitter = req.app.get('myEventEmitter'); //Getting the same event emitter instance from the mobileApp.js
     var url = "https://api.deezer.com/chart/0/tracks";
     var url_2 = "https://api.deezer.com/chart/0/albums";
@@ -46,7 +40,10 @@ router.get('/', (req, res) => {
             //myEventEmitter.emit('FoundTopTracks', response.body);
         }
     })
-    res.render('home');
+    let user = req.session;
+    res.render('home', {
+        data: user
+    });
 })
 
 module.exports = router;

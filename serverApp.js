@@ -10,7 +10,6 @@ var serverAppPort = process.env.SERVER_APP_PORT;
 var secretString = Math.floor((Math.random() * 10000) + 1);
 var Port = serverAppPort;
 var app = express();
-
 app.set('view engine', 'ejs');
 app.use('/newUser', newUser);
 app.use('/verifyUser', verifyUser);

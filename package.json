@@ -1,11 +1,12 @@
 {
   "name": "music-room",
   "version": "1.0.0",
-  "description": "",
+  "description": "This project aims to tackle all the concepts necessary to the creation of a mobile, connected and collaborative application taking into account the constraints of a real product.",
   "main": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon app.js"
+    "devServ": "nodemon serverApp.js",
+    "devMob": "nodemon mobileApp.js"
   },
   "repository": {
     "type": "git",
@@ -19,13 +20,19 @@
   "homepage": "https://github.com/Enrico101/Music-Room#readme",
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.19.0",
     "dotenv": "^8.2.0",
     "ejs": "^3.1.5",
     "express": "^4.17.1",
+    "express-mysql-session": "^2.1.4",
     "express-session": "^1.17.1",
     "localtunnel": "^2.0.0",
     "mysql": "^2.18.1",
     "ngrok": "^3.3.0",
+    "passport": "^0.4.1",
+    "passport-42": "^1.2.6",
+    "passport-facebook": "^3.0.0",
+    "passport-google-oauth20": "^2.0.0",
     "serve": "^11.3.2",
     "socket.io": "^2.3.0",
     "unirest": "^0.6.0",
