@@ -17,6 +17,19 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <!-- Font awesome -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    <!-- Scrollmenu -->
+    <style>
+        .scrolling-wrapper {
+            overflow: auto;
+            white-space: nowrap;
+        }
+        .card {
+            display: inline-block;
+            text-align: center;
+            padding: 14px;
+            text-decoration: none;
+            }
+    </style>
   </head>
   <body style="background: linear-gradient(to right, #16222A, #3A6073); border-radius: 6px; height: 120px;">
     <nav class="navbar navbar-expand-sm" style="background-color: black;">
@@ -42,23 +55,56 @@
         </div>
     </nav>    
     <div class="container-fluid">
-        <div class="row" style="margin-top: 145px;">
-            <div class="col-sm-" style="margin: auto;">
-                <p style="font-size: 40px; color: white; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;" id="trackTitle">Hi there!</p>
-            </div>
-        </div>
         <div class="row">
-            <div col-sm- style="margin: auto; margin-top: -15px;">
-                <p style="font-size: 15px; color: white; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;" id="trackTitle">Jump right in by searrching for something</p>
+            <div class="col-sm- scrolling-wrapper" id="tracks">
+                <%
+                    var x = 0;
+
+                    while (albums.data[x])
+                    {
+                        var url_loc = "/album/"+albums.data[x].id;
+                %>
+                        <div class="card" style="background-color: rgba(0, 0, 0, 0); border-color: rgba(0, 0, 0, 0);">
+                            <div class="list-group">
+                                <a href=<%= url_loc %> class="list-group-item list-group-item-action" style="background-color: rgba(0, 0, 0, 0); border-color: rgba(0, 0, 0, 0);">
+                                    <img class="shadow-lg p-3 bg-white mb-5" src=<%= albums.data[x].cover_medium %>>
+                                    <p style="font-size: 20px; color: white; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; margin-top: -35px;">
+                                        <%=albums.data[x].title%>
+                                    </p>
+                                </a>
+                            </div>
+                        </div>
+                <%
+                        x++;
+                    }
+                %>
             </div>
         </div>
-        <div class="row">
-            <div class="col-sm-" style="margin: auto; margin-top: 10px;">
-                <form action="/search/results" method="GET">
-                    <input type="search" name="search_request" style="width: 300px; border: 0px; height: 40px; border-radius: 5px;" placeholder="   Search for songs and albums">
-                </form>
-            </div>
-        </div>
+        <br>
+            <%
+                var y = 0;
+
+                while (songs.data[y])
+                {
+                    var song_name = songs.data[y].title;
+                    var artist_name = songs.data[y].artist.name;
+                    var id = songs.data[y].id;
+             %>
+                    <div class="row" style="margin-bottom: 10px;">
+                        <div class="col-sm-">
+                            <div class="list-group">
+                                <a href="/music_player/<%=song_name+'/'+artist_name+'/'+id%>" class="list-group-item list-group-item-action" style="background-color: rgba(0, 0, 0, 0); border-color: rgba(0, 0, 0, 0);">
+                                    <img src=<%=songs.data[y].album.cover_small%>>
+                                    <span style="margin-left: 10px; font-size: 15px; color: white; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; margin-top: -35px;"><%= songs.data[y].title_short%><span> | </span>song - <%= songs.data[y].artist.name%></span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+            <%
+                    y++;
+                }
+            %>
+        <br>
     </div>
     <nav class="navbar navbar-expand-sm fixed-bottom justify-content-center" style="background-color: black; border-color: black;">
         <a href="/home"><i style="color: white; margin-right: 30px;" class="fas fa-home fa-2x"></i></a>

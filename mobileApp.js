@@ -6,6 +6,9 @@ var signup = require('./mobile-routes/signup');
 var home = require('./mobile-routes/home');
 var deezer_auth = require('./mobile-routes/deezer_auth');
 var search = require('./mobile-routes/search');
+var album = require('./mobile-routes/album');
+var music_player = require('./mobile-routes/music_player');
+var channel = require('./mobile-routes/channel');
 var socket = require('socket.io');
 var events = require('events');
 const dotenv = require('dotenv');
@@ -28,6 +31,9 @@ app.use('/signup', signup);
 app.use('/home', home);
 app.use('/deezer_auth', deezer_auth);
 app.use('/search', search);
+app.use('/album', album);
+app.use('/music_player', music_player);
+app.use('/channel', channel);
 
 var server = app.listen(Port, (err) => {
     if (err)

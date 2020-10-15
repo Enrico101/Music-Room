@@ -16,30 +16,30 @@ router.use(bodyParser.urlencoded({
     extended: 'true'
 }));
 
-router.get('/', (req, res) => {
-        res.render('search');
-})
-
-router.get('/results', (req, res) => {
-    var musicSearch = req.query.search_request;
-
-    if (musicSearch != undefined)
+router.get('/:id', (req, res) => {
+    if (req.params.id != undefined)
     {
-        console.log("musicSearch: "+musicSearch);
         var request, request_2;
-        var url = "https://api.deezer.com/search/album?q="+musicSearch;
-        var url_2 = "https://api.deezer.com/search/track?q="+musicSearch;
+        var url = "https://api.deezer.com/album/"+req.params.id+"/tracks";
+        var image_url = "https://api.deezer.com/album/"+req.params.id;
 
         request = unirest('GET', url);
-        request_2 = unirest('GET', url_2);
-
+        request_2 = unirest('GET', image_url);
         request.end((response) => {
             request_2.end((response_2) => {
-                res.render('searchResults', {albums: response.body, songs: response_2.body});
+                if (response || response_2)
+                {
+                    res.render('album', {album_name: response_2.body.title, album_image: response_2.body.cover_medium, album_songs: response.body})
+                }
+                else
+                {
+                    res.redirect('/search');
+                }
             })
         })
     }
     else
-        res.render('search');
+        res.redirect('/search');
 })
+
 module.exports = router;

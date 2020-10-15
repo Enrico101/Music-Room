@@ -4,6 +4,7 @@ var bodyParser = require('body-parser');
 var db = require('../database')
 var validator = require('validator');
 var unirest = require('unirest');
+var bcrypt = require('bcrypt-nodejs');
 
 router = express.Router();
 var secretString = Math.floor((Math.random() * 10000) + 1);
@@ -26,7 +27,10 @@ router.post('/verify', (req, res) => {
 
     if(validator.isEmpty(username) == false && validator.isEmpty(password) == false)
     {
-        var request = unirest('GET', 'http://localhost:3003/verifyUser').send({"username": username, "password": password});
+        var salt_rounds = 5;
+        var salt = bcrypt.genSaltSync(salt_rounds);
+        var hash = bcrypt.hashSync(password, salt);
+        var request = unirest('GET', 'http://localhost:3003/verifyUser').send({"username": username, "password": hash});
 
         request.end((response) => {
             if (response)
@@ -41,11 +45,12 @@ router.post('/verify', (req, res) => {
                 }
                 else
                 {
-                    req.session.userInfo = response.body;
+                    req.session.userInfo = "dsdsasa";
+                    console.log("dsdss: "+req.session.userInfo);
                     var app_id = process.env.APP_ID;
                     var redirect_uri = process.env.REDIRECT_URI;
                     var url = "https://connect.deezer.com/oauth/auth.php?app_id="+app_id+"&redirect_uri="+redirect_uri+"&perms=basic_access,email,offline_access,manage_library";
-                    res.redirect(url);
+                    res.redirect('/home');
                     //-----------------------------------------
                 }
             }

@@ -17,6 +17,34 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <!-- Font awesome -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    <!-- Deezer API-->
+    <script src="https://cdns-files.dzcdn.net/js/min/dz.js"></script>
+    <script>
+        var accessToken = `<%=access_token%>`;
+        console.log("access toke: "+accessToken);
+        DZ.init({
+            appId  : '439462',
+            channelUrl : 'http://localhost:3002/channel'
+        });
+        var sdk_option = {
+            token: 
+            {
+                access_token: "<%=access_token%>",
+                expire: '0',
+            },
+            player: 
+            {
+                current_track: '',
+                muted: false,
+                repeat: 1,
+                shuffle: false,
+                volume: 100,
+            }
+        }
+        DZ.ready(function(sdk_options){
+	        console.log('DZ SDK is ready', sdk_options);
+        });
+    </script>
   </head>
   <body style="background: linear-gradient(to right, #16222A, #3A6073); border-radius: 6px; height: 120px;">
     <nav class="navbar navbar-expand-sm" style="background-color: black;">
@@ -42,21 +70,15 @@
         </div>
     </nav>    
     <div class="container-fluid">
-        <div class="row" style="margin-top: 145px;">
+        <br>
+        <div class="row">
             <div class="col-sm-" style="margin: auto;">
-                <p style="font-size: 40px; color: white; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;" id="trackTitle">Hi there!</p>
+                <img src=<%= songInfo.album.cover_medium %>>
             </div>
         </div>
         <div class="row">
-            <div col-sm- style="margin: auto; margin-top: -15px;">
-                <p style="font-size: 15px; color: white; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;" id="trackTitle">Jump right in by searrching for something</p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-" style="margin: auto; margin-top: 10px;">
-                <form action="/search/results" method="GET">
-                    <input type="search" name="search_request" style="width: 300px; border: 0px; height: 40px; border-radius: 5px;" placeholder="   Search for songs and albums">
-                </form>
+            <div class="col-sm-" style="margin: auto;">
+                <p style="font-size: 30px; color: white; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;"><%= songInfo.title_short%></p>
             </div>
         </div>
     </div>

@@ -1,3 +1,7 @@
+//There are memroy leaks because of sockets on this page
+
+
+
 var express = require('express');
 var session = require('express-session');
 var bodyParser = require('body-parser');
@@ -17,6 +21,7 @@ router.use(bodyParser.urlencoded({
 }));
 
 router.get('/', (req, res) => {
+    console.log("userInbfo: "+req.session.userInfo);
     var myEventEmitter = req.app.get('myEventEmitter'); //Getting the same event emitter instance from the mobileApp.js
     var url = "https://api.deezer.com/chart/0/tracks";
     var url_2 = "https://api.deezer.com/chart/0/albums";
