@@ -4,6 +4,7 @@ var socket = require('socket.io');
 var events = require('events');
 const passport = require('passport');
 const dotenv = require('dotenv');
+const bodyParser = require('body-parser');
 var util = require('util');
 var session = require('express-session');
 const MySQLStore = require('express-mysql-session')(session);
@@ -39,6 +40,10 @@ app.use(session({
     store: sessionStore,
     resave: false,
     saveUninitialized: false
+}));
+
+app.use(bodyParser.urlencoded({
+    extended: 'true'
 }));
 
 app.set('views', path.join(__dirname, 'mobile-views'));

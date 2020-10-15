@@ -42,7 +42,7 @@ router.post('/verify', (req, res) => {
                     var app_id = process.env.APP_ID;
                     var redirect_uri = process.env.REDIRECT_URI;
                     var url = "https://connect.deezer.com/oauth/auth.php?app_id="+app_id+"&redirect_uri="+redirect_uri+"&perms=basic_access,email,offline_access,manage_library";
-                    res.redirect('/home');
+                    res.redirect(url);
                     //-----------------------------------------
                 }
             }

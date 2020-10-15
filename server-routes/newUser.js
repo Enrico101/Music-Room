@@ -10,7 +10,6 @@ router.use(bodyParser.urlencoded({
 }));
 
 router.post('/', (req, res) => {
-    console.log(req.body);
     if (validator.isEmpty(req.body.username) == false && validator.isEmpty(req.body.email) == false && validator.isEmpty(req.body.password) == false)
     {
         db.query("SELECT * FROM users WHERE email = ?", [req.body.email], (err, email) => {
