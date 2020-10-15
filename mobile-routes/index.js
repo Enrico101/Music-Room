@@ -1,8 +1,9 @@
 var express = require('express');
+const {redirectLogin, redirectDashboard} = require('./accessControls');
 
 router = express.Router();
 
-router.get('/', (req, res) => {
+router.get('/', redirectDashboard, (req, res) => {
     res.render('index');
 })
 

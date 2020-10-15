@@ -8,6 +8,7 @@ const bodyParser = require('body-parser');
 var util = require('util');
 var session = require('express-session');
 const MySQLStore = require('express-mysql-session')(session);
+var bodyParser = require('body-parser');
 
 dotenv.config();
 var passportSetUp = require('./mobile-routes/passportAuth');
@@ -23,11 +24,15 @@ var app = express();
     saveUninitialized: true
 })); */
 
+app.use(bodyParser.urlencoded({
+    extended: 'true'
+}));
+
 const options = {
     host: process.env.DB_HOST,
     port: 3306,
     user: process.env.DB_USER,
-    password: '',
+    password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME
 };
  

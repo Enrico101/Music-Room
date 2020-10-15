@@ -17,6 +17,8 @@ router.get('/', (req, res) => {
     var deezer_code = req.query.code;
     var deezer_error = req.query.error_reason;
 
+    console.log("deezer_code: "+deezer_code);
+    console.log("deezer_error: "+deezer_error);
     if (deezer_error == undefined)
     {
         console.log("p1");

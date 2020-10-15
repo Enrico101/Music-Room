@@ -21,6 +21,8 @@ router.get('/', (req, res) => {
                 res.send("An error has occured");
             else if (user.length > 0)
             {
+                console.log("bcrypt results: "+bcrypt.compareSync(password, user[0].password));
+                console.log("Password: "+password);
                 if (bcrypt.compareSync(password, user[0].password))
                 {
                     res.send(user);
