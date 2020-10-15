@@ -12,14 +12,14 @@ var conInit = mysql.createConnection({
     host: dbHost,
     user: dbUser,
     port: 3306,
-    password: ""
+    password: process.env.DB_PASSWORD
 });
 
 var con = mysql.createConnection({
     host: dbHost,
     user: dbUser,
     port: 3306,
-    password: "",
+    password: process.env.DB_PASSWORD,
     database: dbName
 });
 
