@@ -22,10 +22,7 @@ router.post('/verify', (req, res) => {
 
     if(validator.isEmpty(username) == false && validator.isEmpty(password) == false)
     {
-        var salt_rounds = 5;
-        var salt = bcrypt.genSaltSync(salt_rounds);
-        var hash = bcrypt.hashSync(password, salt);
-        var request = unirest('GET', 'http://localhost:3003/verifyUser').send({"username": username, "password": hash});
+        var request = unirest('GET', 'http://localhost:3003/verifyUser').send({"username": username, "password": password});
 
         request.end((response) => {
             if (response)
