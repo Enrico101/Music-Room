@@ -1,23 +1,22 @@
 var express = require('express');
-var session = require('express-session');
-var bodyParser = require('body-parser');
-var db = require('../database')
+// var bodyParser = require('body-parser');
+var db = require('../database');
+const {redirectLogin, redirectDashboard} = require('./accessControls');
 var validator = require('validator');
 var unirest = require('unirest');
 
 router = express.Router();
-var secretString = Math.floor((Math.random() * 10000) + 1);
-router.use(session({
-    secret: secretString.toString(),
-    resave: true,
-    saveUninitialized: true
-}));
-router.use(bodyParser.urlencoded({
-    extended: 'true'
-}));
+// router.use(bodyParser.urlencoded({
+//     extended: 'true'
+// }));
 
+<<<<<<< HEAD
 router.get('/', (req, res) => {
         res.render('search');
+=======
+router.get('/', redirectLogin, (req, res) => {
+    res.render('search');
+>>>>>>> 90bf530aec4d532df58662c5a0be11bb2bbd8028
 })
 
 router.get('/results', (req, res) => {

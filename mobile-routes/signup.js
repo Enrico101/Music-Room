@@ -1,17 +1,24 @@
 var express = require('express');
-var bodyParser = require('body-parser');
+// var bodyParser = require('body-parser');
+var app = express();
+const {redirectLogin, redirectDashboard} = require('./accessControls');
 var userRegistrationClass = require('../mobile-classes/userRegistration');
 var unirest = require('unirest');
+// var session = require('express-session');
 var bcrypt = require('bcrypt-nodejs');
+
 
 router = express.Router();
 
-router.use(bodyParser.urlencoded({
-    extended: 'true'
-}));
 
 
-router.get('/', (req, res) => {
+// router.use(bodyParser.urlencoded({
+//     extended: 'true'
+// }));
+
+
+router.get('/', redirectDashboard, (req, res) => {
+    global.CURRENT_PAGE = 'signup';
     res.render('signup');
 })
 router.post('/', (req, res) => {
