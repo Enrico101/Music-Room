@@ -4,7 +4,6 @@ var socket = require('socket.io');
 var events = require('events');
 const passport = require('passport');
 const dotenv = require('dotenv');
-const bodyParser = require('body-parser');
 var util = require('util');
 var session = require('express-session');
 const MySQLStore = require('express-mysql-session')(session);
@@ -70,6 +69,7 @@ var index = require('./mobile-routes/index');
 var album = require('./mobile-routes/album');
 var music_player = require('./mobile-routes/music_player');
 var channel = require('./mobile-routes/channel');
+var settings = require('./mobile-routes/settings');
 
 
 app.use(index);
@@ -83,6 +83,7 @@ app.use('/search', search);
 app.use('/album', album);
 app.use('/music_player', music_player);
 app.use('/channel', channel);
+app.use('/settings', settings);
 
 var server = app.listen(Port, (err) => {
     if (err)
