@@ -8,7 +8,6 @@ const bodyParser = require('body-parser');
 var util = require('util');
 var session = require('express-session');
 const MySQLStore = require('express-mysql-session')(session);
-var bodyParser = require('body-parser');
 
 dotenv.config();
 var passportSetUp = require('./mobile-routes/passportAuth');
@@ -70,6 +69,7 @@ var index = require('./mobile-routes/index');
 var album = require('./mobile-routes/album');
 var music_player = require('./mobile-routes/music_player');
 var channel = require('./mobile-routes/channel');
+var my_music = require('./mobile-routes/my_music');
 
 
 app.use(index);
@@ -83,6 +83,7 @@ app.use('/search', search);
 app.use('/album', album);
 app.use('/music_player', music_player);
 app.use('/channel', channel);
+app.use('/my_music', my_music);
 
 var server = app.listen(Port, (err) => {
     if (err)
@@ -90,7 +91,15 @@ var server = app.listen(Port, (err) => {
     else
         console.log(`Server running in ${process.env.NODE_ENV} mode on port ${Port}`);
 })
-
+//these routes are only for serving images.
+app.get('/sprites/Daco_5913043.png', (req, res) => {
+    //res.sendFile('./');
+    res.sendFile('/sprites/Daco_5913043.png', { root: __dirname });
+})
+app.get('/my_music/sprites/Daco_5913043.png', (req, res) => {
+    //res.sendFile('./');
+    res.sendFile('/sprites/Daco_5913043.png', { root: __dirname });
+})
 
 //socket io
 var io = socket(server);

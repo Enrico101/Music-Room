@@ -7,150 +7,108 @@ var unirest = require('unirest');
 var TorrentIndexer = require('torrent-indexer');
 var pirata = require('pirata');
 const TorrentSearchApi = require('torrent-search-api');
+var torrentStream = require('torrent-stream');
+var path = require('path');
+var webtorrent = require('webtorrent');
+const { ClientResponse } = require('http');
+var util = require('util');
+const { response } = require('express');
 
 
 router = express.Router();
 const torrentIndexer = new TorrentIndexer();
-var secretString = Math.floor((Math.random() * 10000) + 1);
-router.use(session({
-    secret: secretString.toString(),
-    resave: true,
-    saveUninitialized: true
-}));
-router.use(bodyParser.urlencoded({
+//webtorrent
+var client = new webtorrent();
+/*router.use(bodyParser.urlencoded({
     extended: 'true'
-}));
+}));*/
 
-router.get('/:song_name/:artist_name/:id', (req, res) => {
-    var request;
-    var song_name = req.params.song_name;
-    var artist_name = req.params.artist_name;
-    var id = req.params.id;
-    var url = "https://api.deezer.com/track/"+id;
+router.post('/', (req, res) => {
+    var track_id = req.body.track_id;
+    var track_title = req.body.track_title;
+    var cover_image = req.body.cover_image;
+    var playlist_name = req.body.playlist_name;
+    var privacy = req.body.privacy; //check up on this
+    var playlist_id = req.body.playlist_id;
 
-    /*if (song_name != undefined && artist_name != undefined)
+    if (playlist_id != undefined && track_id != undefined)
     {
-        async function search()
-        {
-            try {
-                const torrents_1 = await torrentIndexer.search(artist_name);
-                var x = 0;
-                var y = 0;
+        //this statement is triggered if the user once to add a track to a playlist.
+        var add_track_url = 'https://api.deezer.com/playlist/'+playlist_id+'/tracks?request_method=POST&access_token='+req.session.access_token;
 
-                if (torrents_1 != undefined && torrents_1.length > 0)
-                {
-                    console.log("-----------------------------------------------------------------");
-                    console.log("torrentInDEXER: "+require('util').inspect(torrents_1, {showHidden: false, depth: null}))
-                    console.log("-----------------------------------------------------------------");
-                    while (torrents_1[x])
-                    {
-                        if (torrents_1[x].fileName.search(song_name) > -1 || torrents_1[x].fileName.search(song_name.toLowerCase()) > -1)
-                        {
-                            console.log("found the song: "+require('util').inspect(torrents_1[x], {showHidden: false, depth: null}))
-                            y = 1;
-                            break;
-                        }
-                        x++;
-                    }
-                    if (y == 1)
-                    {
-                        console.log("Song found");
-                    }
-                    else
-                    {
-                        console.log("No song found");
-                        const category = pirata.categories;
-
-                        const opts =
-                        {
-                            url: "https://www1.thepiratebay3.to/",
-                            cat: category.Audio
-                        }
-                        
-                        pirata.search(artist_name, opts, function(err, res)
-                        {
-                            var i = 0;
-                            console.log("---------------------------------------------------------------");
-                            console.log("pirata: "+require('util').inspect(res, {showHidden: false, depth: null}))
-                            console.log("----------------------------------------------------------------");
-                            if (res != undefined && res.length > 0)
-                            {
-                                while (res[i])
-                                {
-                                    if (res[i].fileName.search(song_name) > -1 || res[i].fileName.search(song_name.toLowerCase()) > -1)
-                                    {
-                                        console.log("found the song: "+require('util').inspect(res[i], {showHidden: false, depth: null}))
-                                        y = 1;
-                                        break;
-                                    }
-                                    i++;
-                                }             
-                            }
-                            if (y == 1)
-                            {
-                                console.log("Song found");
-                            }
-                            else
-                            {
-                                async function searchAgain()
-                                {
-                                    try {
-                                        TorrentSearchApi.enablePublicProviders();
-                                        const torrents_2 = await TorrentSearchApi.search(artist_name, 'Music', 20)
-                                        console.log("------------------------------------------------------------------");
-                                        console.log("torrent-search-api: "+require('util').inspect(torrents_2, {showHidden: false, depth: null}))
-                                        console.log("------------------------------------------------------------");
-                                        if (torrents_2 != undefined && torrents_2.length > 0)
-                                        {
-                                            var z = 0;
-                                            while(torrents_2[z])
-                                            {
-                                                if (torrents_2[z].title.search(song_name) > -1 || torrents_2[z].title.search(song_name.toLowerCase()) > -1)
-                                                console.log("found the song: "+require('util').inspect(torrents_2[z], {showHidden: false, depth: null}));
-                                                y = 1;
-                                                break;
-                                                z++;
-                                            }
-                                            if (y == 1)
-                                                console.log("Song found: "+torrents_2[z].title);
-                                            else
-                                                console.log("No song found f***");
-                                        }
-                                        else
-                                        {
-                                            console.log("No torrents found, i give up");
-                                        }   
-                                    } catch (error) {
-                                        console.log("error: "+error);
-                                    }
-                                }
-                                searchAgain();
-                                console.log("No song found again");
-                            }
-                            // res: [{name: "something", seeds: 123, leechs: 33, magnet: "linkmagnet" }]
-                        });
-                    }
-                }
-                //console.log("res: "+require('util').inspect(torrents, {showHidden: false, depth: null}));
-            } catch (error) {
-                console.log("err: "+error);
-            }
-        }
-        search();*/
-
-        request = unirest('GET', url);
-        request.end((response) => {
+        var add_track_request = unirest('POST', add_track_url).query('songs='+track_id);
+        add_track_request.end((response) => {
             if (response)
             {
-                //console.log(require('util').inspect(response.body, {showHidden: false, depth: null}))
-                res.render("music_player", {songInfo: response.body, access_token: req.session.access_token});
+                console.log("check here: "+util.inspect(response.body, {depth: null}));
             }
             else
             {
-                res.redirect('search');
+                res.send("An error occured");
             }
-        }) 
-//    }
+        })
+        var music_url = 'https://api.deezer.com/user/me/playlists?access_token='+req.session.access_token;
+                var music_request = unirest('GET', music_url);
+                music_request.end((music_response) => {
+                    if (music_response)
+                    {
+                        console.log("playlists: "+util.inspect(music_response.body, {depth: null}));
+                        res.render('music_player', {track_id: track_id, access_token: req.session.access_token, access_token_expiration: req.session.access_token_expiration, track_title: track_title, cover_image: cover_image, playlists: music_response.body.data});
+                    }
+                    else
+                    {
+                        res.send("An error ocurred");
+                    }
+                })
+    }
+    else if (playlist_name != undefined && privacy != undefined)
+    {
+        //This statement gets triggered if a user once to create a playlist
+        var playlist_url = 'https://api.deezer.com/user/me/playlists?request_method=POST&access_token='+req.session.access_token;
+        
+        var playlist_request = unirest('POST', playlist_url).query('title='+playlist_name, 'privacy='+privacy);
+        playlist_request.end((response) => {
+            if (response)
+            {
+                var url = 'https://api.deezer.com/user/me/playlists?access_token='+req.session.access_token;
+
+                var request_2 = unirest('GET', url);
+                request_2.end((response_2) => {
+                    if (response_2)
+                    {
+
+                        console.log("playlists: "+util.inspect(response.body, {depth: null}));
+                        res.render('music_player', {track_id: track_id, access_token: req.session.access_token, access_token_expiration: req.session.access_token_expiration, track_title: track_title, cover_image: cover_image, playlists: response_2.body.data});
+                    }
+                    else
+                    {
+                        res.send("An error ocurred");
+                    }
+                })
+            }
+        })
+    }
+    else if (track_id != undefined && track_title != undefined && cover_image != undefined)
+    {
+        //This statement is triggered if the user is only requesting the music page
+        var url = 'https://api.deezer.com/user/me/playlists?access_token='+req.session.access_token;
+        var request = unirest('GET', url);
+        request.end((response) => {
+            if (response)
+            {
+                console.log("playlists: "+util.inspect(response.body, {depth: null}));
+                res.render('music_player', {track_id: track_id, access_token: req.session.access_token, access_token_expiration: req.session.access_token_expiration, track_title: track_title, cover_image: cover_image, playlists: response.body.data});
+            }
+            else
+            {
+                res.send("An error ocurred");
+            }
+        })
+    }
+    else
+    {
+        console.log("An error occured !");
+    }
 })
 
 

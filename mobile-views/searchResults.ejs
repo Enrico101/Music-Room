@@ -91,13 +91,21 @@
                     var id = songs.data[y].id;
              %>
                     <div class="row" style="margin-bottom: 10px;">
-                        <div class="col-sm-">
-                            <div class="list-group">
+                        <div class="col-sm-11">
+                            <!-- <div class="list-group">
                                 <a href="/music_player/<%=song_name+'/'+artist_name+'/'+id%>" class="list-group-item list-group-item-action" style="background-color: rgba(0, 0, 0, 0); border-color: rgba(0, 0, 0, 0);">
                                     <img src=<%=songs.data[y].album.cover_small%>>
-                                    <span style="margin-left: 10px; font-size: 15px; color: white; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; margin-top: -35px;"><%= songs.data[y].title_short%><span> | </span>song - <%= songs.data[y].artist.name%></span>
+                                    
                                 </a>
-                            </div>
+                            </div> -->
+                            <form action="/music_player" method="post" style="width: auto;">
+                                <input type="hidden" name="track_id" value=<%=songs.data[y].id%>>
+                                <input type="hidden" name="cover_image" value=<%=songs.data[y].album.cover_medium%>>
+                                <input type="hidden" name="track_title" value=<%=songs.data[y].title%>>
+                                <img src=<%=songs.data[y].album.cover_small%>>
+                                <span style="margin-left: 10px; font-size: 15px; color: white; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; margin-top: -35px;"><%= songs.data[y].title_short%><span> | </span>song - <%= songs.data[y].artist.name%></span>
+                                <input style="float: right; margin-top: 13px; width: 30px; height: 30px; filter: invert(100%);" type="image" name="submit" src="../sprites/Daco_5913043.png">
+                            </form>
                         </div>
                     </div>
             <%
@@ -109,7 +117,7 @@
     <nav class="navbar navbar-expand-sm fixed-bottom justify-content-center" style="background-color: black; border-color: black;">
         <a href="/home"><i style="color: white; margin-right: 30px;" class="fas fa-home fa-2x"></i></a>
         <a href="/search"><i style="color: white; margin-left: 30px; margin-right: 30px;" class="fas fa-search fa-2x"></i></a>
-        <a href="playlist"><i style="color: white; margin-left: 30px;" class="fas fa-music fa-2x"></i></a>
+        <a href="/my_music"><i style="color: white; margin-left: 30px;" class="fas fa-music fa-2x"></i></a>
     </nav>
     <script>
         function changeColorLogin() {

@@ -19,32 +19,6 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
     <!-- Deezer API-->
     <script src="https://cdns-files.dzcdn.net/js/min/dz.js"></script>
-    <script>
-        var accessToken = `<%=access_token%>`;
-        console.log("access toke: "+accessToken);
-        DZ.init({
-            appId  : '439462',
-            channelUrl : 'http://localhost:3002/channel'
-        });
-        var sdk_option = {
-            token: 
-            {
-                access_token: "<%=access_token%>",
-                expire: '0',
-            },
-            player: 
-            {
-                current_track: '',
-                muted: false,
-                repeat: 1,
-                shuffle: false,
-                volume: 100,
-            }
-        }
-        DZ.ready(function(sdk_options){
-	        console.log('DZ SDK is ready', sdk_options);
-        });
-    </script>
   </head>
   <body style="background: linear-gradient(to right, #16222A, #3A6073); border-radius: 6px; height: 120px;">
     <nav class="navbar navbar-expand-sm" style="background-color: black;">
@@ -68,24 +42,156 @@
             </ul>
             <br>
         </div>
-    </nav>    
+    </nav>
     <div class="container-fluid">
         <br>
         <div class="row">
             <div class="col-sm-" style="margin: auto;">
-                <img src=<%= songInfo.album.cover_medium %>>
+                <img src=<%= cover_image %>>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-" style="margin: auto;">
-                <p style="font-size: 30px; color: white; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;"><%= songInfo.title_short%></p>
+                <p style="font-size: 30px; color: white; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;"><%= track_title %></p>
+            </div>
+        </div>
+        <div class="row">
+            <!--<div class="col-sm-" style="margin: auto;">
+                 Music player goes here 
+                <audio id="myAudio" controls>
+                    <source src="/music_player/music_output" type="audio/mpeg">
+                </audio> 
+            </div> -->
+
+            <div id="dz-root"></div>
+            <div id="player" style="margin: auto;"></div>
+            <script src="https://cdns-files.dzcdn.net/js/min/dz.js"></script>
+            <script>
+                DZ.init({
+                    appId  : '439462',
+                    channelUrl : 'http://loclahost:3002/channel',
+                    player: {
+                        container: 'player',
+                        playlist: false,
+                        width : 320,
+                        height : 58,
+                        layout: 'dark',
+                        onload : function(){}
+                    }                
+                });
+        
+                var token = `<%=access_token%>`;
+                var token_expiration = `<%=access_token_expiration%>`
+                var sdk_options = {
+                    token: {
+                        access_token: token,
+                        expire: token_expiration
+                    },
+                    player: {
+                        current_track: {},
+                        muted: false,
+                        repeat: 1,
+                        shuffle: false,
+                        volume: 100,
+                    }
+                };
+                DZ.ready(function(sdk_options){
+                    console.log('DZ SDK is ready', sdk_options);
+                    var track = `<%=track_id%>`
+                    DZ.player.playTracks([track]);
+                });
+            </script>
+        </div>
+        <div class="row">
+            <!-- The Modal -->
+            <div class="modal fade" id="myModal">
+                <div class="modal-dialog modal-dialog-scrollable">
+                    <div class="modal-content" style="background-color: #1a1a1a;">
+                
+                        <!-- Modsal Header -->
+                        <div class="modal-header">
+                            <p style="color: white; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">Playlists</p>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                
+                        <!-- Modal body -->
+                        <div class="modal-body">
+                            <%
+                                var x = 0;
+                                while(playlists[x])
+                                {
+                            %>
+                                    <form action="/music_player" method="post">
+                                        <input type="hidden" name="track_id" value=<%=track_id%>>
+                                        <input type="hidden" name="track_title" value=<%=track_title%>>
+                                        <input type="hidden" name="cover_image" value=<%=cover_image%>>
+                                        <input type="hidden" name="playlist_id" value=<%=playlists[x].id%>>
+                                        <span style="color: white; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;"><%=playlists[x].title%></span>
+                                        <input type="submit" style="float: right; background-color: #141414; border-color:  #141414;" value="Add song" class="btn btn-primary btn-sm">
+                                    </form>
+                                    <br />
+                            <%
+                                    x++;
+                                }
+                            %>
+                        </div>
+                
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <!-- <button type="button" class="btn btn-danger" style=" margin: auto; background-color: #1a1a1a; border-color:  #1a1a1a;">+ New playlist</button> -->
+                            <button style=" margin: auto; background-color: #1a1a1a; border-color:  #1a1a1a;" type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal2">
+                                + New playlist
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <!-- The Modal 2 -->
+            <div class="modal fade" id="myModal2" style="background-color: #0f0f0f;">
+                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                    <div class="modal-content" style="background-color: #1a1a1a;">
+                
+                        <!-- Modsal Header -->
+                        <div class="modal-header">
+                            <p style="color: white; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">Create a new playlist</p>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                
+                        <!-- Modal body -->
+                        <div class="modal-body">
+                            <form action="/music_player/" method="POST">
+                                <input type="hidden" name="track_id" value=<%=track_id%>>
+                                <input type="hidden" name="track_title" value=<%=track_title%>>
+                                <input type="hidden" name="cover_image" value=<%=cover_image%>>
+                                <div class="form-group">
+                                    <label style="color: white; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;" for="playlist_name">Name:</label>
+                                    <input style="background-color:  #1a1a1a; color: white; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;" type="text" class="form-control" name="playlist_name" id="playlist_name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="privacy" style="color: white; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">Privacy</label>
+                                    <select style="background-color:  #1a1a1a; color: white; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;" class="form-control" id="privacy" name="privacy">
+                                      <option style="background-color:  #1a1a1a; color: white; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">Public</option>
+                                      <option style="background-color:  #1a1a1a; color: white; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">Private</option>
+                                    </select>
+                                </div>
+                                <input type="submit" name="submit" value="CREATE" class="btn btn-danger" style="float: right; margin: auto; background-color: #1a1a1a; border-color:  #1a1a1a;">
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
     <nav class="navbar navbar-expand-sm fixed-bottom justify-content-center" style="background-color: black; border-color: black;">
-        <a href="/home"><i style="color: white; margin-right: 30px;" class="fas fa-home fa-2x"></i></a>
-        <a href="/search"><i style="color: white; margin-left: 30px; margin-right: 30px;" class="fas fa-search fa-2x"></i></a>
-        <a href="playlist"><i style="color: white; margin-left: 30px;" class="fas fa-music fa-2x"></i></a>
+        <a href="/home"><i style="color: white; margin-right: 25px;" class="fas fa-home"></i></a>
+        <a href="/search"><i style="color: white; margin-left: 25px; margin-right: 25px;" class="fas fa-search"></i></a>
+        <a href="/my_music"><i style="color: white; margin-left: 25px; margin-right: 25px;" class="fas fa-music"></i></a>
+        <!-- Button to Open the Modal -->
+        <button style="margin-left: 20px; background-color: black; border-color: black;" type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+            <i class="fas fa-stream"></i>
+        </button>
     </nav>
     <script>
         function changeColorLogin() {
@@ -94,6 +200,9 @@
         function changeColorSignUp() {
             document.getElementById("signupLink").style.color = "#348F50";
         }
+
+        var audio = document.getElementById("myAudio");
+        audio.autoplay = true;
     </script>
   </body>
 </html>
