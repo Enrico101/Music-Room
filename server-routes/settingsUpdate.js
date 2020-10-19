@@ -3,6 +3,7 @@ var bodyParser = require('body-parser');
 var db = require('../database');
 const {conInit, con } = require('../config/connection');
 var validator = require('validator');
+var bcrypt = require('bcrypt-nodejs');
 var router = require('../mobile-routes/settings');
 
 router = express.Router();
@@ -69,7 +70,7 @@ router.get('/email', (req, res) => {
 router.get('/password', (req, res) => {
     if (bcrypt.compareSync(req.body.oldPassword, req.body.sessPass) === true)
     {
-        con.query(`UPDATE users SET password = ? WHERE id = ?`, [req.body.hash, req.body.id], (err, db) => {
+        con.query(`UPDATE users SET password = ? WHERE id = ?`, [req.body.password, req.body.id], (err, db) => {
             if (err) return res.send("An error has occured");
             return res.send("Password has been successfully updated");
         });

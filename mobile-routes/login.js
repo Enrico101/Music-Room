@@ -38,9 +38,11 @@ router.post('/verify', (req, res) => {
                 else
                 {
                     req.session.userInfo = response.body;
+                    console.log(response.body);
                     req.session.userId = req.session.userInfo[0].id;
                     req.session.username = req.session.userInfo[0].username;
                     req.session.email = req.session.userInfo[0].email;
+                    req.session.password = req.session.userInfo[0].password;
                     console.log("Username: " + req.session.username);
                     console.log("email: " + req.session.email);
                     req.session.isOauth = false;
