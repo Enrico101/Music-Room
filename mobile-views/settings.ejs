@@ -41,6 +41,41 @@
         .icon {
             color: black;
         }
+
+        .settings {
+            text-align: center;
+        }
+        .settingsView {
+            text-align: justify;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #D2D2D2;
+        }
+
+        .profilePic {
+            width: auto;
+            height: 100%;
+            max-height: 30vh;
+        }
+
+        /*@media only screen and (max-width: 640px) {
+            body {
+              background-color: lightblue;
+            }
+            .settings {
+                width: 100%;
+            }
+        }
+
+        @media only screen and (max-width: 640px) {
+            body {
+              background-color: lightblue;
+            }
+
+            .settings {
+                width: 100%;
+            }
+        }*/
     </style>
   </head>
   <body style="background: linear-gradient(to right, #348F50, #56B4D3); border-radius: 6px; height: 120px;">
@@ -70,10 +105,198 @@
         </div>
     </nav>    
     <div class="container tempCont">
-       <h3>Settings</h3><hr>
-       <a href="/settings/view-profile"><i class="fa fa-eye icon" title="View profile"></i>View profile</a><br>
-       <a href="/settings/edit-profile"><i class="fa fa-pencil icon" title="Edit profile"></i>Edit profile</a><br>
-       <a href="/settings/change-password"><i class="fa fa-lock icon" title="Change password"></i>Change password</a>
+        <div class="row">
+            <div class="col-3 settings">
+                <h3>Settings</h3><hr>
+                <a href="/settings/view-profile"><i class="fa fa-eye icon" title="View profile"></i>View profile</a><br>
+                <% if (data.isOauth === false) { %>
+                    <a href="/settings/edit-profile"><i class="fa fa-pencil icon" title="Edit profile"></i>Edit profile</a><br>
+                    <a href="/settings/change-password"><i class="fa fa-lock icon" title="Change password"></i>Change password</a>
+                <% } %>
+            </div>
+            <% if (defaultView === 'View Profile') { %>
+                <div class="col-9 settings">
+                    <h3><%=defaultView%></h3><hr>
+                    <div class="row">
+                        
+                        <div class="col-4">
+                            <% if (!data.photo) {%>
+                                <img class="profilePic" src="https://clinicforspecialchildren.org/wp-content/uploads/2016/08/avatar-placeholder.gif" alt="profile image avatar"><hr>
+                            <% } else { %>
+                                <img class="profilePic" src="<%=data.photo%>" alt="profile image avatar"><hr>
+                            <% } %>
+                        </div>
+                        <div class="col-8">
+                            <!-- <div class="col-md-12">
+                                username:
+                            </div>
+                            <div class="col-md-12">
+                                username:
+                            </div>
+                            <div class="col-md-12">
+                                username:
+                            </div> -->
+                            <% if (error == true) { %>
+                                <% if (info != undefined) { %>
+                                    <div class="alert alert-danger" role="alert">
+                                        <%=info%>
+                                    </div>
+                                <% } %>
+                            <% } else { %>
+                                <% if (info != undefined) { %>
+                                    <div class="alert alert-success  d-flex justify-content-center regAlertTest" role="alert">
+                                        <%=info%>
+                                    </div>
+                                <% } %>
+                            <% } %>
+                            <div class="row">
+                                <div class="col-4 settingsView">
+                                  Username
+                                </div>
+                                <div class="col-1"></div>
+                                <div class="col-6 settingsView">
+                                  <%=data.username%>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4 settingsView">
+                                    Email
+                                </div>
+                                <div class="col-1"></div>
+                                <div class="col-6 settingsView">
+                                    <%=data.email%>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% } else if (defaultView === 'Edit Profile') { %>
+                <% if (data.isOauth === false) { %>
+                    <div class="col-9 settings">
+                        <h3><%=defaultView%></h3><hr>
+                        <div class="row">
+                            
+                            <div class="col-4">
+                                <% if (!data.photo) {%>
+                                    <img class="profilePic" src="https://clinicforspecialchildren.org/wp-content/uploads/2016/08/avatar-placeholder.gif" alt="profile image avatar">
+                                <% } else { %>
+                                    <img class="profilePic" src="<%=data.photo%>" alt="profile image avatar">
+                                <% } %>
+                                <form id="myform" class="form-container" action="/set-profilePic" method="POST" enctype="multipart/form-data">
+                                    <input type="file" name="myImage">
+                                    <input type="submit" value="Upload">
+                                </form>
+                            </div>
+                            <div class="col-8">
+                                <% if (error == true) { %>
+                                    <% if (info != undefined) { %>
+                                        <div class="alert alert-danger" role="alert">
+                                            <%=info%>
+                                        </div>
+                                    <% } %>
+                                <% } else { %>
+                                    <% if (info != undefined) { %>
+                                        <div class="alert alert-success  d-flex justify-content-center regAlertTest" role="alert">
+                                            <%=info%>
+                                        </div>
+                                    <% } %>
+                                <% } %>
+                                <form action="/settings/username" method="post">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <label for="username">Username</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input type="text" class="form-control" name="username" id="username" aria-describedby="userUsername" placeholder="<%=data.username%>">
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Update</button>
+                                        </div>
+                                    </div>
+                                </form>
+    
+                                <form action="/settings/email" method="post">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <label for="email">Email address</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input type="email" class="form-control" name="email" id="email" aria-describedby="email" placeholder="<%=data.email%>">
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Update</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                <% } %>
+            <% } else { %>
+                <% if (data.isOauth === false) { %>
+                    <div class="col-9 settings">
+                        <h3><%=defaultView%></h3><hr>
+                        <div class="row">
+                            <div class="col-12">
+                                <% if (error == true) { %>
+                                    <% if (info != undefined && typeof info == 'object') { %>
+                                        <div class="alert alert-danger" role="alert">
+                                            <ul>
+                                                <% info.forEach( (result) => { %>
+                                                    <li><%=result%></li>
+                                                <% }) %>
+                                            </ul>
+                                        </div>
+                                    <% } %>
+                                <% } else { %>
+                                    <% if (info != undefined) { %>
+                                        <div class="alert alert-success  d-flex justify-content-center regAlertTest" role="alert">
+                                            <%=info%>
+                                        </div>
+                                    <% } %>
+                                <% } %>
+                                <form action="/settings/password" method="post">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <label for="oldPassword">Old Password</label>
+                                                <!-- Last Name: -->
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input type="password" class="form-control" name="oldPassword" id="oldPassword" placeholder="Old Password">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <label for="newPassword">New Password</label>
+                                                <!-- Last Name: -->
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input type="password" class="form-control" name="newPassword" id="newPassword" placeholder="New Password">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <label for="confPassword">Confirm Password</label>
+                                                <!-- Last Name: -->
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input type="password" class="form-control" name="confPassword" id="confPassword" placeholder="Confirm Password">
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Update</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                <% } %>
+            <% } %>
+        </div>
     </div>
     <nav class="navbar navbar-expand-sm fixed-bottom justify-content-center" style="background-color: black; border-color: black;">
         <a href="/home"><i style="color: white; margin-right: 30px;" class="fas fa-home fa-2x"></i></a>
@@ -91,9 +314,9 @@
         function changeColorLogout() {
             document.getElementById("logoutLink").style.color = "#348F50";
         }
-        if (location.href !== 'http://localhost:3002/settings') {
+        /*if (location.href !== 'http://localhost:3002/settings' && location.href !== 'http://localhost:3002/settings/view-profile' && location.href !== 'http://localhost:3002/settings/edit-profile' && location.href !== 'http://localhost:3002/settings/change-password') {
             location.replace('http://localhost:3002/settings');
-        }
+        }*/
     </script>
   </body>
 </html>

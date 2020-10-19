@@ -46,10 +46,6 @@ app.use(session({
     saveUninitialized: false
 }));
 
-app.use(bodyParser.urlencoded({
-    extended: 'true'
-}));
-
 app.set('views', path.join(__dirname, 'mobile-views'));
 app.set('view engine', 'ejs');
 

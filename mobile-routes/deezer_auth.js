@@ -32,7 +32,6 @@ router.get('/', (req, res) => {
             var request = unirest('GET', url);
             request.end((response) => {
                 req.session.access_token = response.body;
-                req.session.userId = 1;
                 res.redirect('/home');
             })
         }
