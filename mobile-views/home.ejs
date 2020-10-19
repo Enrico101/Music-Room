@@ -93,7 +93,7 @@
                     <a id="signupLink" onclick="changeColorSignUp()" style="font-size: 30px; color: white; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;" class="nav-link" href="/About">About</a>
                 </li>
                 <li class="nav-item">
-                    <a id="logoutLink" onclick="changeColorSignUp()" style="font-size: 30px; color: white; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;" class="nav-link" href="/logout">Logout</a>
+                    <a id="logoutLink" onclick="changeColorLogout()" style="font-size: 30px; color: white; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;" class="nav-link" href="/logout">Logout</a>
                 </li>
             </ul>
             <br>
@@ -127,6 +127,9 @@
         }
         function changeColorSignUp() {
             document.getElementById("signupLink").style.color = "#348F50";
+        }
+        function changeColorLogout() {
+            document.getElementById("logoutLink").style.color = "#348F50";
         }
         if (location.href !== 'http://localhost:3002/home') {
             location.replace('http://localhost:3002/home');

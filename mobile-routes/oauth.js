@@ -46,8 +46,10 @@ router.get('/google/callback', redirectDashboard, passport.authenticate('google'
                 req.session.email = req.user.emails[0].value;
                 req.session.photo = req.user.photos[0].value;
                 var app_id = process.env.APP_ID;
+                req.session.isOauth = true;
                 var redirect_uri = process.env.REDIRECT_URI;
                 var url = "https://connect.deezer.com/oauth/auth.php?app_id="+app_id+"&redirect_uri="+redirect_uri+"&perms=basic_access,email,offline_access,manage_library";
+                req.session.userId = db[0].id;
                 res.redirect(url);
             }
         })
@@ -91,8 +93,10 @@ router.get('/42/callback', redirectDashboard, passport.authenticate('42', { fail
                 req.session.email = req.user.emails[0].value;
                 req.session.photo = req.user.photos[0].value;
                 var app_id = process.env.APP_ID;
+                req.session.isOauth = true;
                 var redirect_uri = process.env.REDIRECT_URI;
                 var url = "https://connect.deezer.com/oauth/auth.php?app_id="+app_id+"&redirect_uri="+redirect_uri+"&perms=basic_access,email,offline_access,manage_library";
+                req.session.userId = db[0].id;
                 res.redirect(url);
             }
         })
@@ -137,8 +141,10 @@ router.get('/facebook/callback', redirectDashboard, passport.authenticate('faceb
                 req.session.email = req.user.emails[0].value;
                 req.session.photo = req.user.photos[0].value;
                 var app_id = process.env.APP_ID;
+                req.session.isOauth = true;
                 var redirect_uri = process.env.REDIRECT_URI;
                 var url = "https://connect.deezer.com/oauth/auth.php?app_id="+app_id+"&redirect_uri="+redirect_uri+"&perms=basic_access,email,offline_access,manage_library";
+                req.session.userId = db[0].id;
                 res.redirect(url);
             }
         })

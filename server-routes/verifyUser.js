@@ -22,7 +22,7 @@ router.get('/', (req, res) => {
             else if (user.length > 0)
             {
                 console.log("bcrypt results: "+bcrypt.compareSync(password, user[0].password));
-                console.log("Password: "+password);
+                // console.log("Password: "+password);
                 if (bcrypt.compareSync(password, user[0].password))
                 {
                     res.send(user);

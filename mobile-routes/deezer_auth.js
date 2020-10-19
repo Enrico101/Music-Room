@@ -44,6 +44,8 @@ router.get('/', (req, res) => {
                     req.session.userDeezerId = response_2.body.id;
                     res.redirect('/home');
                 })
+               /* req.session.access_token = response.body;
+                res.redirect('/home'); */
             })
         }
         else
