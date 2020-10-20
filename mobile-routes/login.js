@@ -38,13 +38,11 @@ router.post('/verify', (req, res) => {
                 else
                 {
                     req.session.userInfo = response.body;
-                    console.log(response.body);
-                    req.session.userId = req.session.userInfo[0].id;
-                    req.session.username = req.session.userInfo[0].username;
-                    req.session.email = req.session.userInfo[0].email;
-                    req.session.password = req.session.userInfo[0].password;
-                    console.log("Username: " + req.session.username);
-                    console.log("email: " + req.session.email);
+                    req.session.userId = req.session.userInfo.user[0].id;
+                    req.session.username = req.session.userInfo.user[0].username;
+                    req.session.email = req.session.userInfo.user[0].email;
+                    req.session.password = req.session.userInfo.user[0].password;
+                    req.session.photo = req.session.userInfo.results[0].imagePath;
                     req.session.isOauth = false;
                     var app_id = process.env.APP_ID;
                     var redirect_uri = process.env.REDIRECT_URI;

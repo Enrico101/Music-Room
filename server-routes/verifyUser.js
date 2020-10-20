@@ -25,7 +25,11 @@ router.get('/', (req, res) => {
                 // console.log("Password: "+password);
                 if (bcrypt.compareSync(password, user[0].password))
                 {
-                    res.send(user);
+                    db.query("SELECT * FROM images WHERE username = ? LIMIT 1", [username], (err, results) => {
+                        if (err)
+                            res.send("An error has occured");
+                        res.send({user, results});
+                    })
                 }
                 else
                 {

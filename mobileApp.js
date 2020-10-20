@@ -4,6 +4,7 @@ var socket = require('socket.io');
 var events = require('events');
 const passport = require('passport');
 const dotenv = require('dotenv');
+var bodyParser = require('body-parser');
 var util = require('util');
 var session = require('express-session');
 const MySQLStore = require('express-mysql-session')(session);
@@ -21,6 +22,8 @@ var app = express();
     resave: true,
     saveUninitialized: true
 })); */
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(bodyParser.urlencoded({
     extended: 'true'

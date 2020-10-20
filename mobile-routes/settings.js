@@ -166,7 +166,7 @@ router.post('/password', (req, res) => {
             var request = unirest('GET', 'http://localhost:3003/settings/password').send({"username": req.session.username, "oldPassword": oldPassword, "sessPass": req.session.password, "password": hash, "id": req.session.userId});
 
             request.end((response) => {
-                console.log(response.body);
+                // console.log(response.body);
                 if (response)
                 {
                     if (response.body == 'Password has been successfully updated') 
@@ -205,8 +205,57 @@ router.post('/password', (req, res) => {
     }
 })
 
-router.post('/set-profilePic', (req, res) => {
-
+router.post('/set-profilePic', upload.single('myImage'), (req, res) => {
+    if (req.file) {
+        if (!req.session.photo) {
+            const imageName = `/uploads/${req.file.filename}`;
+            var request = unirest('POST', 'http://localhost:3003/settings/profilePic').send({"image": imageName, "username": req.session.username, "id": req.session.userId, "update": false});
+    
+            request.end((response) => {
+                if (response)
+                {
+                    if (response.body == 'Profile Picture has been successfully updated') 
+                    {
+                        req.session.photo = imageName;
+                        res.render('settings', {info: "Profile Picture has been successfully updated.", data: req.session, defaultView: 'View Profile', error: false});
+                    }
+                    else if (response.body == "An error has occured")
+                    {
+                        res.render('settings', {info: "An error has occured.", data: req.session, defaultView: 'Edit Profile', error: true});
+                    }
+                }
+                else
+                {
+                    res.render('settings', {info: "An unkown error occured.", data: req.session, defaultView: 'Edit Profile', error: true});
+                }
+            })
+        } else {
+            const imageName = `/uploads/${req.file.filename}`;
+            var request = unirest('GET', 'http://localhost:3003/settings/profilePic').send({"image": imageName, "username": req.session.username, "id": req.session.userId, "update": true});
+    
+            request.end((response) => {
+                if (response)
+                {
+                    if (response.body == 'Profile Picture has been successfully updated') 
+                    {
+                        req.session.photo = imageName;
+                        res.render('settings', {info: "Profile Picture has been successfully updated.", data: req.session, defaultView: 'View Profile', error: false});
+                    }
+                    else if (response.body == "An error has occured")
+                    {
+                        res.render('settings', {info: "An error has occured.", data: req.session, defaultView: 'Edit Profile', error: true});
+                    }
+                }
+                else
+                {
+                    res.render('settings', {info: "An unkown error occured.", data: req.session, defaultView: 'Edit Profile', error: true});
+                }
+            })
+        }
+    } else {
+        console.log('Image upload fail!');
+    }
 })
+
 
 module.exports = router;
