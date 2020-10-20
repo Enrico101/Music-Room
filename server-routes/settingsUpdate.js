@@ -39,7 +39,6 @@ router.get('/username', (req, res) => {
         return res.send("Username field is empty");
 });
 
-
 router.get('/email', (req, res) => {
     var email = req.body.email;
     var id = req.body.id;

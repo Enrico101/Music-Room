@@ -107,14 +107,14 @@ router.post('/email', (req, res) => {
         request.end((response) => {
             if (response)
             {
-                if (response.body == 'email has been successfully updated') 
+                if (response.body == 'Email has been successfully updated') 
                 {
                     req.session.email = email;
-                    res.render('settings', {info: "email has been successfully updated.", data: req.session, defaultView: 'View Profile', error: false});
+                    res.render('settings', {info: "Email has been successfully updated.", data: req.session, defaultView: 'View Profile', error: false});
                 }
-                else if (response.body == "email field is empty")
+                else if (response.body == "Email field is empty")
                 {
-                    res.render('settings', {info: "email field is empty.", data: req.session, defaultView: 'Edit Profile', error: true});
+                    res.render('settings', {info: "Email field is empty.", data: req.session, defaultView: 'Edit Profile', error: true});
                 }
                 else if (response.body == "email already exists")
                 {
