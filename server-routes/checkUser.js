@@ -17,16 +17,16 @@ router.get('/', (req, res) => {
     var deviceOS = req.body.deviceOS;
     if (uniqueToken !== undefined && deviceOS !== undefined) {
         con.query(`SELECT * FROM deviceManager WHERE deviceToken = ?`, [uniqueToken], (err, result) => {
-            if (err) return res.send(`An error has occured`);
+            if (err) return res.send(`An error has occured in Device Manager`);
             if (result.length === 1) {
                 con.query("SELECT * FROM users WHERE username = ?", [result[0].username], (err, user) => {
                     if (err)
-                        res.send("An error has occured");
+                        res.send("An error has occured in Users");
                     else if (user.length > 0)
                     {
                         con.query("SELECT * FROM images WHERE username = ? LIMIT 1", [result[0].username], (err, results) => {
                             if (err)
-                                res.send("An error has occured");
+                                res.send("An error has occured in Images");
                             res.send({user, results});
                         })
                     }
