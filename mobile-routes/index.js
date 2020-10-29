@@ -13,7 +13,9 @@ router.get('/', redirectDashboard, (req, res) => {
     var request = unirest('GET', 'http://localhost:3003/checkUser').send({"uniqueToken": req.fingerprint.hash, "deviceOS": req.fingerprint.components.useragent.os});
 
     request.end((response) => {
-        
+        if (response) {
+            // if (response.body ==)
+        }
     });
     res.render('index');
 })
