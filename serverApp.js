@@ -20,11 +20,13 @@ var index = require('./mobile-routes/index');
 var newUser = require('./server-routes/newUser');
 var verifyUser = require('./server-routes/verifyUser');
 const settings = require('./server-routes/settingsUpdate');
+const checkUser = require('./server-routes/checkUser');
 
 app.set('view engine', 'ejs');
 app.use('/newUser', newUser);
 app.use('/verifyUser', verifyUser);
-app.use('/settings', settings);
+app.use('/settings', settings); 
+app.use('/checkUser', checkUser);
 
 app.listen(Port, (err) => {
     if (err)

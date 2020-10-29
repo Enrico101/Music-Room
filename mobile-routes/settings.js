@@ -57,6 +57,16 @@ router.get('/edit-profile', redirectLogin, (req, res) => {
     });
 })
 
+router.get('/privacy', redirectLogin, (req, res) => {
+    let user = req.session;
+    res.render('settings', {
+        data: user,
+        defaultView: 'Privacy',
+        error: false,
+        info: undefined
+    });
+})
+
 router.get('/change-password', redirectLogin, (req, res) => {
     let user = req.session;
     res.render('settings', {
@@ -257,5 +267,8 @@ router.post('/set-profilePic', upload.single('myImage'), (req, res) => {
     }
 })
 
+router.post('/privacy', (req, res) => {
+    console.log(req.body);
+})
 
 module.exports = router;

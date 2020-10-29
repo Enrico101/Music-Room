@@ -58,6 +58,66 @@
             max-height: 30vh;
         }
 
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+          }
+          
+          .switch input { 
+            opacity: 0;
+            width: 0;
+            height: 0;
+          }
+          
+          .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+          }
+          
+          .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+          }
+          
+          input:checked + .slider {
+            background-color: #2196F3;
+          }
+          
+          input:focus + .slider {
+            box-shadow: 0 0 1px #2196F3;
+          }
+          
+          input:checked + .slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+          }
+          
+          /* Rounded sliders */
+          .slider.round {
+            border-radius: 34px;
+          }
+          
+          .slider.round:before {
+            border-radius: 50%;
+          }
         /*@media only screen and (max-width: 640px) {
             body {
               background-color: lightblue;
@@ -111,8 +171,9 @@
                 <a href="/settings/view-profile"><i class="fa fa-eye icon" title="View profile"></i>View profile</a><br>
                 <% if (data.isOauth === false) { %>
                     <a href="/settings/edit-profile"><i class="fa fa-pencil icon" title="Edit profile"></i>Edit profile</a><br>
-                    <a href="/settings/change-password"><i class="fa fa-lock icon" title="Change password"></i>Change password</a>
+                    <a href="/settings/change-password"><i class="fa fa-lock icon" title="Change password"></i>Change password</a><br>
                 <% } %>
+                <a href="/settings/privacy"><i class="fa fa-lock icon" title="Change password"></i>Privacy</a>
             </div>
             <% if (defaultView === 'View Profile') { %>
                 <div class="col-9 settings">
@@ -232,7 +293,7 @@
                         </div>
                     </div>
                 <% } %>
-            <% } else { %>
+            <% } else if (defaultView === 'Change Password') { %>
                 <% if (data.isOauth === false) { %>
                     <div class="col-9 settings">
                         <h3><%=defaultView%></h3><hr>
@@ -299,6 +360,60 @@
                         </div>
                     </div>
                 <% } %>
+            <% } else { %>
+                <div class="col-9 settings">
+                    <h3><%=defaultView%></h3><hr>
+                    <div class="row">
+                        
+                        <div class="col-4">
+                            <% if (!data.photo) {%>
+                                <img class="profilePic" src="https://clinicforspecialchildren.org/wp-content/uploads/2016/08/avatar-placeholder.gif" alt="profile image avatar">
+                            <% } else { %>
+                                <img class="profilePic" src="<%=data.photo%>" alt="profile image avatar">
+                            <% } %>
+                            <!-- <form id="myform" class="form-container" action="/settings/set-profilePic" method="POST" enctype="multipart/form-data">
+                                <input type="file" name="myImage">
+                                <input type="submit" value="Upload">
+                            </form> -->
+                        </div>
+                        <div class="col-8">
+                            <% if (error == true) { %>
+                                <% if (info != undefined) { %>
+                                    <div class="alert alert-danger" role="alert">
+                                        <%=info%>
+                                    </div>
+                                <% } %>
+                            <% } else { %>
+                                <% if (info != undefined) { %>
+                                    <div class="alert alert-success  d-flex justify-content-center regAlertTest" role="alert">
+                                        <%=info%>
+                                    </div>
+                                <% } %>
+                            <% } %>
+                            <form action="/settings/privacy" method="post">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-md-8" style="text-align: left;">
+                                            <label for="privacy">Make info Public?</label><br>
+                                            <label for="privacyFriend">Make information available only friends?</label>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="switch">
+                                                <input type="checkbox" id="privacy" name="privacyPublicToAll">
+                                                <span class="slider round"></span>
+                                            </label><br>
+                                            <label class="switch">
+                                                <input type="checkbox" id="privacyFriend" name="privacyPublicToFriend">
+                                                <span class="slider round"></span>
+                                            </label>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Update</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             <% } %>
         </div>
     </div>
