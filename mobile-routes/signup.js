@@ -30,7 +30,7 @@ router.post('/', (req, res) => {
         var salt_rounds = 5;
         var salt = bcrypt.genSaltSync(salt_rounds);
         var hash = bcrypt.hashSync(userRegistration.password, salt);
-        var request = unirest('POST', 'http://localhost:3003/newUser').send({"username": userRegistration.username, "email": userRegistration.email, "password": hash});
+        var request = unirest('POST', 'http://localhost:3003/newUser').send({"username": userRegistration.username, "email": userRegistration.email, "password": hash, "access_token": "Not_set"});
 
         request.end((response) => {
             if (response)
@@ -52,16 +52,15 @@ router.post('/', (req, res) => {
             }
             else
             {
-                console.log("p2");
                 res.render('signup', {signupInfo: "An unkown error occured"});
             }
         })
     }
     else
     {
-        console.log("p3");
         res.render('signup', {signupInfo: userRegistrationResults.reason});
     }
 })
+
 
 module.exports = router;

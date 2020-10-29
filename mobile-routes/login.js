@@ -76,16 +76,28 @@ router.post('/verify', (req, res) => {
                     req.session.email = req.session.userInfo.user[0].email;
                     req.session.password = req.session.userInfo.user[0].password;
                     req.session.photo = req.session.userInfo.results[0].imagePath;
-                    var ip = res.socket.remoteAddress;
-                    var port = res.socket.remotePort;
-
-                    console.log("Socket ip: " + ip);
-                    console.log("Socket port: " + port);
-                    req.session.isOauth = false;
-                    var app_id = process.env.APP_ID;
-                    var redirect_uri = process.env.REDIRECT_URI;
-                    var url = "https://connect.deezer.com/oauth/auth.php?app_id="+app_id+"&redirect_uri="+redirect_uri+"&perms=basic_access,email,offline_access,manage_library";
-                    res.redirect(url);
+                    
+                    if (response.body[0].access_token == '' || response.body[0].access_token == "Not_set")
+                    {
+                        req.session.isOauth = false;
+                        var app_id = process.env.APP_ID;
+                        var redirect_uri = process.env.REDIRECT_URI;
+                        var url = "https://connect.deezer.com/oauth/auth.php?app_id="+app_id+"&redirect_uri="+redirect_uri+"&perms=basic_access,email,offline_access,manage_library,delete_library";
+                        res.redirect(url);
+                    }
+                    else
+                    {
+                        req.session.isOauth = false;
+                        req.session.userId = req.session.userInfo.user[0].id;
+                        req.session.access_token = req.session.userInfo.user[0].access_token;
+                        req.session.access_token_expiration = '0';
+                        var url_2 = "https://developers.deezer.com/api/explorer?url=user/me?access_token=";
+                        var request_2 = unirest('GET', url_2+req.session.access_token);
+                        request_2.end((response_2) => {
+                            req.session.userDeezerId = response_2.body.id;
+                            res.redirect('/home');
+                        })              
+                    }
                     //-----------------------------------------
                 }
             }
