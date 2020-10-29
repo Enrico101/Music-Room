@@ -9,7 +9,7 @@ var getmac = require('getmac');
 var MacAddress = require('get-mac-address');
 
 var useragent = require('useragent');
-console.log("MAC ADDRESS: ", MacAddress);
+// console.log("MAC ADDRESS: ", MacAddress);
 // console.log(getmac.default());
 /////////////////////////////////////////////
 const DeviceDetector = require('node-device-detector');
@@ -25,26 +25,26 @@ router = express.Router();
 
 router.get('/', redirectDashboard, (req, res) => {
     const detector = new DeviceDetector;
-    console.log("Mac: ", getmac.default());
+    // console.log("Mac: ", getmac.default());
 
-    console.log('Request useragent: ', req.session.userAgent);
+    // console.log('Request useragent: ', req.session.userAgent);
     if (req.session.userAgent !== undefined) {
         const result = detector.detect(req.session.userAgent);
         // console.log('result parse', result);
     }else {
         var agent = useragent.parse(req.headers['user-agent']);
         req.session.userAgent = agent.source;
-        console.log('Useragent: ', req.session.userAgent);
+        // console.log('Useragent: ', req.session.userAgent);
         var tmp = agent.source.split("(");
         var tmp2 = tmp[1].split(")");
         var tmp3 = tmp2[0].split(";");
         var brand = tmp3[0];
         var model = tmp3[1];
-        console.log("tmp", tmp);
+       /*  console.log("tmp", tmp);
         console.log("tmp2", tmp2);
         console.log("brand", brand);
         console.log("model", model);
-        console.log('Useragent: ', req.session.userAgent.split("("));
+        console.log('Useragent: ', req.session.userAgent.split("(")); */
     }
     res.render('login');
 })
@@ -75,9 +75,11 @@ router.post('/verify', (req, res) => {
                     req.session.username = req.session.userInfo.user[0].username;
                     req.session.email = req.session.userInfo.user[0].email;
                     req.session.password = req.session.userInfo.user[0].password;
-                    req.session.photo = req.session.userInfo.results[0].imagePath;
+                    console.log("Results: ", req.session.userInfo.results.lenght);
+                    if (req.session.userInfo.results.length !== 0)
+                        req.session.photo = req.session.userInfo.results[0].imagePath;
                     
-                    if (response.body[0].access_token == '' || response.body[0].access_token == "Not_set")
+                    if (req.session.userInfo.user[0].access_token == '' || req.session.userInfo.user[0].access_token == "Not_set")
                     {
                         req.session.isOauth = false;
                         var app_id = process.env.APP_ID;

@@ -27,7 +27,7 @@ router.get('/', (req, res) => {
                         con.query("SELECT * FROM images WHERE username = ? LIMIT 1", [result[0].username], (err, results) => {
                             if (err)
                                 res.send("An error has occured in Images");
-                            res.send({user, results});
+                            res.send({user, results, result});
                         })
                     }
                     else
