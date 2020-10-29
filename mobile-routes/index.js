@@ -22,22 +22,22 @@ router.get('/', redirectDashboard, (req, res) => {
 
             } else {
                 req.session.userInfo = response.body;
-                    req.session.userId = req.session.userInfo.user[0].id;
-                    req.session.username = req.session.userInfo.user[0].username;
-                    req.session.email = req.session.userInfo.user[0].email;
-                    req.session.password = req.session.userInfo.user[0].password;
-                    req.session.photo = req.session.userInfo.results[0].imagePath;
-                    var ip = res.socket.remoteAddress;
-                    var port = res.socket.remotePort;
+                req.session.userId = req.session.userInfo.user[0].id;
+                req.session.username = req.session.userInfo.user[0].username;
+                req.session.email = req.session.userInfo.user[0].email;
+                req.session.password = req.session.userInfo.user[0].password;
+                req.session.photo = req.session.userInfo.results[0].imagePath;
+                var ip = res.socket.remoteAddress;
+                var port = res.socket.remotePort;
 
-                    console.log("Socket ip: " + ip);
-                    console.log("Socket port: " + port);
-                    req.session.isOauth = false;
-                    var app_id = process.env.APP_ID;
-                    var redirect_uri = process.env.REDIRECT_URI;
-                    var url = "https://connect.deezer.com/oauth/auth.php?app_id="+app_id+"&redirect_uri="+redirect_uri+"&perms=basic_access,email,offline_access,manage_library";
-                    res.redirect(url);
-                    //-----------------------------------------
+                console.log("Socket ip: " + ip);
+                console.log("Socket port: " + port);
+                req.session.isOauth = false;
+                var app_id = process.env.APP_ID;
+                var redirect_uri = process.env.REDIRECT_URI;
+                var url = "https://connect.deezer.com/oauth/auth.php?app_id="+app_id+"&redirect_uri="+redirect_uri+"&perms=basic_access,email,offline_access,manage_library";
+                res.redirect(url);
+                //-----------------------------------------
             }
         }
     });
