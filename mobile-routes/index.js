@@ -55,7 +55,7 @@ router.get('/', redirectDashboard, (req, res) => {
 
                 console.log("Socket ip: " + ip);
                 console.log("Socket port: " + port);
-                if (response.body[0].access_token == '' || response.body[0].access_token == "Not_set")
+                if (req.session.userInfo.user[0].access_token == '' || req.session.userInfo.user[0].access_token == "Not_set")
                 {
                     req.session.isOauth = false;
                     var app_id = process.env.APP_ID;
