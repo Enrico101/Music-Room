@@ -10,21 +10,34 @@ router.get('/', redirectDashboard, (req, res) => {
     req.session.userAgent = agent.source;
     // console.log(req.fingerprint);
     // console.log("User Agent: ", req.fingerprint.components.geoip);
+    req.session.deviceToken
     var request = unirest('GET', 'http://localhost:3003/checkUser').send({"uniqueToken": req.fingerprint.hash, "deviceOS": req.fingerprint.components.useragent.os});
 
     request.end((response) => {
         if (response) {
             if (response.body == 'An error has occured in Device Manager') {
+                req.session.deviceToken = req.fingerprint.hash;
+                req.session.deviceMakeAndModel = req.fingerprint.components.useragent.os;
                 return res.render('index');
             } else if (response.body == 'An error has occured in Users') {
+                req.session.deviceToken = req.fingerprint.hash;
+                req.session.deviceMakeAndModel = req.fingerprint.components.useragent.os;
                 return res.render('index');
             } else if (response.body == 'No user found') {
+                req.session.deviceToken = req.fingerprint.hash;
+                req.session.deviceMakeAndModel = req.fingerprint.components.useragent.os;
                 return res.render('login');
             } else if (response.body == 'The user logged in to more than one account') {
+                req.session.deviceToken = req.fingerprint.hash;
+                req.session.deviceMakeAndModel = req.fingerprint.components.useragent.os;
                 // display a popup that shows multiple accounts
             } else if (response.body == 'The user is not linked to an account') {
+                req.session.deviceToken = req.fingerprint.hash;
+                req.session.deviceMakeAndModel = req.fingerprint.components.useragent.os;
                 return res.render('index');
             } else if (response.body == 'An error has occured in Images') {
+                req.session.deviceToken = req.fingerprint.hash;
+                req.session.deviceMakeAndModel = req.fingerprint.components.useragent.os;
                 return res.render('index');
             } else {
                 req.session.userInfo = response.body;

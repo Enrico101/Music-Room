@@ -46,6 +46,8 @@ router.get('/', redirectDashboard, (req, res) => {
         console.log("model", model);
         console.log('Useragent: ', req.session.userAgent.split("(")); */
     }
+    console.log(req.session.deviceToken);
+    console.log(req.session.deviceMakeAndModel);
     res.render('login');
 })
 
