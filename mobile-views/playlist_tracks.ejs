@@ -19,6 +19,16 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
     <!-- Deezer API-->
     <script src="https://cdns-files.dzcdn.net/js/min/dz.js"></script>
+        <!-- Socket io -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        var room_name = `<%=room_name%>`;
+        console.log("tracks: "+`<%=tracks.tracks.data[0].id%>`);
+        
+        socket.emit('join_room', {room_number: room_name, music_section: true});
+        socket.emit('start_player', {track_id: `<%=tracks.tracks.data[0].id%>`});
+    </script>
   </head>
   <body style="background: linear-gradient(to right, #136a8a, #267871); border-radius: 6px; height: 120px;">
     <nav class="navbar navbar-expand-sm" style="background-color: black;">
@@ -74,6 +84,61 @@
     <br>
     <br>
     <br>
+    <nav class="navbar navbar-expand-sm fixed-bottom justify-content-center" style="margin-bottom: 38px;">
+        <div class="row">
+            <!--<div class="col-sm-" style="margin: auto;">
+                 Music player goes here 
+                <audio id="myAudio" controls>
+                    <source src="/music_player/music_output" type="audio/mpeg">
+                </audio> 
+            </div> -->
+
+            <div id="dz-root"></div>
+            <div id="player" style="margin: auto;"></div>
+            <script src="https://cdns-files.dzcdn.net/js/min/dz.js"></script>
+            <script>
+                console.log("screen width: "+screen.width);
+                DZ.init({
+                    appId  : '439462',
+                    channelUrl : 'http://localhost:3002/channel',
+                    player: {
+                        container: 'player',
+                        playlist: false,
+                        width : screen.width,
+                        height : 58,
+                        layout: 'dark',
+                        onload : function(){}
+                    }                
+                });
+        
+                var token = `<%=access_token%>`;
+                console.log("access_token: "+`<%=access_token%>`);
+                var token_expiration = 0;
+                var sdk_options = {
+                    token: {
+                        access_token: token,
+                        expire: token_expiration
+                    },
+                    player: {
+                        current_track: {},
+                        muted: false,
+                        repeat: 1,
+                        shuffle: false,
+                        volume: 100,
+                    }
+                };
+                socket.on('player_started', (data) => {
+                    console.log("track_id: "+data.track_id);
+                    DZ.ready(function(sdk_options)
+                    {
+                        console.log('DZ SDK is ready', sdk_options);
+                        var track = data.track_id;
+                        DZ.player.playTracks([track]);
+                    });
+                })
+            </script>
+        </div>
+    </nav>
     <nav class="navbar navbar-expand-sm fixed-bottom justify-content-center" style="background-color: black; border-color: black;">
         <a href="/home"><i style="color: white; margin-right: 25px;" class="fas fa-home"></i></a>
         <a href="/search"><i style="color: white; margin-left: 25px; margin-right: 25px;" class="fas fa-search"></i></a>

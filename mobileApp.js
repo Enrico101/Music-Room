@@ -129,8 +129,15 @@ io.on('connection', (socket) => {
     socket.on('join_room', (data) => {
         socket.join('room: '+data.room_number, () => {
             let rooms = Object.keys(socket.rooms);
-            //console.log("room: "+rooms);
+            console.log("room: "+rooms);
         })
+    })
+    socket.on('start_player', (data) => {
+        var track_id = data.track_id;
+        //let rooms = Object.keys(socket.rooms);
+        //socket.to(rooms[1]).emit('playlist_updated', {updated_playlist: response_2.body.data});
+        //io.to(socket.id).emit('playlist_updated', {updated_playlist: response_2.body.data});
+        socket.emit('player_started', {track_id: track_id});
     })
     socket.on('add_song', (data) => {
         var song_id = data.song_id;

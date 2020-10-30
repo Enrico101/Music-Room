@@ -28,8 +28,9 @@ router.get('/', (req, res) => {
 
 router.post('/playlist/tracks', (req, res) => {
     var playlist_id = req.body.playlist_id;
+    var room_name = req.body.room_name;
 
-    if (playlist_id != undefined)
+    if (playlist_id != undefined && room_name != undefined)
     {
         var tracks_url = 'https://api.deezer.com/playlist/'+playlist_id+'?access_token='+req.session.access_token;
 
@@ -37,7 +38,7 @@ router.post('/playlist/tracks', (req, res) => {
         tracks_request.end((tracks_response) => {
             if (tracks_response)
             {
-                res.render('playlist_tracks', {tracks: tracks_response.body});
+                res.render('playlist_tracks', {tracks: tracks_response.body, room_name: room_name, access_token: req.session.access_token});
             }
             else
             {
@@ -86,34 +87,44 @@ router.post('/private_playlist/tracks', (req, res) => {
     var room_number = req.body.room_number;
     var playlist_owner = req.body.playlist_owner;
 
-
     if (playlist_id != undefined && room_number != undefined && playlist_owner != undefined)
     {
-        var tracks_url = 'https://api.deezer.com/playlist/'+playlist_id;
-        var owner_access_token_url = 'http://localhost:3003/get_access_token/'+playlist_owner;
+        var url_1 = 'http://localhost:3003/get_playlist_invites'
 
-        var tracks_request = unirest('GET', tracks_url);
-        tracks_request.end((tracks_response) => {
-            if (tracks_response)
+        var request_1 = unirest('GET', url_1);
+        request_1.end((response_1) => {
+            if (response_1.body.length > 0)
             {
-                var access_token_request = unirest('GET', owner_access_token_url);
-
-                access_token_request.end((response_from_server) => {
-                    if (response_from_server != "error")
+                var x = 0;
+                var list = response_1.body;
+                
+                while (list[x])
+                {
+                    if (list[x].invited_user == req.session.username && list[x].playlist_id == playlist_id)
                     {
-                        res.render('global_playlist_tracks', {tracks: tracks_response.body, room_number: room_number, playlist_id: playlist_id, access_token: response_from_server.body});
+                        break;
+                    }
+                    x++;
+                }
+                var tracks_url = 'https://api.deezer.com/playlist/'+playlist_id+'?access_token='+list[x].access_token;
+
+                var tracks_request = unirest('GET', tracks_url);
+                tracks_request.end((tracks_response) => {
+                    if (tracks_response)
+                    {
+                        res.render('playlist_tracks', {tracks: tracks_response.body, room_name: list[x].room_name, access_token: req.session.access_token});
                     }
                     else
                     {
-                        res.send("An error occured");
+                        res.send("An error has occured");
                     }
                 })
             }
-            else
-            {
-                res.send("An error has occured");
-            }
         })
+    }
+    else
+    {
+        res.send("Missing info");
     }
 })
 //route for global playlist

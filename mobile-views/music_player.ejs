@@ -69,7 +69,7 @@
             <script>
                 DZ.init({
                     appId  : '439462',
-                    channelUrl : 'http://loclahost:3002/channel',
+                    channelUrl : 'http://localhost:3002/channel',
                     player: {
                         container: 'player',
                         playlist: false,
@@ -81,6 +81,8 @@
                 });
         
                 var token = `<%=access_token%>`;
+                console.log("access_token: "+`<%=access_token%>`);
+                console.log("expiration: "+`<%=access_token_expiration%>`);
                 var token_expiration = `<%=access_token_expiration%>`
                 var sdk_options = {
                     token: {
