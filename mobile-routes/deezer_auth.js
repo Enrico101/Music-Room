@@ -17,8 +17,6 @@ router.get('/', (req, res) => {
     var deezer_code = req.query.code;
     var deezer_error = req.query.error_reason;
 
-    console.log("deezer_code: "+deezer_code);
-    console.log("deezer_error: "+deezer_error);
     if (deezer_error == undefined)
     {
         console.log("p1");
@@ -29,6 +27,7 @@ router.get('/', (req, res) => {
             var secret = process.env.SECRET_KEY;
             var url = "https://connect.deezer.com/oauth/access_token.php?app_id="+app_id+"&secret="+secret+"&code="+deezer_code;
             var url_2 = "https://developers.deezer.com/api/explorer?url=user/me?access_token=";
+            var url_3 = "http://localhost:3003/add_access_token";
 
             var request = unirest('GET', url);
             request.end((response) => {
@@ -38,6 +37,10 @@ router.get('/', (req, res) => {
                 var access_token = access_token_2[0];
                 req.session.access_token = access_token;
                 req.session.access_token_expiration = access_token_expiration;
+                var request_3 = unirest('POST', url_3).send({"access_token": access_token, "username": req.session.username});
+                request_3.end((response_3) => {
+
+                })
                 req.session.userId = 1;
                 var request_2 = unirest('GET', url_2+access_token);
                 request_2.end((response_2) => {

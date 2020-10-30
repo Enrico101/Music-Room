@@ -148,25 +148,17 @@ router.post('/password', (req, res) => {
     let oldPassword = req.body.oldPassword;
     let newPassword = req.body.newPassword;
     let confPassword = req.body.confPassword;
-    console.log(req.session.password);
-    console.log(newPassword);
-    console.log(confPassword);
 
-    // console.log("This is bcrypt: " +bcrypt.compareSync(oldPassword, req.session.password));
     var tmpArray = [];
     if (checker(oldPassword, 'Old Password').bool === true && checker(newPassword, 'New Password').bool === true && checker(confPassword, 'Confirm Password').bool === true) {
         if (newPassword === confPassword) {
-            console.log(newPassword);
-            console.log(confPassword);
 
             var salt_rounds = 5;
             var salt = bcrypt.genSaltSync(salt_rounds);
             var hash = bcrypt.hashSync(newPassword, salt);
-            console.log(hash);
             var request = unirest('GET', 'http://localhost:3003/settings/password').send({"username": req.session.username, "oldPassword": oldPassword, "sessPass": req.session.password, "password": hash, "id": req.session.userId});
 
             request.end((response) => {
-                console.log(response.body);
                 if (response)
                 {
                     if (response.body == 'Password has been successfully updated') 

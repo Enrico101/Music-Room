@@ -40,7 +40,7 @@ router.post('/', (req, res) => {
         add_track_request.end((response) => {
             if (response)
             {
-                console.log("check here: "+util.inspect(response.body, {depth: null}));
+            
             }
             else
             {
@@ -52,7 +52,6 @@ router.post('/', (req, res) => {
                 music_request.end((music_response) => {
                     if (music_response)
                     {
-                        console.log("playlists: "+util.inspect(music_response.body, {depth: null}));
                         res.render('music_player', {track_id: track_id, access_token: req.session.access_token, access_token_expiration: req.session.access_token_expiration, track_title: track_title, cover_image: cover_image, playlists: music_response.body.data});
                     }
                     else
@@ -66,18 +65,34 @@ router.post('/', (req, res) => {
         //This statement gets triggered if a user once to create a playlist
         var playlist_url = 'https://api.deezer.com/user/me/playlists?request_method=POST&access_token='+req.session.access_token;
         
-        var playlist_request = unirest('POST', playlist_url).query('title='+playlist_name, 'privacy='+privacy);
+        var playlist_request = unirest('POST', playlist_url).query('title='+playlist_name);
         playlist_request.end((response) => {
             if (response)
             {
-                var url = 'https://api.deezer.com/user/me/playlists?access_token='+req.session.access_token;
+                console.log("Privacy: "+privacy);
+                if (privacy == 'Private')
+                {
+                    var playlist_update_url = 'https://api.deezer.com/playlist/'+response.body.id+"?request_method=POST&access_token="+req.session.access_token;
+                    var playlist_update_request = unirest('POST', playlist_update_url).query('public=false');
 
+                    playlist_update_request.end((response_update) => {
+                        console.log("dsadsadsa: "+util.inspect(response_update.body, {showHidden: false, depth: null}))
+                    })
+                }
+                var url = 'https://api.deezer.com/user/me/playlists?access_token='+req.session.access_token;
+                var url_to_server = 'http://localhost:3003/add_playlist';
+                var url_playlist_cover = 'https://api.deezer.com/playlist/'+response.body.id;
+
+                var url_playlist_cover_response = unirest('GET', url_playlist_cover);
+                url_playlist_cover_response.end((url_playlist_cover_response) => {
+                    var server_response = unirest('POST', url_to_server).send({"playlist_id": response.body.id, "playlist_name": playlist_name, "username": req.session.username, "privacy": privacy, "cover_image": url_playlist_cover_response.body.picture_small});
+                    server_response.end((server_response) => {
+                    })
+                })
                 var request_2 = unirest('GET', url);
                 request_2.end((response_2) => {
                     if (response_2)
                     {
-
-                        console.log("playlists: "+util.inspect(response.body, {depth: null}));
                         res.render('music_player', {track_id: track_id, access_token: req.session.access_token, access_token_expiration: req.session.access_token_expiration, track_title: track_title, cover_image: cover_image, playlists: response_2.body.data});
                     }
                     else
@@ -96,7 +111,6 @@ router.post('/', (req, res) => {
         request.end((response) => {
             if (response)
             {
-                console.log("playlists: "+util.inspect(response.body, {depth: null}));
                 res.render('music_player', {track_id: track_id, access_token: req.session.access_token, access_token_expiration: req.session.access_token_expiration, track_title: track_title, cover_image: cover_image, playlists: response.body.data});
             }
             else
@@ -107,7 +121,7 @@ router.post('/', (req, res) => {
     }
     else
     {
-        console.log("An error occured !");
+        res.send("An error occured");
     }
 })
 

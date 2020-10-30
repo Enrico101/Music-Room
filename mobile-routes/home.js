@@ -29,8 +29,6 @@ router.get('/', redirectLogin, (req, res) => {
             io.on('connection', (socket) => {
                 socket.emit('FoundTopTracks', response.body);
             })
-            //console.log("Found something");
-            //myEventEmitter.emit('FoundTopTracks', response.body);
         }
     })
     request_2.end((response) => {
@@ -40,8 +38,6 @@ router.get('/', redirectLogin, (req, res) => {
             io.on('connection', (socket) => {
                 socket.emit('FoundTopAlbums', response.body);
             })
-            //console.log("Found something");
-            //myEventEmitter.emit('FoundTopTracks', response.body);
         }
     })
     let user = req.session;

@@ -36,4 +36,29 @@ router.get('/results', (req, res) => {
     else
         res.render('search');
 })
+
+//Router ajax search
+router.post('/ajax/tracks', (req, res) => {
+    var song_name = req.body.song_name;
+
+    if (song_name != undefined)
+    {
+        var url = "https://api.deezer.com/search?q="+song_name;
+
+        var request = unirest('GET', url);
+        request.end((response) => {
+            if (response)
+            {
+                console.log("dsadsa: "+req.session.username);
+                res.send(response.body.data);
+            }
+            else
+                res.send("No data found");
+        })
+    }
+    else
+    {
+        res.send("Song name not defined");
+    }
+})
 module.exports = router;

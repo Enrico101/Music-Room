@@ -30,7 +30,7 @@ router.post('/', (req, res) => {
                         res.send("Username already exists");
                     else
                     {
-                        db.query("INSERT INTO users (username, email, password) VALUES (?, ?, ?)", [req.body.username, req.body.email, req.body.password], (err, succ) => {
+                        db.query("INSERT INTO users (username, email, password, access_token) VALUES (?, ?, ?, ?)", [req.body.username, req.body.email, req.body.password, req.body.access_token], (err, succ) => {
                             if (err)
                                 res.send("An error has occured!");
                             else

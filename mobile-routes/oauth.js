@@ -12,7 +12,6 @@ router.get('/google', redirectDashboard, passport.authenticate('google', { scope
 
 router.get('/google/callback', redirectDashboard, passport.authenticate('google', { failureRedirect: '/login'}), (req, res) => {
     // Successful authentication, redirect home.
-    // console.log(CURRENT_PAGE);
     if (CURRENT_PAGE === 'signup') {
         let sql = `SELECT * FROM users WHERE username = '${req.user.displayName}'`;
         con.query(sql, (err, result) => {
@@ -21,14 +20,12 @@ router.get('/google/callback', redirectDashboard, passport.authenticate('google'
                 let confirmed = 1;
                 con.query("INSERT INTO users (userName, email, password) VALUES (?, ?, ?)", [req.user.displayName, req.user.emails[0].value, "NULL"], (err, results) => {
                     if (err) throw err;
-                    console.log("1 record inserted");
                 });
     
                 const sql = `INSERT INTO images(imagePath, username) VALUES (?, ?)`;
     
                 con.query(sql, [req.user.photos[0].value, req.user.displayName], (err, result) => {
                     if (err) throw err;
-                    console.log("1 record inserted");
                 });
                 return res.redirect('/login');
             }else {
@@ -68,14 +65,12 @@ router.get('/42/callback', redirectDashboard, passport.authenticate('42', { fail
                 let confirmed = 1;
                 con.query("INSERT INTO users (userName, email, password) VALUES (?, ?, ?)", [req.user.username, req.user.emails[0].value, "NULL"], (err, results) => {
                     if (err) throw err;
-                    console.log("1 record inserted");
                 });
     
                 const sql = `INSERT INTO images(imagePath, username) VALUES (?, ?)`;
     
                 con.query(sql, [req.user.photos[0].value, req.user.username], (err, result) => {
                     if (err) throw err;
-                    console.log("1 record inserted");
                 });
                 return res.redirect('/login');
             }else {
@@ -116,14 +111,12 @@ router.get('/facebook/callback', redirectDashboard, passport.authenticate('faceb
                 let confirmed = 1;
                 con.query("INSERT INTO users (userName, email, password) VALUES (?, ?, ?)", [req.user.displayName, req.user.emails[0].value, "NULL"], (err, results) => {
                     if (err) throw err;
-                    console.log("1 record inserted");
                 });
     
                 const sql = `INSERT INTO images(imagePath, username) VALUES (?, ?)`;
     
                 con.query(sql, [req.user.photos[0].value, req.user.displayName], (err, result) => {
                     if (err) throw err;
-                    console.log("1 record inserted");
                 });
                 return res.redirect('/login');
             }else {

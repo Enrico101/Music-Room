@@ -44,46 +44,249 @@
         </div>
     </nav>
     <div class="container-fluid">
+        <div class="row" id="notifications">
+
+        </div>
+        <div class="row">
+            <div class="col-sm-" style="margin: auto;">
+                <a href="/my_music/global_playlist" style="float: right; margin-top: 15px;" type="button" class="btn btn-outline-light text-light btn-sm">Global playlists</a>
+                <a href="/my_music/private_playlist" style="float: right; margin-top: 15px;" type="button" class="btn btn-outline-light text-light btn-sm">Private playlists</a>
+                <a href="/my_music" style="float: right; margin-top: 15px;" type="button" class="btn btn-outline-light text-light btn-sm">My playlists</a>
+            </div>
+        </div>
+        <br>
         <br>
     <%
-        var x = 0;
-
-        while (playlists[x])
+        console.log("check here: "+global_playlist);
+        if (playlists != "")
         {
+            var x = 0;
+
+            while (playlists[x])
+            {
+                var button_id = "privacy_button_"+x;
+                var add_button_id = "add_"+x;
+                var default_add_button_id = "default_add_"+x;
+                var privacy_container_name = "privacy_"+x;
+                var privacy_value = playlists[x].public;
+
+                if (playlists[x].public == true)
+                {
     %>
-            <div class="row" style="margin-bottom: 10px;">
-                <div class="col-sm-11">
-                    <form action="/my_music/playlist/tracks" method="post" style="width: auto;">
-                        <input type="hidden" name="playlist_id" value=<%=playlists[x].id%>>
-                        <img src=<%=playlists[x].picture_small%>>
-                        <span style="margin-left: 10px; font-size: 15px; color: white; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; margin-top: -35px;"><%=playlists[x].title%></span>
-                        <input style="float: right; margin-top: 15px;" type="submit" name="submit" value="view playlist" class="btn btn-outline-light text-light btn-sm">
-                    </form>
-                </div>
-            </div>
+                    <div class="row" style="margin-bottom: 10px;">
+                        <div class="col-sm-11">
+                            <form action="/my_music/playlist/tracks" method="post" style="width: auto;">
+                                <input type="hidden" name=<%=privacy_container_name%> value=<%=privacy_value%> id=<%=privacy_container_name%>>
+                                <input id="play_id" type="hidden" name="playlist_id" value=<%=playlists[x].id%>>
+                                <input id="cover" type="hidden" name="cover" value=<%=playlists[x].picture_small%>>
+                                <input id="playlist_name" type="hidden" name="playlist_name" value=<%=playlists[x].title%>>
+                                <img src=<%=playlists[x].picture_small%>>
+                                <span style="margin-left: 10px; font-size: 15px; color: white; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; margin-top: -35px;"><%=playlists[x].title%></span>
+                                <!-- <input style="float: right; margin-top: 15px;" type="submit" name="submit" value="view playlist" class="btn btn-outline-light text-light btn-sm"> -->
+                                <button name="submit" type="submit" style="border:rgba(0, 0, 0, 0); background-color: rgba(0, 0, 0, 0); float: right; color: whitesmoke; margin-top: 11px; margin-right: 5px;"><i class="fas fa-angle-right"></i></button>
+                                <button  onclick="change_privacy(`<%=playlists[x].id%>`, `<%=button_id%>`, `<%=privacy_container_name%>`,`<%=add_button_id%>`, `<%=default_add_button_id%>`)" type="button" style="border:rgba(0, 0, 0, 0); background-color: rgba(0, 0, 0, 0); float: right; color: whitesmoke; margin-top: 11px; margin-right: 5px;" id=<%=button_id%>><i class="fas fa-user"></i></button>
+                                <span id=<%=add_button_id%>></span>
+                            </form>
+                        </div>
+                    </div>
     <%
-            x++;
+                }
+                else if (playlists[x].public == false)
+                {
+    %>
+                    <div class="row" style="margin-bottom: 10px;">
+                        <div class="col-sm-11">
+                            <form action="/my_music/playlist/tracks" method="post" style="width: auto;">
+                                <input type="hidden" name=<%=privacy_container_name%> value=<%=privacy_value%> id=<%=privacy_container_name%>>
+                                <input id="play_id" type="hidden" name="playlist_id" value=<%=playlists[x].id%>>
+                                <input id="cover" type="hidden" name="cover" value=<%=playlists[x].picture_small%>>
+                                <input id="playlist_name" type="hidden" name="playlist_name" value=<%=playlists[x].title%>>
+                                <img src=<%=playlists[x].picture_small%>>
+                                <span style="margin-left: 10px; font-size: 15px; color: white; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; margin-top: -35px;"><%=playlists[x].title%></span>
+                                <!-- <input style="float: right; margin-top: 15px;" type="submit" name="submit" value="view playlist" class="btn btn-outline-light text-light btn-sm"> -->
+                                <button name="submit" type="submit" style="border:rgba(0, 0, 0, 0); background-color: rgba(0, 0, 0, 0); float: right; color: whitesmoke; margin-top: 11px; margin-right: 5px;"><i class="fas fa-angle-right"></i></button>
+                                <button onclick="change_privacy(`<%=playlists[x].id%>`, `<%=button_id%>`, `<%=privacy_container_name%>`, `<%=add_button_id%>`, `<%=default_add_button_id%>`)" type="button" style="border:rgba(0, 0, 0, 0); background-color: rgba(0, 0, 0, 0); float: right; color: whitesmoke; margin-top: 11px; margin-right: 5px;" id=<%=button_id%> ><i class="fas fa-user-slash"></i></button>
+                                <span id=<%=default_add_button_id%>><button type="button" style="border:rgba(0, 0, 0, 0); background-color: rgba(0, 0, 0, 0); float: right; color: whitesmoke; margin-top: 11px; margin-right: 5px;" data-toggle="modal" data-target="#myModal"><i class="fas fa-plus"></i></button></span>
+                                <span id=<%=add_button_id%>></span>
+                            </form>
+                        </div>
+                    </div>
+    <%
+                }
+                x++;
+            }
+        }
+        else if (global_playlist != "")
+        {
+            var x = 0;
+            
+            while (global_playlist[x])
+            {
+                console.log("iM IN ");
+                var room_number = x;
+                var playlist_owner = global_playlist[x].username;
+                console.log("public: "+global_playlist[x].public);
+                if (global_playlist[x].public == "true")
+                {
+    %>
+                    <div class="row" style="margin-bottom: 10px;">
+                        <div class="col-sm-11">
+                            <form action="/my_music/global_playlist/tracks" method="post" style="width: auto;">
+                                <input type="hidden" name="room_number" value=<%=room_number%>>
+                                <input type="hidden" name="playlist_id" value=<%=global_playlist[x].id%>>
+                                <input type="hidden" name="playlist_owner" value=<%=playlist_owner%>>
+                                <img src=<%=global_playlist[x].cover_image%>>
+                                <span style="margin-left: 10px; font-size: 15px; color: white; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; margin-top: -35px;"><%=global_playlist[x].playlist_name%></span>
+                                <input style="float: right; margin-top: 15px;" type="submit" name="submit" value="view playlist" class="btn btn-outline-light text-light btn-sm">
+                            </form>
+                        </div>
+                    </div>
+    <%
+                }
+                x++;
+            }
+        }
+        else if (private_playlist != "")
+        {
+            var x = 0;
+            
+            while (private_playlist[x])
+            {
+    %>
+                <div class="row" style="margin-bottom: 10px;">
+                    <div class="col-sm-11">
+                        <form action="/my_music/private_playlist/tracks" method="post" style="width: auto;">
+                            <input type="hidden" name="room_number" value=<%=room_number%>>
+                            <input type="hidden" name="playlist_id" value=<%=private_playlist[x].playlist_id%>>
+                            <input type="hidden" name="playlist_owner" value=<%=private_playlist[x].playlist_owner%>>
+                            <input type="hidden" name="access_token" value=<%=private_playlist[x].access_token%>>
+                            <img src=<%=private_playlist[x].cover_image%>>
+                            <span style="margin-left: 10px; font-size: 15px; color: white; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; margin-top: -35px;"><%=private_playlist[x].playlist_name%></span>
+                            <input style="float: right; margin-top: 15px;" type="submit" name="submit" value="view playlist" class="btn btn-outline-light text-light btn-sm">
+                        </form>
+                    </div>
+                </div>
+    <%
+                x++;
+            }
         }
      %>
     </div>
     <br>
     <br>
     <br>
+    <div class="modal fade" id="myModal">
+        <div class="modal-dialog modal-dialog-scrollable" style="margin-top: 50px;">
+          <div class="modal-content" style="border-color: rgba(0, 0, 0, 0); background: rgba(0, 0, 0, 0)">
+            <div class="modal-header">
+                <input class="form-control" id="username" type="text" oninput="enableSerachButton();" placeholder="Enter username">
+                <br>
+                <input style="margin-left: 10px;" class="btn btn-secondary" id="inviteButton"type="button" onclick="sendInvite();" value="Invite">
+                <button id="x_button" type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div id="displayResults">
+                </div>
+            </div>
+          </div>
+        </div>
+    </div>
     <nav class="navbar navbar-expand-sm fixed-bottom justify-content-center" style="background-color: black; border-color: black;">
         <a href="/home"><i style="color: white; margin-right: 25px;" class="fas fa-home"></i></a>
         <a href="/search"><i style="color: white; margin-left: 25px; margin-right: 25px;" class="fas fa-search"></i></a>
         <a href="/my_music"><i style="color: white; margin-left: 25px; margin-right: 25px;" class="fas fa-music"></i></a>
-        <!-- Button to Open the Modal -->
-        <button style="margin-left: 20px; background-color: black; border-color: black;" type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-            <i class="fas fa-stream"></i>
-        </button>
     </nav>
     <script>
+        document.getElementById("inviteButton").disabled = true;
+        function enableSerachButton()
+        {
+          document.getElementById("inviteButton").disabled = false;
+        }
         function changeColorLogin() {
             document.getElementById("loginLink").style.color = "#348F50";
         }
         function changeColorSignUp() {
             document.getElementById("signupLink").style.color = "#348F50";
+        }
+        function change_privacy(playlist_id, button_id, container_id, add_button_id, default_add_button_id)
+        {
+            var data = document.getElementById(container_id).value;
+
+            if (data != undefined && playlist_id != undefined)
+            {
+                var privacy = "";
+                if (data == "false")
+                {
+                    privacy = "true";
+                }
+                else if (data == "true")
+                {
+                    privacy = "false";
+                }
+                var xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) 
+                    {
+                        var response = this.responseText;
+                        if (response == "success")
+                        {
+                            if (privacy == "true")
+                            {
+                                document.getElementById(button_id).innerHTML = `<i class="fas fa-user"></i>`;
+                                document.getElementById(container_id).value = "true";
+                                document.getElementById(add_button_id).innerHTML = "";
+                                if (document.getElementById(default_add_button_id) != null)
+                                {
+                                    document.getElementById(default_add_button_id).innerHTML = "";
+                                }
+                            }
+                            else if (privacy == "false")
+                            {
+                                document.getElementById(button_id).innerHTML = `<i class="fas fa-user-slash"></i>`;
+                                document.getElementById(container_id).value = "false";
+                                document.getElementById(add_button_id).innerHTML = `<button type="button" style="border:rgba(0, 0, 0, 0); background-color: rgba(0, 0, 0, 0); float: right; color: whitesmoke; margin-top: 11px; margin-right: 5px;" data-toggle="modal" data-target="#myModal"><i class="fas fa-plus"></i></button>`;
+                            }
+                        }
+                    }
+                }
+                xhttp.open('POST', 'http://localhost:3002/change_privacy', true);
+                xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                var data = "privacy="+privacy+"&playlist_id="+playlist_id;
+                xhttp.send(data);
+            }
+        }
+        function sendInvite()
+        {
+          var username = document.getElementById("username").value;
+          var play_id = document.getElementById("play_id").value;
+          var cover = document.getElementById("cover").value;
+          var playlist_name = document.getElementById("playlist_name").value;
+
+          var xhttp = new XMLHttpRequest();
+          xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                var x_button = document.getElementById("x_button");
+                x_button.click();
+                var div = document.getElementById("displayResults");
+                var response = this.responseText;
+                console.log("dsdsds: "+response);
+                if (response == "success")
+                {
+                    document.getElementById("notifications").innerHTML = `<div class="alert alert-success alert-dismissible fade show"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Success!</strong> If the user exists, they will recieve the invite.</div>`;
+                }
+                else
+                {
+                    document.getElementById("notifications").innerHTML = `<div class="alert alert-danger alert-dismissible fade show"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Failure!</strong> This error appeared because the user already has an invite or sn unkown error occured.</div>`;
+                }
+            }
+          };
+          xhttp.open('POST', 'http://localhost:3002/playlist_invite', true);
+          xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+          console.log("username: "+username);
+          console.log("play_id: "+play_id);
+          var data = "username="+username+"&playlist_id="+play_id+"&cover_image="+cover+"&playlist_name="+playlist_name;
+          xhttp.send(data);
         }
     </script>
   </body>

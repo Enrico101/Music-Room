@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Font awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    <!-- Deezer API-->
+    <script src="https://cdns-files.dzcdn.net/js/min/dz.js"></script>
+    <!-- Socket io -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        var room_number = `<%=room_number%>`;
+        
+        socket.emit('join_room', {room_number: room_number});
+    </script>
+  </head>
+  <body style="background: linear-gradient(to right, #136a8a, #267871); border-radius: 6px; height: 120px;">
+    <nav class="navbar navbar-expand-sm" style="background-color: black;">
+        <a class="navbar-brand" href="">
+            <i style="color: white;" class=" fas fa-compact-disc fa-2x"></i>
+        </a>
+        <!-- Toggler/collapsibe Button -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+            <i style="color: white;" class="fas fa-bars"></i>
+        </button>
+        <!-- Navbar links -->
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <br>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a id="loginLink" onclick="changeColorLogin()" style="font-size: 30px; color: white; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;" class="nav-link" href="/Account">Account</a>
+                </li>
+                <li class="nav-item">
+                    <a id="signupLink" onclick="changeColorSignUp()" style="font-size: 30px; color: white; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;" class="nav-link" href="/About">About</a>
+                </li>
+            </ul>
+            <br>
+        </div>
+    </nav>
+    <div class="container-fluid">
+        <br />
+        <div class="row">
+            <div class="col-sm-" style="margin: auto;">
+                <!-- Button to Open the Modal -->
+                <button type="button" type="button" class="btn btn-outline-light text-light btn-sm" data-toggle="modal" data-target="#myModal">
+                    Add song
+                </button>
+            </div>
+        </div>
+        <br>
+        <div id="list_tracks">
+    <%
+            var x = 0;
+
+            while (tracks.tracks.data[x])
+            {
+                var track_id = tracks.tracks.data[x].id;
+                var track_title = tracks.tracks.data[x].title;
+                var cover_image = tracks.tracks.data[x].album.cover_medium;
+    %>
+                <div class="row" style="margin-bottom: 10px;">
+                    <div class="col-sm-10">
+                        <form action="/music_player" method="post" style="width: auto;">
+                            <input type="hidden" name="track_id" value=<%=track_id%>>
+                            <input type="hidden" name="track_title" value=<%=track_title%>>
+                            <input type="hidden" name="cover_image" value=<%=cover_image%>>
+                            <img src=<%=tracks.tracks.data[x].album.cover_small%>>
+                            <span style="margin-left: 10px; font-size: 15px; color: white; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; margin-top: -35px;"><%=tracks.tracks.data[x].title%></span>
+                            <!-- <input style="float: right; margin-top: 13px; width: 30px; height: 30px; filter: invert(100%);" type="image" name="submit" src="../sprites/Daco_5913043.png"> -->
+                            <button type="submit" style="border:rgba(0, 0, 0, 0); background-color: rgba(0, 0, 0, 0); float: right; color: whitesmoke; margin-top: 13px; margin-right: 5px;"><i class="far fa-play-circle fa-2x"></i></button>
+                            <button type="button" style="border:rgba(0, 0, 0, 0); background-color: rgba(0, 0, 0, 0); float: right; color: whitesmoke; margin-top: 11px; margin-right: 5px;" onclick="delete_song(`<%=track_id%>`)";><i class="far fa-trash-alt fa-2x"></i></button>
+                        </form>
+                    </div>
+                </div>
+    <%
+                x++;
+            }
+     %>
+        </div>
+    </div>
+    <br>
+    <br>
+    <br>
+    <div class="modal fade" id="myModal">
+        <div class="modal-dialog modal-dialog-scrollable" style="margin-top: 50px;">
+          <div class="modal-content" style="border-color: rgba(0, 0, 0, 0); background: rgba(0, 0, 0, 0)">
+            <div class="modal-header">
+                <input class="form-control" id="song_name" type="text" oninput="enableSerachButton();" placeholder="Enter song_name">
+                <br>
+                <input style="margin-left: 10px;" class="btn btn-secondary" id="searchButton"type="button" onclick="sendSong();" value="search">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div id="displayResults">
+                </div>
+            </div>
+          </div>
+        </div>
+    </div>
+    <nav class="navbar navbar-expand-sm fixed-bottom justify-content-center" style="background-color: black; border-color: black;">
+        <a href="/home"><i style="color: white; margin-right: 25px;" class="fas fa-home"></i></a>
+        <a href="/search"><i style="color: white; margin-left: 25px; margin-right: 25px;" class="fas fa-search"></i></a>
+        <a href="/my_music"><i style="color: white; margin-left: 25px; margin-right: 25px;" class="fas fa-music"></i></a>
+        <!-- Button to Open the Modal -->
+        <button style="margin-left: 20px; background-color: black; border-color: black;" type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+            <i class="fas fa-stream"></i>
+        </button>
+    </nav>
+    <script>
+        //for siokcets ------------------------------------
+        document.getElementById("searchButton").disabled = true;
+        
+        function enableSerachButton()
+        {
+          document.getElementById("searchButton").disabled = false;
+        }
+        function sendSong()
+        {
+          var song_name = document.getElementById("song_name").value;
+          var xhttp = new XMLHttpRequest();
+          xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+              var div = document.getElementById("displayResults");
+              var myArray = JSON.parse(this.responseText);
+
+              var x = 0;
+              div.innerHTML = "";
+              while (myArray[x])
+              {
+                var song = myArray[x];
+
+                div.innerHTML += `<br><img src=`+song.album.cover_small+`><span style="margin-left: 10px; color: white;">`+song.title_short+`</span><button class="btn btn-secondary btn-sm" style="float: right;" onclick="addSong(`+song.id+`);" type="button">Add song</button><br>`;
+                //console.log("lookssss: "+song_name.title);
+                x++;
+              }
+            }
+          };
+          xhttp.open('POST', 'http://localhost:3002/search/ajax/tracks', true);
+          xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+          var data = "song_name="+song_name;
+          xhttp.send(data);
+        }
+        function addSong(song_id)
+        {
+          console.log("song_id: "+song_id);
+          var room_number = `<%=room_number%>`;
+          var playlist_id = `<%=playlist_id%>`;
+          var access_token = `<%=access_token%>`;
+
+          if (room_number != undefined && playlist_id != undefined && access_token != undefined)
+          {
+              console.log("about to emit: add_song");
+              socket.emit('add_song', {song_id: song_id, room_number: room_number, playlist_id: playlist_id, access_token: access_token});
+          }
+          else
+          {
+              console.log("An error in omitting event: add_song");
+          }
+        }
+        function delete_song(song_id)
+        {
+            var room_number = `<%=room_number%>`;
+            var playlist_id = `<%=playlist_id%>`;
+            var access_token = `<%=access_token%>`;
+
+            if (room_number != undefined && playlist_id != undefined && access_token != undefined)
+            {
+                console.log("About to emit: deletSong");
+                socket.emit('delete_song', {song_id: song_id, room_number: room_number, playlist_id: playlist_id, access_token: access_token});
+            }
+            else
+            {
+                console.log("An error in ommitting event: delete_song");
+            }
+        }
+
+        //--------------------------------
+        function changeColorLogin() {
+            document.getElementById("loginLink").style.color = "#348F50";
+        }
+        function changeColorSignUp() {
+            document.getElementById("signupLink").style.color = "#348F50";
+        }
+
+        //Events
+        socket.on('playlist_updated', (data) => {
+            var div = document.getElementById("list_tracks");
+            console.log("playlist_updated");
+            var x = 0;
+            div.innerHTML = "";
+            //console.log("data: "+data.updated_playlist[x].title);
+            while (data.updated_playlist[x])
+            {
+                var song = data.updated_playlist[x];
+                console.log("song_title: "+song.title);
+                div.innerHTML += `<div class="row" style="margin-bottom: 10px;"><div class="col-sm-11"><form action="/music_player" method="post" style="width: auto;"><input type="hidden" name="track_id" value=`+song.id+`><input type="hidden" name="track_title" value=`+song.title+`><input type="hidden" name="cover_image" value=`+song.album.cover_medium+`><img src=`+song.album.cover_small+`><span style="margin-left: 10px; font-size: 15px; color: white; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; margin-top: -35px;">`+song.title_short+`</span><button type="submit" style="border:rgba(0, 0, 0, 0); background-color: rgba(0, 0, 0, 0); float: right; color: whitesmoke; margin-top: 13px; margin-right: 5px;"><i class="far fa-play-circle fa-2x"></i></button><button type="button" style="border:rgba(0, 0, 0, 0); background-color: rgba(0, 0, 0, 0); float: right; color: whitesmoke; margin-top: 11px; margin-right: 5px;" onclick="delete_song('`+song.id+`')";><i class="far fa-trash-alt fa-2x"></i></button></form></div></div>`;
+                //console.log("lookssss: "+song_name.title);
+                x++;
+            }
+        })
+        socket.on('deleted_song_playlist_updated', (data) => {
+            var div = document.getElementById("list_tracks");
+            console.log("song deleted");
+            var x = 0;
+            div.innerHTML = "";
+            //console.log("data: "+data.updated_playlist[x].title);
+            while (data.updated_playlist[x])
+            {
+                var song = data.updated_playlist[x];
+                console.log("song_title: "+song.title);
+                div.innerHTML += `<div class="row" style="margin-bottom: 10px;"><div class="col-sm-11"><form action="/music_player" method="post" style="width: auto;"><input type="hidden" name="track_id" value=`+song.id+`><input type="hidden" name="track_title" value=`+song.title+`><input type="hidden" name="cover_image" value=`+song.album.cover_medium+`><img src=`+song.album.cover_small+`><span style="margin-left: 10px; font-size: 15px; color: white; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; margin-top: -35px;">`+song.title_short+`</span><button type="submit" style="border:rgba(0, 0, 0, 0); background-color: rgba(0, 0, 0, 0); float: right; color: whitesmoke; margin-top: 13px; margin-right: 5px;"><i class="far fa-play-circle fa-2x"></i></button><button type="button" style="border:rgba(0, 0, 0, 0); background-color: rgba(0, 0, 0, 0); float: right; color: whitesmoke; margin-top: 11px; margin-right: 5px;" onclick="delete_song('`+song.id+`')";><i class="far fa-trash-alt fa-2x"></i></button></form></div></div>`;
+                //console.log("lookssss: "+song_name.title);
+                x++;
+            }
+        })
+    </script>
+  </body>
+</html>
