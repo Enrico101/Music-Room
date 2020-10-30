@@ -4,7 +4,9 @@ var socket = require('socket.io');
 var events = require('events');
 const passport = require('passport');
 const dotenv = require('dotenv');
+var bodyParser = require('body-parser');
 var util = require('util');
+const Fingerprint = require('express-fingerprint');
 var session = require('express-session');
 const MySQLStore = require('express-mysql-session')(session);
 var bodyParser = require('body-parser');
@@ -23,6 +25,17 @@ var app = express();
     resave: true,
     saveUninitialized: true
 })); */
+
+app.use(Fingerprint({
+    parameters:[
+        // Defaults
+        Fingerprint.useragent,
+        Fingerprint.acceptHeaders,
+        Fingerprint.geoip
+    ]
+}));
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(bodyParser.urlencoded({
     extended: 'true'

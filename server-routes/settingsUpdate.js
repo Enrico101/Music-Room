@@ -39,7 +39,6 @@ router.get('/username', (req, res) => {
         return res.send("Username field is empty");
 });
 
-
 router.get('/email', (req, res) => {
     var email = req.body.email;
     var id = req.body.id;
@@ -81,4 +80,35 @@ router.get('/password', (req, res) => {
     }
     
 })
+
+router.get('/profilePic', (req, res) => {
+    let photo = req.body.image;
+    let username = req.body.username;
+    let id = req.body.id;
+    let update = req.body.update;
+    const sql = `UPDATE images SET imagePath = ? WHERE username = ?`;
+            
+    con.query(sql, [photo, username], (err, result) => {
+        if (err) return res.send("An error has occured");
+        req.session.photo = photo;
+        console.log(result.affectedRows + " record(s) updated");
+        return res.send("Profile Picture has been successfully updated");
+    });
+})
+
+router.post('/profilePic', (req, res) => {
+    let photo = req.body.image;
+    let username = req.body.username;
+    let id = req.body.id;
+    let update = req.body.update;
+    const sql = `INSERT INTO images(imagePath, username) VALUES (?, ?)`;
+            
+    con.query(sql, [photo, username], (err, result) => {
+        if (err) return res.send("An error has occured");
+        req.session.photo = photo;
+        console.log('1 Document inserted');
+        return res.send("Profile Picture has been successfully updated");
+    });
+})
+
 module.exports = router;

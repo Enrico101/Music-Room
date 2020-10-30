@@ -27,6 +27,7 @@ var get_access_token = require('./server-routes/get_access_token');
 var get_playlist_invites = require('./server-routes/getPlaylistInvites');
 var add_playlist_invite = require('./server-routes/addPlaylistInvite');
 var get_my_playlist = require('./server-routes/get_my_playlists');
+const checkUser = require('./server-routes/checkUser');
 
 app.set('view engine', 'ejs');
 app.use('/newUser', newUser);
@@ -39,6 +40,8 @@ app.use('/add_access_token', add_access_token);
 app.use('/get_access_token', get_access_token);
 app.use('/get_playlist_invites', get_playlist_invites);
 app.use('/add_playlist_invite', add_playlist_invite);
+app.use('/settings', settings); 
+app.use('/checkUser', checkUser);
 
 app.listen(Port, (err) => {
     if (err)

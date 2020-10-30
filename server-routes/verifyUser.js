@@ -13,6 +13,8 @@ router.use(bodyParser.urlencoded({
 router.get('/', (req, res) => {
     var username = req.body.username;
     var password = req.body.password;
+    var deviceToken = req.body.uniqueToken;
+    var deviceOS = req.body.deviceOS;
 
     if (validator.isEmpty(username) == false && validator.isEmpty(password) == false)
     {
@@ -25,7 +27,21 @@ router.get('/', (req, res) => {
                 // console.log("Password: "+password);
                 if (bcrypt.compareSync(password, user[0].password))
                 {
-                    res.send(user);
+                    db.query("SELECT * FROM images WHERE username = ? LIMIT 1", [username], (err, results) => {
+                        if (err)
+                            res.send("An error has occured");
+                        db.query("SELECT * FROM deviceManager WHERE deviceToken = ? AND username = ?", [deviceToken, deviceOS], (err, data) => {
+                            if (err) return res.send("An error has occured");
+                            if (data.length !== 0) {
+                                return res.send({user, results, data});
+                            } else {
+                                db.query("INSERT INTO deviceManager (username, deviceToken, deviceMakeAndModel) VALUES (?, ?, ?)", [username, deviceToken, deviceOS], (err, devInfo) => {
+                                    if (err) return res.send("An error has occured");
+                                    return res.send({user, results});
+                                })
+                            }
+                        })
+                    })
                 }
                 else
                 {
