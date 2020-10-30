@@ -45,7 +45,9 @@ router.get('/', redirectDashboard, (req, res) => {
                 req.session.username = req.session.userInfo.user[0].username;
                 req.session.email = req.session.userInfo.user[0].email;
                 req.session.password = req.session.userInfo.user[0].password;
-                req.session.photo = req.session.userInfo.results[0].imagePath;
+                // req.session.photo = req.session.userInfo.results[0].imagePath;
+                if (req.session.userInfo.results.length !== 0)
+                    req.session.photo = req.session.userInfo.results[0].imagePath;
                 req.session.deviceToken = req.session.userInfo.result[0].deviceToken;
                 req.session.deviceMakeAndModel = req.session.userInfo.result[0].deviceMakeAndModel;
                 var ip = res.socket.remoteAddress;
