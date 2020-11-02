@@ -30,7 +30,7 @@ router.get('/', (req, res) => {
                     db.query("SELECT * FROM images WHERE username = ? LIMIT 1", [username], (err, results) => {
                         if (err)
                             res.send("An error has occured");
-                        db.query("SELECT * FROM deviceManager WHERE deviceToken = ? AND username = ?", [deviceToken, deviceOS], (err, data) => {
+                        db.query("SELECT * FROM deviceManager WHERE deviceToken = ? AND username = ? LIMIT 1", [deviceToken, username], (err, data) => {
                             if (err) return res.send("An error has occured");
                             if (data.length !== 0) {
                                 return res.send({user, results, data});

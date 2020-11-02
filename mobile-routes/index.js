@@ -14,6 +14,7 @@ router.get('/', redirectDashboard, (req, res) => {
     var request = unirest('GET', 'http://localhost:3003/checkUser').send({"uniqueToken": req.fingerprint.hash, "deviceOS": req.fingerprint.components.useragent.os});
 
     request.end((response) => {
+        console.log(response.body);
         if (response) {
             if (response.body == 'An error has occured in Device Manager') {
                 req.session.deviceToken = req.fingerprint.hash;
