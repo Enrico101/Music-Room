@@ -38,7 +38,7 @@ router.post('/playlist/tracks', (req, res) => {
         tracks_request.end((tracks_response) => {
             if (tracks_response)
             {
-                res.render('playlist_tracks', {tracks: tracks_response.body, room_name: room_name, access_token: req.session.access_token});
+                res.render('playlist_tracks', {tracks: tracks_response.body, room_name: room_name, access_token: req.session.access_token, owner: "true"});
             }
             else
             {
@@ -112,7 +112,7 @@ router.post('/private_playlist/tracks', (req, res) => {
                 tracks_request.end((tracks_response) => {
                     if (tracks_response)
                     {
-                        res.render('playlist_tracks', {tracks: tracks_response.body, room_name: list[x].room_name, access_token: req.session.access_token});
+                        res.render('playlist_tracks', {tracks: tracks_response.body, room_name: list[x].room_name, access_token: req.session.access_token, owner: "false"});
                     }
                     else
                     {

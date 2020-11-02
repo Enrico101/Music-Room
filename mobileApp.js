@@ -139,6 +139,16 @@ io.on('connection', (socket) => {
         //io.to(socket.id).emit('playlist_updated', {updated_playlist: response_2.body.data});
         socket.emit('player_started', {track_id: track_id});
     })
+    socket.on('change_track', (data) => {
+        var track_id = data.track_id;
+        //var room_name = data.room_name;
+        // /console.log("room_name: "+room_name);
+        var rooms = Object.keys(socket.rooms);
+        io.to(socket.id).emit('player_started', {track_id: track_id});
+        //socket.to(rooms[1]).emit('player_started', {track_id: track_id});
+        //socket.emit('player_started', {track_id: track_id});
+        //io.in(rooms[1]).emit('player_started', {track_id: track_id});
+    })
     socket.on('add_song', (data) => {
         var song_id = data.song_id;
         var room_number = data.room_number;

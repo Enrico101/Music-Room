@@ -26,8 +26,8 @@
         var room_name = `<%=room_name%>`;
         console.log("tracks: "+`<%=tracks.tracks.data[0].id%>`);
         
-        socket.emit('join_room', {room_number: room_name, music_section: true});
-        socket.emit('start_player', {track_id: `<%=tracks.tracks.data[0].id%>`});
+        socket.emit('join_room', {room_number: room_name});
+        //socket.emit('start_player', {track_id: `<%=tracks.tracks.data[0].id%>`});
     </script>
   </head>
   <body style="background: linear-gradient(to right, #136a8a, #267871); border-radius: 6px; height: 120px;">
@@ -55,6 +55,7 @@
     </nav>
     <div class="container-fluid">
         <br>
+        <hr style="margin: 0px; width: 100%; margin: 0px">
     <%
         var x = 0;
 
@@ -64,16 +65,16 @@
             var track_title = tracks.tracks.data[x].title;
             var cover_image = tracks.tracks.data[x].album.cover_medium;
     %>
-            <div class="row" style="margin-bottom: 10px;">
+            <div class="row" style="margin-bottom: 0px;">
                 <div class="col-sm-11">
-                    <form action="/music_player" method="post" style="width: auto;">
+                    <button  onclick="change_track(`<%=track_id%>`);" type="button" class="btn btn-primary btn-block" style="background-color: rgba(0, 0, 0, 0); border: 0px; margin-top: 0px; margin-bottom: 0px;">
                         <input type="hidden" name="track_id" value=<%=track_id%>>
                         <input type="hidden" name="track_title" value=<%=track_title%>>
                         <input type="hidden" name="cover_image" value=<%=cover_image%>>
-                        <img src=<%=tracks.tracks.data[x].album.cover_small%>>
-                        <span style="margin-left: 10px; font-size: 15px; color: white; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; margin-top: -35px;"><%=tracks.tracks.data[x].title%></span>
-                        <input style="float: right; margin-top: 13px; width: 30px; height: 30px; filter: invert(100%);" type="image" name="submit" src="../sprites/Daco_5913043.png">
-                    </form>
+                        <img src=<%=tracks.tracks.data[x].album.cover_small%> style="border-radius: 0px; float: left; margin-right: 15px;">
+                        <span style="float: left; margin-top: 15px; font-size: 15px; color: white; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;"><%=tracks.tracks.data[x].title%></span>
+                    </button>
+                    <hr style="margin: 0px; width: 100%; margin: 0px;">
                 </div>
             </div>
     <%
@@ -110,30 +111,41 @@
                         onload : function(){}
                     }                
                 });
-        
                 var token = `<%=access_token%>`;
-                console.log("access_token: "+`<%=access_token%>`);
-                var token_expiration = 0;
-                var sdk_options = {
-                    token: {
-                        access_token: token,
-                        expire: token_expiration
-                    },
-                    player: {
-                        current_track: {},
-                        muted: false,
-                        repeat: 1,
-                        shuffle: false,
-                        volume: 100,
+                    console.log("access_token: "+token);
+                    var token_expiration = 0;
+                    var sdk_options = {
+                        token: {
+                            access_token: token,
+                            expire: token_expiration
+                        },
+                        player: {
+                            current_track: {},
+                            muted: false,
+                            repeat: 1,
+                            shuffle: false,
+                            volume: 100,
+                        }
+                    };  
+                function change_track(track_id)
+                {
+                    var owner_of_playlist = `<%=owner%>`;
+                    console.log("owner: "+owner_of_playlist);
+                    if (owner_of_playlist == "true")
+                    {
+                        socket.emit('change_track', {track_id: track_id, room_name: `<%=room_name%>`});
                     }
-                };
+                }
                 socket.on('player_started', (data) => {
-                    console.log("track_id: "+data.track_id);
+                    console.log("playing music in room right now");
+                    console.log("track_id: "+data.track_id);             
                     DZ.ready(function(sdk_options)
                     {
                         console.log('DZ SDK is ready', sdk_options);
                         var track = data.track_id;
-                        DZ.player.playTracks([track]);
+                        DZ.player.playTracks([track], (response) => {
+                            console.log("playing song right now");
+                        });
                     });
                 })
             </script>
