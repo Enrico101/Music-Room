@@ -32,6 +32,7 @@ router.get('/', redirectDashboard, (req, res) => {
                 req.session.deviceToken = req.fingerprint.hash;
                 req.session.deviceMakeAndModel = req.fingerprint.components.useragent.os;
                 // display a popup that shows multiple accounts
+                return res.render('index');
             } else if (response.body == 'The user is not linked to an account') {
                 req.session.deviceToken = req.fingerprint.hash;
                 req.session.deviceMakeAndModel = req.fingerprint.components.useragent.os;
