@@ -11,7 +11,7 @@ router.get('/', redirectDashboard, (req, res) => {
     // console.log(req.fingerprint);
     // console.log("User Agent: ", req.fingerprint.components.geoip);
     req.session.deviceToken
-    var request = unirest('GET', 'http://localhost:3003/checkUser').send({"uniqueToken": req.fingerprint.hash, "deviceOS": req.fingerprint.components.useragent.os});
+    var request = unirest('GET', 'http://localhost:3003/api/checkUser').send({"uniqueToken": req.fingerprint.hash, "deviceOS": req.fingerprint.components.useragent.os});
 
     request.end((response) => {
         console.log(response.body);

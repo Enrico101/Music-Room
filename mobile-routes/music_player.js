@@ -80,12 +80,12 @@ router.post('/', (req, res) => {
                     })
                 }
                 var url = 'https://api.deezer.com/user/me/playlists?access_token='+req.session.access_token;
-                var url_to_server = 'http://localhost:3003/add_playlist';
+                var url_to_server = 'http://localhost:3003/api/post_playlist';
                 var url_playlist_cover = 'https://api.deezer.com/playlist/'+response.body.id;
 
                 var url_playlist_cover_response = unirest('GET', url_playlist_cover);
                 url_playlist_cover_response.end((url_playlist_cover_response) => {
-                    var server_response = unirest('POST', url_to_server).send({"playlist_id": response.body.id, "playlist_name": playlist_name, "username": req.session.username, "privacy": privacy, "cover_image": url_playlist_cover_response.body.picture_small});
+                    var server_response = unirest('POST', url_to_server).send({"playlist_id": response.body.id, "playlist_name": playlist_name, "username": req.session.username, "privacy": privacy, "cover_image": url_playlist_cover_response.body.picture_small, "playlist_rights": "add_remove"});
                     server_response.end((server_response) => {
                     })
                 })

@@ -22,6 +22,8 @@ router.get('/:username', (req, res) => {
            console.log("dataset: "+succ);
            if (succ.length > 0)
            {
+               console.log("succ");
+               console.log("sjkjsnndsjnjk: "+succ[0].playlist_name);
                res.send(succ);
            }
            else

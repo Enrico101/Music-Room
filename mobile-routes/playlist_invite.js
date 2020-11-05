@@ -28,7 +28,7 @@ router.post('/', (req, res) => {
     console.log("cover_image: ")
     if (username != undefined && owner_of_playlist != undefined && access_token != undefined && playlist_id != undefined && playlist_name != undefined && cover_image != undefined && room_name != undefined)
     {
-        var url = 'http://localhost:3003/get_playlist_invites';
+        var url = 'http://localhost:3003/api/get_playlist_invites';
 
         var request = unirest('GET', url);
         request.end((response) => {
@@ -53,7 +53,7 @@ router.post('/', (req, res) => {
                 }
                 else
                 {
-                    var url_2 = 'http://localhost:3003/add_playlist_invite';
+                    var url_2 = 'http://localhost:3003/api/post_playlist_invite';
 
                     var request_2 = unirest('POST', url_2).send({"playlist_id": playlist_id, "username_invite": username, "username": owner_of_playlist, "access_token": access_token, "cover_image": cover_image, "playlist_name": playlist_name, "room_name": room_name});
                     request_2.end((response_2) => {

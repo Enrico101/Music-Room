@@ -28,20 +28,29 @@ var get_playlist_invites = require('./server-routes/getPlaylistInvites');
 var add_playlist_invite = require('./server-routes/addPlaylistInvite');
 var get_my_playlist = require('./server-routes/get_my_playlists');
 const checkUser = require('./server-routes/checkUser');
+var update_playlist_privacy = require('./server-routes/update_playlist_privacy');
+var set_rights = require('./server-routes/set_rights');
+var get_rights = require('./server-routes/get_rights');
+var update_password = require('./server-routes/upate_password');
 
 app.set('view engine', 'ejs');
-app.use('/newUser', newUser);
-app.use('/verifyUser', verifyUser);
-app.use('/settings', settings);
-app.use('/add_playlist', addPlaylist);
-app.use('/get_playlist', getPlaylist);
-app.use('/get_my_playlist', get_my_playlist);
-app.use('/add_access_token', add_access_token);
-app.use('/get_access_token', get_access_token);
-app.use('/get_playlist_invites', get_playlist_invites);
-app.use('/add_playlist_invite', add_playlist_invite);
-app.use('/settings', settings); 
-app.use('/checkUser', checkUser);
+app.use('/api/post_user', newUser);
+app.use('/api/verifyUser', verifyUser);
+app.use('/api/settings', settings);
+app.use('/api/post_playlist', addPlaylist);
+app.use('/api/get_playlist', getPlaylist);
+app.use('/api/get_my_playlist', get_my_playlist);
+app.use('/api/post_access_token', add_access_token);
+app.use('/api/get_access_token', get_access_token);
+app.use('/api/get_playlist_invites', get_playlist_invites);
+app.use('/api/post_playlist_invite', add_playlist_invite);
+app.use('/api/settings', settings); 
+app.use('/api/checkUser', checkUser);
+app.use('/api/post_playlist_privacy', update_playlist_privacy);
+app.use('/api/post_rights', set_rights);
+app.use('/api/get_rights', get_rights);
+app.use('/api/post_new_password', update_password);
+
 
 app.listen(Port, (err) => {
     if (err)

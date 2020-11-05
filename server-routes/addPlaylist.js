@@ -15,17 +15,19 @@ router.post('/', (req, res) => {
     var playlist_creator = req.body.username;
     var privacy = req.body.privacy;
     var cover_image = req.body.cover_image;
+    var playlist_rights = req.body.playlist_rights;
 
     console.log("playlist_id: "+playlist_id);
     console.log("playlist_name: "+playlist_name);
     console.log("playlist_creator: "+playlist_creator);
     console.log("playlist privacy: "+privacy);
     console.log("cover_image: "+cover_image);
+    console.log("playlist_rights"+playlist_rights);
 
-    if (playlist_id != undefined && playlist_name != undefined && playlist_creator != undefined && privacy != undefined && cover_image != undefined)
+    if (playlist_id != undefined && playlist_name != undefined && playlist_creator != undefined && privacy != undefined && cover_image != undefined && playlist_rights != undefined)
     {
         console.log("Im in");
-        db.query("INSERT INTO playlist (id, username, playlist_name, privacy, cover_image) VALUES (?, ?, ?, ?, ?)", [parseInt(playlist_id), playlist_creator, playlist_name, privacy, cover_image], (err, succ) => {
+        db.query("INSERT INTO playlist (id, username, playlist_name, privacy, cover_image, playlist_rights) VALUES (?, ?, ?, ?, ?, ?)", [parseInt(playlist_id), playlist_creator, playlist_name, privacy, cover_image, playlist_rights], (err, succ) => {
             if (err)
             {
                 console.log("errL: "+err);

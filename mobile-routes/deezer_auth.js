@@ -27,7 +27,7 @@ router.get('/', (req, res) => {
             var secret = process.env.SECRET_KEY;
             var url = "https://connect.deezer.com/oauth/access_token.php?app_id="+app_id+"&secret="+secret+"&code="+deezer_code;
             var url_2 = "https://developers.deezer.com/api/explorer?url=user/me?access_token=";
-            var url_3 = "http://localhost:3003/add_access_token";
+            var url_3 = "http://localhost:3003/api/post_access_token";
 
             var request = unirest('GET', url);
             request.end((response) => {

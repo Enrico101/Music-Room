@@ -77,10 +77,10 @@
                         <div class="col-sm-11">
                             <form action="/my_music/playlist/tracks" method="post" style="width: auto;">
                                 <input type="hidden" name=<%=privacy_container_name%> value=<%=privacy_value%> id=<%=privacy_container_name%>>
-                                <input id="play_id" type="hidden" name="playlist_id" value=<%=playlists[x].id%>>
-                                <input id="cover" type="hidden" name="cover" value=<%=playlists[x].picture_small%>>
-                                <input id="room_name" type="hidden" name="room_name" value=<%=playlists[x].title%>>
-                                <input id="playlist_name" type="hidden" name="playlist_name" value=<%=playlists[x].title%>>
+                                <input type="hidden" name="playlist_id" value=<%=playlists[x].id%>>
+                                <input type="hidden" name="cover" value=<%=playlists[x].picture_small%>>
+                                <input type="hidden" name="room_name" value=<%=playlists[x].title%>>
+                                <input type="hidden" name="playlist_name" value=<%=playlists[x].title%>>
                                 <img src=<%=playlists[x].picture_small%>>
                                 <span style="margin-left: 10px; font-size: 15px; color: white; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; margin-top: -35px;"><%=playlists[x].title%></span>
                                 <!-- <input style="float: right; margin-top: 15px;" type="submit" name="submit" value="view playlist" class="btn btn-outline-light text-light btn-sm"> -->
@@ -99,10 +99,10 @@
                         <div class="col-sm-11">
                             <form action="/my_music/playlist/tracks" method="post" style="width: auto;">
                                 <input type="hidden" name=<%=privacy_container_name%> value=<%=privacy_value%> id=<%=privacy_container_name%>>
-                                <input id="play_id" type="hidden" name="playlist_id" value=<%=playlists[x].id%>>
-                                <input id="cover" type="hidden" name="cover" value=<%=playlists[x].picture_small%>>
-                                <input id="room_name" type="hidden" name="room_name" value=<%=playlists[x].title%>>
-                                <input id="playlist_name" type="hidden" name="playlist_name" value=<%=playlists[x].title%>>
+                                <input type="hidden" name="playlist_id" value=<%=playlists[x].id%>>
+                                <input type="hidden" name="cover" value=<%=playlists[x].picture_small%>>
+                                <input type="hidden" name="room_name" value=<%=playlists[x].title%>>
+                                <input type="hidden" name="playlist_name" value=<%=playlists[x].title%>>
                                 <img src=<%=playlists[x].picture_small%>>
                                 <span style="margin-left: 10px; font-size: 15px; color: white; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; margin-top: -35px;"><%=playlists[x].title%></span>
                                 <!-- <input style="float: right; margin-top: 15px;" type="submit" name="submit" value="view playlist" class="btn btn-outline-light text-light btn-sm"> -->
@@ -127,8 +127,8 @@
                 console.log("iM IN ");
                 var room_number = x;
                 var playlist_owner = global_playlist[x].username;
-                console.log("public: "+global_playlist[x].public);
-                if (global_playlist[x].public == "true")
+                console.log("public: "+global_playlist[x].privacy);
+                if (global_playlist[x].privacy == "Public")
                 {
     %>
                     <div class="row" style="margin-bottom: 10px;">

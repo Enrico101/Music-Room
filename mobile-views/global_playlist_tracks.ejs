@@ -53,14 +53,21 @@
     </nav>
     <div class="container-fluid">
         <br />
-        <div class="row">
-            <div class="col-sm-" style="margin: auto;">
-                <!-- Button to Open the Modal -->
-                <button type="button" type="button" class="btn btn-outline-light text-light btn-sm" data-toggle="modal" data-target="#myModal">
-                    Add song
-                </button>
-            </div>
-        </div>
+        <%
+            if (rights == "Add/Remove" || rights == "Add")
+            {
+        %>
+                <div class="row">
+                    <div class="col-sm-" style="margin: auto;">
+                        <!-- Button to Open the Modal -->
+                        <button type="button" type="button" class="btn btn-outline-light text-light btn-sm" data-toggle="modal" data-target="#myModal">
+                            Add song
+                        </button>
+                    </div>
+                </div>
+        <%
+            }
+        %>
         <br>
         <div id="list_tracks">
     <%
@@ -82,7 +89,14 @@
                             <span style="margin-left: 10px; font-size: 15px; color: white; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; margin-top: -35px;"><%=tracks.tracks.data[x].title%></span>
                             <!-- <input style="float: right; margin-top: 13px; width: 30px; height: 30px; filter: invert(100%);" type="image" name="submit" src="../sprites/Daco_5913043.png"> -->
                             <button type="submit" style="border:rgba(0, 0, 0, 0); background-color: rgba(0, 0, 0, 0); float: right; color: whitesmoke; margin-top: 13px; margin-right: 5px;"><i class="far fa-play-circle fa-2x"></i></button>
-                            <button type="button" style="border:rgba(0, 0, 0, 0); background-color: rgba(0, 0, 0, 0); float: right; color: whitesmoke; margin-top: 11px; margin-right: 5px;" onclick="delete_song(`<%=track_id%>`)";><i class="far fa-trash-alt fa-2x"></i></button>
+                            <%
+                                if (rights == "Add/Remove" || rights == "Remove")
+                                {
+                            %>
+                                <button type="button" style="border:rgba(0, 0, 0, 0); background-color: rgba(0, 0, 0, 0); float: right; color: whitesmoke; margin-top: 11px; margin-right: 5px;" onclick="delete_song(`<%=track_id%>`)";><i class="far fa-trash-alt fa-2x"></i></button>
+                            <%
+                                }
+                            %>
                         </form>
                     </div>
                 </div>
@@ -208,7 +222,15 @@
             {
                 var song = data.updated_playlist[x];
                 console.log("song_title: "+song.title);
-                div.innerHTML += `<div class="row" style="margin-bottom: 10px;"><div class="col-sm-11"><form action="/music_player" method="post" style="width: auto;"><input type="hidden" name="track_id" value=`+song.id+`><input type="hidden" name="track_title" value=`+song.title+`><input type="hidden" name="cover_image" value=`+song.album.cover_medium+`><img src=`+song.album.cover_small+`><span style="margin-left: 10px; font-size: 15px; color: white; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; margin-top: -35px;">`+song.title_short+`</span><button type="submit" style="border:rgba(0, 0, 0, 0); background-color: rgba(0, 0, 0, 0); float: right; color: whitesmoke; margin-top: 13px; margin-right: 5px;"><i class="far fa-play-circle fa-2x"></i></button><button type="button" style="border:rgba(0, 0, 0, 0); background-color: rgba(0, 0, 0, 0); float: right; color: whitesmoke; margin-top: 11px; margin-right: 5px;" onclick="delete_song('`+song.id+`')";><i class="far fa-trash-alt fa-2x"></i></button></form></div></div>`;
+                var rights = `<%=rights%>`;
+                if (rights == "Add/Remove" || rights == "Remove")
+                {
+                    div.innerHTML += `<div class="row" style="margin-bottom: 10px;"><div class="col-sm-11"><form action="/music_player" method="post" style="width: auto;"><input type="hidden" name="track_id" value=`+song.id+`><input type="hidden" name="track_title" value=`+song.title+`><input type="hidden" name="cover_image" value=`+song.album.cover_medium+`><img src=`+song.album.cover_small+`><span style="margin-left: 10px; font-size: 15px; color: white; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; margin-top: -35px;">`+song.title_short+`</span><button type="submit" style="border:rgba(0, 0, 0, 0); background-color: rgba(0, 0, 0, 0); float: right; color: whitesmoke; margin-top: 13px; margin-right: 5px;"><i class="far fa-play-circle fa-2x"></i></button><button type="button" style="border:rgba(0, 0, 0, 0); background-color: rgba(0, 0, 0, 0); float: right; color: whitesmoke; margin-top: 11px; margin-right: 5px;" onclick="delete_song('`+song.id+`')";><i class="far fa-trash-alt fa-2x"></i></button></form></div></div>`;
+                }
+                else
+                {
+                    div.innerHTML += `<div class="row" style="margin-bottom: 10px;"><div class="col-sm-11"><form action="/music_player" method="post" style="width: auto;"><input type="hidden" name="track_id" value=`+song.id+`><input type="hidden" name="track_title" value=`+song.title+`><input type="hidden" name="cover_image" value=`+song.album.cover_medium+`><img src=`+song.album.cover_small+`><span style="margin-left: 10px; font-size: 15px; color: white; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; margin-top: -35px;">`+song.title_short+`</span><button type="submit" style="border:rgba(0, 0, 0, 0); background-color: rgba(0, 0, 0, 0); float: right; color: whitesmoke; margin-top: 13px; margin-right: 5px;"><i class="far fa-play-circle fa-2x"></i></button></form></div></div>`;
+                }
                 //console.log("lookssss: "+song_name.title);
                 x++;
             }
@@ -223,7 +245,15 @@
             {
                 var song = data.updated_playlist[x];
                 console.log("song_title: "+song.title);
-                div.innerHTML += `<div class="row" style="margin-bottom: 10px;"><div class="col-sm-11"><form action="/music_player" method="post" style="width: auto;"><input type="hidden" name="track_id" value=`+song.id+`><input type="hidden" name="track_title" value=`+song.title+`><input type="hidden" name="cover_image" value=`+song.album.cover_medium+`><img src=`+song.album.cover_small+`><span style="margin-left: 10px; font-size: 15px; color: white; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; margin-top: -35px;">`+song.title_short+`</span><button type="submit" style="border:rgba(0, 0, 0, 0); background-color: rgba(0, 0, 0, 0); float: right; color: whitesmoke; margin-top: 13px; margin-right: 5px;"><i class="far fa-play-circle fa-2x"></i></button><button type="button" style="border:rgba(0, 0, 0, 0); background-color: rgba(0, 0, 0, 0); float: right; color: whitesmoke; margin-top: 11px; margin-right: 5px;" onclick="delete_song('`+song.id+`')";><i class="far fa-trash-alt fa-2x"></i></button></form></div></div>`;
+                var rights = `<%=rights%>`;
+                if (rights == "Add/Remove" || rights == "Remove")
+                {
+                    div.innerHTML += `<div class="row" style="margin-bottom: 10px;"><div class="col-sm-11"><form action="/music_player" method="post" style="width: auto;"><input type="hidden" name="track_id" value=`+song.id+`><input type="hidden" name="track_title" value=`+song.title+`><input type="hidden" name="cover_image" value=`+song.album.cover_medium+`><img src=`+song.album.cover_small+`><span style="margin-left: 10px; font-size: 15px; color: white; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; margin-top: -35px;">`+song.title_short+`</span><button type="submit" style="border:rgba(0, 0, 0, 0); background-color: rgba(0, 0, 0, 0); float: right; color: whitesmoke; margin-top: 13px; margin-right: 5px;"><i class="far fa-play-circle fa-2x"></i></button><button type="button" style="border:rgba(0, 0, 0, 0); background-color: rgba(0, 0, 0, 0); float: right; color: whitesmoke; margin-top: 11px; margin-right: 5px;" onclick="delete_song('`+song.id+`')";><i class="far fa-trash-alt fa-2x"></i></button></form></div></div>`;
+                }
+                else
+                {
+                    div.innerHTML += `<div class="row" style="margin-bottom: 10px;"><div class="col-sm-11"><form action="/music_player" method="post" style="width: auto;"><input type="hidden" name="track_id" value=`+song.id+`><input type="hidden" name="track_title" value=`+song.title+`><input type="hidden" name="cover_image" value=`+song.album.cover_medium+`><img src=`+song.album.cover_small+`><span style="margin-left: 10px; font-size: 15px; color: white; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; margin-top: -35px;">`+song.title_short+`</span><button type="submit" style="border:rgba(0, 0, 0, 0); background-color: rgba(0, 0, 0, 0); float: right; color: whitesmoke; margin-top: 13px; margin-right: 5px;"><i class="far fa-play-circle fa-2x"></i></button></form></div></div>`;
+                }
                 //console.log("lookssss: "+song_name.title);
                 x++;
             }

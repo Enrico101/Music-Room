@@ -59,7 +59,7 @@ router.post('/verify', (req, res) => {
     console.log("req.fingerprint.components.useragent.os ::: ", req.fingerprint.components.useragent.os.family + " " + req.fingerprint.components.useragent.os.major)
     if(validator.isEmpty(username) == false && validator.isEmpty(password) == false)
     {
-        var request = unirest('GET', 'http://localhost:3003/verifyUser').send({"username": username, "password": password, "uniqueToken": req.fingerprint.hash, "deviceOS": req.fingerprint.components.useragent.os.family + " " + req.fingerprint.components.useragent.os.major});
+        var request = unirest('GET', 'http://localhost:3003/api/verifyUser').send({"username": username, "password": password, "uniqueToken": req.fingerprint.hash, "deviceOS": req.fingerprint.components.useragent.os.family + " " + req.fingerprint.components.useragent.os.major});
 
         request.end((response) => {
             if (response)

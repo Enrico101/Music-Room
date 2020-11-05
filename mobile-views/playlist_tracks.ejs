@@ -28,6 +28,7 @@
         
         socket.emit('join_room', {room_number: room_name});
         //socket.emit('start_player', {track_id: `<%=tracks.tracks.data[0].id%>`});
+        var permission = {user: `<%=non_owner_name%>`, permission: "false"};
     </script>
   </head>
   <body style="background: linear-gradient(to right, #136a8a, #267871); border-radius: 6px; height: 120px;">
@@ -54,34 +55,206 @@
         </div>
     </nav>
     <div class="container-fluid">
-        <br>
-        <hr style="margin: 0px; width: 100%; margin: 0px">
-    <%
-        var x = 0;
+        <!-- Modal for adding songs -->
+        <br />
+        <%
+            if (playlist_rights == "Add/Remove" || playlist_rights == "Add")
+            {
+        %>
+                <div class="row">
+                    <div class="col-sm-" style="margin: auto;">
+                        <!-- Button to Open the Modal -->
+                        <button type="button" type="button" class="btn btn-outline-light text-light btn-sm" data-toggle="modal" data-target="#myModal_2">
+                            Add song
+                        </button>
+                    </div>
+                </div>
+        <%
+            }
+        %>
+        <div class="modal fade" id="myModal_2">
+            <div class="modal-dialog modal-dialog-scrollable" style="margin-top: 50px;">
+              <div class="modal-content" style="border-color: rgba(0, 0, 0, 0); background: rgba(0, 0, 0, 0)">
+                <div class="modal-header">
+                    <input class="form-control" id="song_name" type="text" oninput="enableSerachButton();" placeholder="Enter song_name">
+                    <br>
+                    <input style="margin-left: 10px;" class="btn btn-secondary" id="searchButton"type="button" onclick="sendSong();" value="search">
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                </div>
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div id="displayResults">
+                    </div>
+                </div>
+              </div>
+            </div>
+        </div>
+        <script>
+            function sendSong()
+            {
+            var song_name = document.getElementById("song_name").value;
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                var div = document.getElementById("displayResults");
+                var myArray = JSON.parse(this.responseText);
 
-        while (tracks.tracks.data[x])
-        {
-            var track_id = tracks.tracks.data[x].id;
-            var track_title = tracks.tracks.data[x].title;
-            var cover_image = tracks.tracks.data[x].album.cover_medium;
+                var x = 0;
+                div.innerHTML = "";
+                while (myArray[x])
+                {
+                    var song = myArray[x];
+
+                    div.innerHTML += `<br><img src=`+song.album.cover_small+`><span style="margin-left: 10px; color: white;">`+song.title_short+`</span><button class="btn btn-secondary btn-sm" style="float: right;" onclick="addSong(`+song.id+`);" type="button">Add song</button><br>`;
+                    //console.log("lookssss: "+song_name.title);
+                    x++;
+                }
+                }
+            };
+            xhttp.open('POST', 'http://localhost:3002/search/ajax/tracks', true);
+            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            var data = "song_name="+song_name;
+            xhttp.send(data);
+            }
+            function addSong(song_id)
+            {
+                console.log("song_id: "+song_id);
+                var room_number = `<%=room_name%>`;
+                var playlist_id = `<%=tracks.id%>`;
+                var access_token = `<%=owner_access_token%>`;
+
+                if (room_number != undefined && playlist_id != undefined && access_token != undefined)
+                {
+                    console.log("about to emit: add_song");
+                    socket.emit('add_song_2', {song_id: song_id, room_number: room_number, playlist_id: playlist_id, access_token: access_token});
+                }
+                else
+                {
+                    console.log("An error in omitting event: add_song");
+                }
+            }
+            function delete_song_2(song_id)
+            {
+                var room_number = `<%=room_name%>`;
+                var playlist_id = `<%=tracks.id%>`;
+                var access_token = `<%=owner_access_token%>`;
+
+                if (room_number != undefined && playlist_id != undefined && access_token != undefined)
+                {
+                    console.log("About to emit: deletSong");
+                    socket.emit('delete_song_2', {song_id: song_id, room_number: room_number, playlist_id: playlist_id, access_token: access_token});
+                }
+                else
+                {
+                    console.log("An error in ommitting event: delete_song");
+                }
+            }
+            socket.on('playlist_updated_2', (data) => {
+                var div = document.getElementById("list_tracks");
+                var x = 0;
+                console.log("gvhghgjhghghjg: "+data.updated_playlist[1].title);
+                div.innerHTML = "";
+                while (data.updated_playlist[x])
+                {
+                    var track_id = data.updated_playlist[x].id;
+                    var track_title = data.updated_playlist[x].title;
+                    var cover_image = data.updated_playlist[x].album.cover_small;
+                    var rights = `<%=playlist_rights%>`;
+                    if (rights == "Add/Remove" || rights == "Remove")
+                    {
+                        div.innerHTML += `<div class="row" style="margin-bottom: 0px;"><div class="col-sm-11"><button  onclick="change_track(`+track_id+`);" type="button" class="btn btn-primary btn-block" style="background-color: rgba(0, 0, 0, 0); border: 0px; margin-top: 0px; margin-bottom: 0px;"><input type="hidden" name="track_id" value=`+track_id+`><input type="hidden" name="track_title" value=`+track_title+`><input type="hidden" name="cover_image" value=`+cover_image+`><img src=`+cover_image+` style="border-radius: 0px; float: left; margin-right: 15px;"><span style="float: left; margin-top: 15px; font-size: 15px; color: white; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">`+track_title+`</span></button></div><div class="col-sm-12"><button type="button" style="border:rgba(0, 0, 0, 0); background-color: rgba(0, 0, 0, 0); float: right; color: whitesmoke; margin-top : -50px; margin-right: 5px;" onclick="delete_song_2(`+track_id+`)";><i class="far fa-trash-alt fa-2x"></i></button></div><hr style="margin: 0px; width: 100%; margin: 0px;"></div>`;
+                    }
+                    else
+                    {
+                        div.innerHTML += `<div class="row" style="margin-bottom: 0px;"><div class="col-sm-11"><button  onclick="change_track(`+track_id+`);" type="button" class="btn btn-primary btn-block" style="background-color: rgba(0, 0, 0, 0); border: 0px; margin-top: 0px; margin-bottom: 0px;"><input type="hidden" name="track_id" value=`+track_id+`><input type="hidden" name="track_title" value=`+track_title+`><input type="hidden" name="cover_image" value=`+cover_image+`><img src=`+cover_image+` style="border-radius: 0px; float: left; margin-right: 15px;"><span style="float: left; margin-top: 15px; font-size: 15px; color: white; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">`+track_title+`</span></button></div><div class="col-sm-12"></div><hr style="margin: 0px; width: 100%; margin: 0px;"></div>`;   
+                    }
+                    console.log("song title: "+data.updated_playlist[x].title);
+                    x++;
+                }
+            })
+            socket.on('deleted_song_playlist_updated_2', (data) => {
+                var div = document.getElementById("list_tracks");
+                console.log("song deleted");
+                var x = 0;
+                div.innerHTML = "";
+                //console.log("data: "+data.updated_playlist[x].title);
+                while (data.updated_playlist[x])
+                {
+                    var track_id = data.updated_playlist[x].id;
+                    var track_title = data.updated_playlist[x].title;
+                    var cover_image = data.updated_playlist[x].album.cover_small
+
+                    var rights = `<%=playlist_rights%>`;
+                    if (rights == "Add/Remove" || rights == "Remove")
+                    {
+                        div.innerHTML += `<div class="row" style="margin-bottom: 0px;"><div class="col-sm-11"><button  onclick="change_track(`+track_id+`);" type="button" class="btn btn-primary btn-block" style="background-color: rgba(0, 0, 0, 0); border: 0px; margin-top: 0px; margin-bottom: 0px;"><input type="hidden" name="track_id" value=`+track_id+`><input type="hidden" name="track_title" value=`+track_title+`><input type="hidden" name="cover_image" value=`+cover_image+`><img src=`+cover_image+` style="border-radius: 0px; float: left; margin-right: 15px;"><span style="float: left; margin-top: 15px; font-size: 15px; color: white; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">`+track_title+`</span></button></div><div class="col-sm-12"><button type="button" style="border:rgba(0, 0, 0, 0); background-color: rgba(0, 0, 0, 0); float: right; color: whitesmoke; margin-top : -50px; margin-right: 5px;" onclick="delete_song_2(`+track_id+`)";><i class="far fa-trash-alt fa-2x"></i></button></div><hr style="margin: 0px; width: 100%; margin: 0px;"></div>`;
+                    }
+                    else
+                    {
+                        div.innerHTML += `<div class="row" style="margin-bottom: 0px;"><div class="col-sm-11"><button  onclick="change_track(`+track_id+`);" type="button" class="btn btn-primary btn-block" style="background-color: rgba(0, 0, 0, 0); border: 0px; margin-top: 0px; margin-bottom: 0px;"><input type="hidden" name="track_id" value=`+track_id+`><input type="hidden" name="track_title" value=`+track_title+`><input type="hidden" name="cover_image" value=`+cover_image+`><img src=`+cover_image+` style="border-radius: 0px; float: left; margin-right: 15px;"><span style="float: left; margin-top: 15px; font-size: 15px; color: white; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;">`+track_title+`</span></button></div><div class="col-sm-12"></div><hr style="margin: 0px; width: 100%; margin: 0px;"></div>`;   
+                    }
+                    //console.log("lookssss: "+song_name.title);
+                    x++;
+                }
+            })
+        </script>
+        <!-------------------------------->
+        <div id="alert" class="row" style="margin: auto;">
+        </div>
+        <br>
+        <div class="row">
+            <hr style="margin: 0px; width: 100%; margin: 0px">
+        </div>
+        <div id="list_tracks">
+    <%
+            var x = 0;
+
+            while (tracks.tracks.data[x])
+            {
+                var track_id = tracks.tracks.data[x].id;
+                var track_title = tracks.tracks.data[x].title;
+                var cover_image = tracks.tracks.data[x].album.cover_medium;
     %>
-            <div class="row" style="margin-bottom: 0px;">
-                <div class="col-sm-11">
-                    <button  onclick="change_track(`<%=track_id%>`);" type="button" class="btn btn-primary btn-block" style="background-color: rgba(0, 0, 0, 0); border: 0px; margin-top: 0px; margin-bottom: 0px;">
-                        <input type="hidden" name="track_id" value=<%=track_id%>>
-                        <input type="hidden" name="track_title" value=<%=track_title%>>
-                        <input type="hidden" name="cover_image" value=<%=cover_image%>>
-                        <img src=<%=tracks.tracks.data[x].album.cover_small%> style="border-radius: 0px; float: left; margin-right: 15px;">
-                        <span style="float: left; margin-top: 15px; font-size: 15px; color: white; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;"><%=tracks.tracks.data[x].title%></span>
-                    </button>
+                <div class="row" style="margin-bottom: 0px;">
+                    <div class="col-sm-10">
+                        <button  onclick="change_track(`<%=track_id%>`);" type="button" class="btn btn-primary btn-block" style="background-color: rgba(0, 0, 0, 0); border: 0px; margin-top: 0px; margin-bottom: 0px;">
+                            <input type="hidden" name="track_id" value=<%=track_id%>>
+                            <input type="hidden" name="track_title" value=<%=track_title%>>
+                            <input type="hidden" name="cover_image" value=<%=cover_image%>>
+                            <img src=<%=tracks.tracks.data[x].album.cover_small%> style="border-radius: 0px; float: left; margin-right: 15px;">
+                            <span style="float: left; margin-top: 15px; font-size: 15px; color: white; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;"><%=tracks.tracks.data[x].title%></span>
+                        </button>
+                    </div>
+                    <%
+                        if (playlist_rights == "Add/Remove" || playlist_rights == "Remove")
+                        {
+                    %>
+                            <div class="col-sm-12">
+                                <button type="button" style="border:rgba(0, 0, 0, 0); background-color: rgba(0, 0, 0, 0); float: right; color: whitesmoke; margin-top : -50px; margin-right: 5px;" onclick="delete_song_2(`<%=track_id%>`)";><i class="far fa-trash-alt fa-2x"></i></button>
+                            </div>
+                    <%
+                        }
+                    %>
                     <hr style="margin: 0px; width: 100%; margin: 0px;">
                 </div>
-            </div>
     <%
-            x++;
-        }
+                x++;
+            }
      %>
+        </div>
     </div>
+    <%
+        if (owner == "false")
+        {
+    %>
+            <div id="request_button_div"class="row">
+                <button onclick="requestControl(`<%=owner_name%>`, `<%=non_owner_name%>`, `<%=room_name%>`);" style="margin: auto; margin-top: 20px;" class="btn btn-outline-light text-light btn-sm">
+                    Request to control
+                </button>
+            </div>
+    <% 
+        }
+    %>
     <br>
     <br>
     <br>
@@ -100,7 +273,7 @@
             <script>
                 console.log("screen width: "+screen.width);
                 DZ.init({
-                    appId  : '637500692',
+                    appId  : '443482',
                     channelUrl : 'http://localhost:3002/channel',
                     player: {
                         container: 'player',
@@ -126,15 +299,33 @@
                             shuffle: false,
                             volume: 100,
                         }
-                    };  
+                    };
+                function requestControl(owner_name, non_owner_name, room_name)
+                {
+                    document.getElementById('alert').innerHTML = `<div style="margin: auto;" class="alert alert-success alert-dismissible fade show"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Request sent!</strong></div>`;
+                    socket.emit('request_for_delegation', {owner_of_delegetion: owner_name, user_requesting_delegation: non_owner_name, room_name: room_name});
+                }  
                 function change_track(track_id)
                 {
                     var owner_of_playlist = `<%=owner%>`;
                     console.log("owner: "+owner_of_playlist);
-                    if (owner_of_playlist == "true")
+                    console.log("non owner permission: "+permission.permission);
+                    if (owner_of_playlist == "true" || permission.permission == "true")
                     {
                         socket.emit('change_track', {track_id: track_id, room_name: `<%=room_name%>`});
                     }
+                }
+                function grant_delegation(user_requested)
+                {
+                    console.log('user: '+user_requested);
+                    document.getElementById('alert').innerHTML = '';
+                    socket.emit('grant_delegation', {user: user_requested});
+                }
+                function deny_delegation(user)
+                {
+                    console.log("user: "+user);
+                    document.getElementById('alert').innerHTML = '';
+                    socket.emit('deny_delegation', {user: user});
                 }
                 socket.on('player_started', (data) => {
                     console.log("playing music in room right now");
@@ -148,9 +339,65 @@
                         });
                     });
                 })
+                socket.on('for_owner_regarding_delegation', (data) => {
+                    console.log("Event triggered");
+                    var is_owner = `<%=owner%>`
+                    if (is_owner == "true")
+                    {
+                        document.getElementById('alert').innerHTML = `<div style="margin: auto;" class="alert alert-light"><strong>User: `+data.user_requesting_delegation+` is requesting for control delegation</strong><br/><button style="margin-right: 10px;" class="btn btn-danger btn-small" onclick="deny_delegation('`+data.user_requesting_delegation+`')">No</button><button style="margin: auto;" class="btn btn-success btn-small" onclick="grant_delegation('`+data.user_requesting_delegation+`')">Yes</button></div>`;
+                        //socket.emit('change non owner permission', {room_name: data.room_name, non_owner_name: data.non_owner_name});
+                    }
+                    console.log("request recieved: "+data.user_requesting_delegation);
+                })
+                socket.on('delegation_granted', (data) => {
+                    console.log("user udshuahdus ua: "+data.user);
+                    var private_user = `<%=non_owner_name%>`;
+                    console.log("sdadsadsadsads  oojojo: "+permission.user);
+                    if (data.user == private_user)
+                    {
+                        if (permission.user == `<%=non_owner_name%>`)
+                        {
+                            document.getElementById('alert').innerHTML = `<div class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Success. The owner has granted you access to the control delegation</strong></div>`;
+                            document.getElementById('request_button_div').innerHTML = ''
+                            permission.permission = "true";
+                        }
+                    }
+                })
+                socket.on('delegation_denied', (data) => {
+                    console.log("user udshuahdus ua: "+data.user);
+                    var private_user = `<%=non_owner_name%>`;
+                    if (data.user == private_user)
+                    {
+                        document.getElementById('alert').innerHTML = `<div style="margin: auto;" class="alert alert-danger"><strong>You have been denied access to the control delegation</strong></div>`;
+                        permission.permission = "true";
+                    }
+                })
+                socket.on('new_rights', (data) => {
+                    console.log("new rights are: "+data.new_rights);
+                })
             </script>
         </div>
     </nav>
+    <!-- The Modal -->
+    <div class="modal fade" id="myModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="form-group">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <label for="sel1">Select rights:</label>
+                        <select class="form-control" id="sel">
+                          <option>Add/Remove</option>
+                          <option>Add</option>
+                          <option>Remove</option>
+                        </select>
+                      </div>
+                      <button onclick="setRights(document.getElementById('sel').value);" type="button" class="btn btn-primary btn-block" style="height: 38px;">Set</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <nav class="navbar navbar-expand-sm fixed-bottom justify-content-center" style="background-color: black; border-color: black;">
         <a href="/home"><i style="color: white; margin-right: 25px;" class="fas fa-home"></i></a>
         <a href="/search"><i style="color: white; margin-left: 25px; margin-right: 25px;" class="fas fa-search"></i></a>
@@ -161,6 +408,11 @@
         </button>
     </nav>
     <script>
+        function setRights(rights)
+        {
+            var playlist_id = `<%=tracks.id%>`
+            socket.emit('set_incoming_rights', {playlist_id: playlist_id, rights: rights});
+        }
         function changeColorLogin() {
             document.getElementById("loginLink").style.color = "#348F50";
         }

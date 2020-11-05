@@ -80,7 +80,7 @@ router.get('/change-password', redirectLogin, (req, res) => {
 router.post('/username', (req, res) => {
     let username = req.body.username;
     if(validator.isEmpty(username) == false && validator.isAlpha(username)) {
-        var request = unirest('GET', 'http://localhost:3003/settings/username').send({"username": username, "id": req.session.userId});
+        var request = unirest('GET', 'http://localhost:3003/api/settings/username').send({"username": username, "id": req.session.userId});
     
         request.end((response) => {
             if (response)
@@ -112,7 +112,7 @@ router.post('/username', (req, res) => {
 router.post('/email', (req, res) => {
     let email = req.body.email;
     if(validator.isEmpty(email) == false && validator.isEmail(email) == true) {
-        var request = unirest('GET', 'http://localhost:3003/settings/email').send({"email": email, "id": req.session.userId});
+        var request = unirest('GET', 'http://localhost:3003/api/settings/email').send({"email": email, "id": req.session.userId});
     
         request.end((response) => {
             if (response)
@@ -166,7 +166,7 @@ router.post('/password', (req, res) => {
             var salt_rounds = 5;
             var salt = bcrypt.genSaltSync(salt_rounds);
             var hash = bcrypt.hashSync(newPassword, salt);
-            var request = unirest('GET', 'http://localhost:3003/settings/password').send({"username": req.session.username, "oldPassword": oldPassword, "sessPass": req.session.password, "password": hash, "id": req.session.userId});
+            var request = unirest('GET', 'http://localhost:3003/api/settings/password').send({"username": req.session.username, "oldPassword": oldPassword, "sessPass": req.session.password, "password": hash, "id": req.session.userId});
 
             request.end((response) => {
                 if (response)
@@ -211,7 +211,7 @@ router.post('/set-profilePic', upload.single('myImage'), (req, res) => {
     if (req.file) {
         if (!req.session.photo) {
             const imageName = `/uploads/${req.file.filename}`;
-            var request = unirest('POST', 'http://localhost:3003/settings/profilePic').send({"image": imageName, "username": req.session.username, "id": req.session.userId, "update": false});
+            var request = unirest('POST', 'http://localhost:3003/api/settings/profilePic').send({"image": imageName, "username": req.session.username, "id": req.session.userId, "update": false});
     
             request.end((response) => {
                 if (response)
@@ -233,7 +233,7 @@ router.post('/set-profilePic', upload.single('myImage'), (req, res) => {
             })
         } else {
             const imageName = `/uploads/${req.file.filename}`;
-            var request = unirest('GET', 'http://localhost:3003/settings/profilePic').send({"image": imageName, "username": req.session.username, "id": req.session.userId, "update": true});
+            var request = unirest('GET', 'http://localhost:3003/api/settings/profilePic').send({"image": imageName, "username": req.session.username, "id": req.session.userId, "update": true});
     
             request.end((response) => {
                 if (response)

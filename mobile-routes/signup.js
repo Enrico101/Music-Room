@@ -30,7 +30,7 @@ router.post('/', (req, res) => {
         var salt_rounds = 5;
         var salt = bcrypt.genSaltSync(salt_rounds);
         var hash = bcrypt.hashSync(userRegistration.password, salt);
-        var request = unirest('POST', 'http://localhost:3003/newUser').send({"username": userRegistration.username, "email": userRegistration.email, "password": hash, "access_token": "Not_set"});
+        var request = unirest('POST', 'http://localhost:3003/api/post_user').send({"username": userRegistration.username, "email": userRegistration.email, "password": hash, "access_token": "Not_set"});
 
         request.end((response) => {
             if (response)
