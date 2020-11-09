@@ -32,6 +32,8 @@ var update_playlist_privacy = require('./server-routes/update_playlist_privacy')
 var set_rights = require('./server-routes/set_rights');
 var get_rights = require('./server-routes/get_rights');
 var update_password = require('./server-routes/upate_password');
+var deleteDevice = require('./server-routes/deleteDevice');
+var getUsers = require('./server-routes/getUsers');
 
 app.set('view engine', 'ejs');
 app.use('/api/post_user', newUser);
@@ -50,7 +52,8 @@ app.use('/api/post_playlist_privacy', update_playlist_privacy);
 app.use('/api/post_rights', set_rights);
 app.use('/api/get_rights', get_rights);
 app.use('/api/post_new_password', update_password);
-
+app.use('/api/deleteDevice', deleteDevice);
+app.use('/api/getUsers', getUsers);
 
 app.listen(Port, (err) => {
     if (err)

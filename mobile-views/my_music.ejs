@@ -39,6 +39,9 @@
                 <li class="nav-item">
                     <a id="signupLink" onclick="changeColorSignUp()" style="font-size: 30px; color: white; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;" class="nav-link" href="/About">About</a>
                 </li>
+                <li class="nav-item">
+                    <a id="logoutLink" onclick="changeColorLogout()" style="font-size: 30px; color: white; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;" class="nav-link" href="/logout">Logout</a>
+                </li>
             </ul>
             <br>
         </div>
@@ -198,6 +201,7 @@
         <a href="/home"><i style="color: white; margin-right: 25px;" class="fas fa-home"></i></a>
         <a href="/search"><i style="color: white; margin-left: 25px; margin-right: 25px;" class="fas fa-search"></i></a>
         <a href="/my_music"><i style="color: white; margin-left: 25px; margin-right: 25px;" class="fas fa-music"></i></a>
+        <a href="/settings"><i style="color: white; margin-left: 25px; margin-right: 25px;" class="fas fa-cog fa"></i></a>
     </nav>
     <script>
         var play_id, cover, playlist_name, room_name;
@@ -212,6 +216,9 @@
         }
         function changeColorSignUp() {
             document.getElementById("signupLink").style.color = "#348F50";
+        }
+        function changeColorLogout() {
+            document.getElementById("logoutLink").style.color = "#348F50";
         }
         function change_privacy(playlist_id, button_id, container_id, add_button_id, default_add_button_id)
         {

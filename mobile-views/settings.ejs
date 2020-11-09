@@ -19,6 +19,10 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
 
     <!-- Scrollmenu -->
+
+    <!-- <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> -->
     <style>
         .scrolling-wrapper {
             overflow: auto;
@@ -118,6 +122,10 @@
           .slider.round:before {
             border-radius: 50%;
           }
+
+          .card {
+              width: 100%;
+          }
         /*@media only screen and (max-width: 640px) {
             body {
               background-color: lightblue;
@@ -164,263 +172,235 @@
             <br>
         </div>
     </nav>    
-    <div class="container tempCont">
+    <div class="container">
         <div class="row">
-            <div class="col-3 settings">
-                <h3>Settings</h3><hr>
-                <a href="/settings/view-profile"><i class="fa fa-eye icon" title="View profile"></i>View profile</a><br>
-                <% if (data.isOauth === false) { %>
-                    <a href="/settings/edit-profile"><i class="fa fa-pencil icon" title="Edit profile"></i>Edit profile</a><br>
-                    <a href="/settings/change-password"><i class="fa fa-lock icon" title="Change password"></i>Change password</a><br>
-                <% } %>
-                <a href="/settings/privacy"><i class="fa fa-lock icon" title="Change password"></i>Privacy</a>
+            <div class="col-md-3 ">
+                <div class="list-group ">
+                    <a class="list-group-item list-group-item-action <%=((defaultView == 'View Profile') ? 'active' : '')%>" href="/settings/view-profile">View profile</a>
+                    <% if (data.isOauth === false) { %>
+                        <a class="list-group-item list-group-item-action <%=((defaultView == 'Edit Profile') ? 'active' : '')%>" href="/settings/edit-profile">Edit profile</a>
+                        <a class="list-group-item list-group-item-action <%=((defaultView == 'Change Password') ? 'active' : '')%>" href="/settings/change-password">Change password</a>
+                    <% } %>
+                    <a class="list-group-item list-group-item-action <%=((defaultView == 'Privacy') ? 'active' : '')%>" href="/settings/privacy">Privacy</a>
+                </div> 
             </div>
-            <% if (defaultView === 'View Profile') { %>
-                <div class="col-9 settings">
-                    <h3><%=defaultView%></h3><hr>
-                    <div class="row">
-                        
-                        <div class="col-4">
-                            <% if (!data.photo) {%>
-                                <img class="profilePic" src="https://clinicforspecialchildren.org/wp-content/uploads/2016/08/avatar-placeholder.gif" alt="profile image avatar"><hr>
-                            <% } else { %>
-                                <img class="profilePic" src="<%=data.photo%>" alt="profile image avatar"><hr>
-                            <% } %>
-                        </div>
-                        <div class="col-8">
-                            <!-- <div class="col-md-12">
-                                username:
-                            </div>
-                            <div class="col-md-12">
-                                username:
-                            </div>
-                            <div class="col-md-12">
-                                username:
-                            </div> -->
-                            <% if (error == true) { %>
-                                <% if (info != undefined) { %>
-                                    <div class="alert alert-danger" role="alert">
-                                        <%=info%>
-                                    </div>
-                                <% } %>
-                            <% } else { %>
-                                <% if (info != undefined) { %>
-                                    <div class="alert alert-success  d-flex justify-content-center regAlertTest" role="alert">
-                                        <%=info%>
-                                    </div>
-                                <% } %>
-                            <% } %>
-                            <div class="row">
-                                <div class="col-4 settingsView">
-                                  Username
-                                </div>
-                                <div class="col-1"></div>
-                                <div class="col-6 settingsView">
-                                  <%=data.username%>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-4 settingsView">
-                                    Email
-                                </div>
-                                <div class="col-1"></div>
-                                <div class="col-6 settingsView">
-                                    <%=data.email%>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            <% } else if (defaultView === 'Edit Profile') { %>
-                <% if (data.isOauth === false) { %>
-                    <div class="col-9 settings">
-                        <h3><%=defaultView%></h3><hr>
+            <div class="col-md-9">
+                <div class="card">
+                    <div class="card-body">
                         <div class="row">
-                            
-                            <div class="col-4">
-                                <% if (!data.photo) {%>
-                                    <img class="profilePic" src="https://clinicforspecialchildren.org/wp-content/uploads/2016/08/avatar-placeholder.gif" alt="profile image avatar">
-                                <% } else { %>
-                                    <img class="profilePic" src="<%=data.photo%>" alt="profile image avatar">
-                                <% } %>
-                                <form id="myform" class="form-container" action="/settings/set-profilePic" method="POST" enctype="multipart/form-data">
-                                    <input type="file" name="myImage">
-                                    <input type="submit" value="Upload">
-                                </form>
-                            </div>
-                            <div class="col-8">
-                                <% if (error == true) { %>
-                                    <% if (info != undefined) { %>
-                                        <div class="alert alert-danger" role="alert">
-                                            <%=info%>
-                                        </div>
-                                    <% } %>
-                                <% } else { %>
-                                    <% if (info != undefined) { %>
-                                        <div class="alert alert-success  d-flex justify-content-center regAlertTest" role="alert">
-                                            <%=info%>
-                                        </div>
-                                    <% } %>
-                                <% } %>
-                                <form action="/settings/username" method="post">
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-2">
-                                                <label for="username">Username</label>
-                                            </div>
-                                            <div class="col-md-8">
-                                                <input type="text" class="form-control" name="username" id="username" aria-describedby="userUsername" placeholder="<%=data.username%>">
-                                            </div>
-                                            <button type="submit" class="btn btn-primary">Update</button>
-                                        </div>
-                                    </div>
-                                </form>
-    
-                                <form action="/settings/email" method="post">
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-2">
-                                                <label for="email">Email address</label>
-                                            </div>
-                                            <div class="col-md-8">
-                                                <input type="email" class="form-control" name="email" id="email" aria-describedby="email" placeholder="<%=data.email%>">
-                                            </div>
-                                            <button type="submit" class="btn btn-primary">Update</button>
-                                        </div>
-                                    </div>
-                                </form>
+                            <div class="col-md-12">
+                                <h4><%=defaultView%></h4>
+                                <hr>
                             </div>
                         </div>
-                    </div>
-                <% } %>
-            <% } else if (defaultView === 'Change Password') { %>
-                <% if (data.isOauth === false) { %>
-                    <div class="col-9 settings">
-                        <h3><%=defaultView%></h3><hr>
                         <div class="row">
-                            <div class="col-12">
-                                <% if (error == true) { %>
-                                    <% if (info != undefined && typeof info == 'object') { %>
-                                        <div class="alert alert-danger" role="alert">
-                                            <ul>
-                                                <% info.forEach( (result) => { %>
-                                                    <li><%=result%></li>
-                                                <% }) %>
-                                            </ul>
-                                        </div>
+                            <% if (defaultView === 'View Profile') { %>
+                                <div class="col-md-12">
+                                    <% if (!data.photo) {%>
+                                        <img class="profilePic" src="https://clinicforspecialchildren.org/wp-content/uploads/2016/08/avatar-placeholder.gif" alt="profile image avatar"><hr>
                                     <% } else { %>
-                                        <div class="alert alert-danger" role="alert">
-                                            <%=info%>
+                                        <img class="profilePic" src="<%=data.photo%>" alt="profile image avatar"><hr>
+                                    <% } %>
+                                    
+                                    <% if (error == true) { %>
+                                        <% if (info != undefined) { %>
+                                            <div class="alert alert-danger" role="alert">
+                                                <%=info%>
+                                            </div>
+                                        <% } %>
+                                    <% } else { %>
+                                        <% if (info != undefined) { %>
+                                            <div class="alert alert-success  d-flex justify-content-center regAlertTest" role="alert">
+                                                <%=info%>
+                                            </div>
+                                        <% } %>
+                                    <% } %>
+                                    
+                                    <div class="form-group row">
+                                        <div class="col-4 col-form-label">Username</div>
+                                        <div class="col-8"><%=data.username%></div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <div class="col-4 col-form-label">Email</div>
+                                        <div class="col-8"><%=data.email%></div>
+                                    </div>
+                                </div>
+                                <% } else if (defaultView === 'Edit Profile') { %>
+                                    <div class="col-md-12">
+                                        <% if (data.isOauth === false) { %>
+                                            <% if (!data.photo) {%>
+                                                <img class="profilePic" src="https://clinicforspecialchildren.org/wp-content/uploads/2016/08/avatar-placeholder.gif" alt="profile image avatar">
+                                            <% } else { %>
+                                                <img class="profilePic" src="<%=data.photo%>" alt="profile image avatar">
+                                            <% } %>
+                                            <form id="myform" class="form-container" action="/settings/set-profilePic" method="POST" enctype="multipart/form-data">
+                                                <input type="file" name="myImage">
+                                                <input type="submit" value="Upload">
+                                            </form>
+                                            <hr>
+                                            <% if (error == true) { %>
+                                                <% if (info != undefined) { %>
+                                                    <div class="alert alert-danger" role="alert">
+                                                        <%=info%>
+                                                    </div>
+                                                <% } %>
+                                            <% } else { %>
+                                                <% if (info != undefined) { %>
+                                                    <div class="alert alert-success  d-flex justify-content-center regAlertTest" role="alert">
+                                                        <%=info%>
+                                                    </div>
+                                                <% } %>
+                                            <% } %>
+                                            <form action="/settings/username" method="post">
+                                                <div class="form-group">
+                                                    <div class="row">
+                                                        <div class="col-md-2">
+                                                            <label for="username">Username</label>
+                                                        </div>
+                                                        <div class="col-md-8">
+                                                            <input type="text" class="form-control here" name="username" id="username" aria-describedby="userUsername" placeholder="<%=data.username%>">
+                                                        </div>
+                                                        <button type="submit" class="btn btn-primary">Update</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                
+                                            <form action="/settings/email" method="post">
+                                                <div class="form-group">
+                                                    <div class="row">
+                                                        <div class="col-md-2">
+                                                            <label for="email">Email address</label>
+                                                        </div>
+                                                        <div class="col-md-8">
+                                                            <input type="email" class="form-control" name="email" id="email" aria-describedby="email" placeholder="<%=data.email%>">
+                                                        </div>
+                                                        <button type="submit" class="btn btn-primary">Update</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        <% } %>
+                                    </div>
+                                <% } else if (defaultView === 'Change Password') { %>
+                                    <% if (data.isOauth === false) { %>
+                                        <div class="col-12">
+                                            <% if (error == true) { %>
+                                                <% if (info != undefined && typeof info == 'object') { %>
+                                                    <div class="alert alert-danger" role="alert">
+                                                        <ul>
+                                                            <% info.forEach( (result) => { %>
+                                                                <li><%=result%></li>
+                                                            <% }) %>
+                                                        </ul>
+                                                    </div>
+                                                <% } else { %>
+                                                    <div class="alert alert-danger" role="alert">
+                                                        <%=info%>
+                                                    </div>
+                                                <% } %>
+                                            <% } else { %>
+                                                <% if (info != undefined) { %>
+                                                    <div class="alert alert-success  d-flex justify-content-center regAlertTest" role="alert">
+                                                        <%=info%>
+                                                    </div>
+                                                <% } %>
+                                            <% } %>
+                                            <form action="/settings/password" method="post">
+                                                <div class="form-group">
+                                                    <div class="row">
+                                                        <div class="col-md-2">
+                                                            <label for="oldPassword">Old Password</label>
+                                                            <!-- Last Name: -->
+                                                        </div>
+                                                        <div class="col-md-8">
+                                                            <input type="password" class="form-control" name="oldPassword" id="oldPassword" placeholder="Old Password">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="row">
+                                                        <div class="col-md-2">
+                                                            <label for="newPassword">New Password</label>
+                                                            <!-- Last Name: -->
+                                                        </div>
+                                                        <div class="col-md-8">
+                                                            <input type="password" class="form-control" name="newPassword" id="newPassword" placeholder="New Password">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="row">
+                                                        <div class="col-md-2">
+                                                            <label for="confPassword">Confirm Password</label>
+                                                            <!-- Last Name: -->
+                                                        </div>
+                                                        <div class="col-md-8">
+                                                            <input type="password" class="form-control" name="confPassword" id="confPassword" placeholder="Confirm Password">
+                                                        </div>
+                                                        <button type="submit" class="btn btn-primary">Update</button>
+                                                    </div>
+                                                </div>
+                                            </form>
                                         </div>
                                     <% } %>
                                 <% } else { %>
-                                    <% if (info != undefined) { %>
-                                        <div class="alert alert-success  d-flex justify-content-center regAlertTest" role="alert">
-                                            <%=info%>
-                                        </div>
-                                    <% } %>
+                                    <div class="col-12">    
+                                        <% if (!data.photo) {%>
+                                            <img class="profilePic" src="https://clinicforspecialchildren.org/wp-content/uploads/2016/08/avatar-placeholder.gif" alt="profile image avatar">
+                                        <% } else { %>
+                                            <img class="profilePic" src="<%=data.photo%>" alt="profile image avatar">
+                                        <% } %>
+                                        <hr>
+                                        
+                                        <% if (error == true) { %>
+                                            <% if (info != undefined) { %>
+                                                <div class="alert alert-danger" role="alert">
+                                                    <%=info%>
+                                                </div>
+                                            <% } %>
+                                        <% } else { %>
+                                            <% if (info != undefined) { %>
+                                                <div class="alert alert-success  d-flex justify-content-center regAlertTest" role="alert">
+                                                    <%=info%>
+                                                </div>
+                                            <% } %>
+                                        <% } %>
+                                        <form action="/settings/privacy" method="post">
+                                            <div class="form-group">
+                                                <div class="row">
+                                                    <div class="col-md-8" style="text-align: left;">
+                                                        <label for="privacy">Make info Public?</label><br>
+                                                        <label for="privacyFriend">Make information available only friends?</label>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <label class="switch">
+                                                            <input type="checkbox" id="privacy" name="privacyPublicToAll">
+                                                            <span class="slider round"></span>
+                                                        </label><br>
+                                                        <label class="switch">
+                                                            <input type="checkbox" id="privacyFriend" name="privacyPublicToFriend">
+                                                            <span class="slider round"></span>
+                                                        </label>
+                                                    </div>
+                                                    <button type="submit" class="btn btn-primary">Update</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
                                 <% } %>
-                                <form action="/settings/password" method="post">
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-2">
-                                                <label for="oldPassword">Old Password</label>
-                                                <!-- Last Name: -->
-                                            </div>
-                                            <div class="col-md-8">
-                                                <input type="password" class="form-control" name="oldPassword" id="oldPassword" placeholder="Old Password">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-2">
-                                                <label for="newPassword">New Password</label>
-                                                <!-- Last Name: -->
-                                            </div>
-                                            <div class="col-md-8">
-                                                <input type="password" class="form-control" name="newPassword" id="newPassword" placeholder="New Password">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-2">
-                                                <label for="confPassword">Confirm Password</label>
-                                                <!-- Last Name: -->
-                                            </div>
-                                            <div class="col-md-8">
-                                                <input type="password" class="form-control" name="confPassword" id="confPassword" placeholder="Confirm Password">
-                                            </div>
-                                            <button type="submit" class="btn btn-primary">Update</button>
-                                        </div>
-                                    </div>
-                                </form>
                             </div>
                         </div>
-                    </div>
-                <% } %>
-            <% } else { %>
-                <div class="col-9 settings">
-                    <h3><%=defaultView%></h3><hr>
-                    <div class="row">
                         
-                        <div class="col-4">
-                            <% if (!data.photo) {%>
-                                <img class="profilePic" src="https://clinicforspecialchildren.org/wp-content/uploads/2016/08/avatar-placeholder.gif" alt="profile image avatar">
-                            <% } else { %>
-                                <img class="profilePic" src="<%=data.photo%>" alt="profile image avatar">
-                            <% } %>
-                            <!-- <form id="myform" class="form-container" action="/settings/set-profilePic" method="POST" enctype="multipart/form-data">
-                                <input type="file" name="myImage">
-                                <input type="submit" value="Upload">
-                            </form> -->
-                        </div>
-                        <div class="col-8">
-                            <% if (error == true) { %>
-                                <% if (info != undefined) { %>
-                                    <div class="alert alert-danger" role="alert">
-                                        <%=info%>
-                                    </div>
-                                <% } %>
-                            <% } else { %>
-                                <% if (info != undefined) { %>
-                                    <div class="alert alert-success  d-flex justify-content-center regAlertTest" role="alert">
-                                        <%=info%>
-                                    </div>
-                                <% } %>
-                            <% } %>
-                            <form action="/settings/privacy" method="post">
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-md-8" style="text-align: left;">
-                                            <label for="privacy">Make info Public?</label><br>
-                                            <label for="privacyFriend">Make information available only friends?</label>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <label class="switch">
-                                                <input type="checkbox" id="privacy" name="privacyPublicToAll">
-                                                <span class="slider round"></span>
-                                            </label><br>
-                                            <label class="switch">
-                                                <input type="checkbox" id="privacyFriend" name="privacyPublicToFriend">
-                                                <span class="slider round"></span>
-                                            </label>
-                                        </div>
-                                        <button type="submit" class="btn btn-primary">Update</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
                     </div>
                 </div>
-            <% } %>
+            </div>
         </div>
     </div>
+
     <nav class="navbar navbar-expand-sm fixed-bottom justify-content-center" style="background-color: black; border-color: black;">
         <a href="/home"><i style="color: white; margin-right: 30px;" class="fas fa-home fa-2x"></i></a>
         <a href="/search"><i style="color: white; margin-left: 30px; margin-right: 30px;" class="fas fa-search fa-2x"></i></a>
-        <a href="playlist"><i style="color: white; margin-left: 30px;" class="fas fa-music fa-2x"></i></a>
+        <a href="/my_music"><i style="color: white; margin-left: 30px; margin-right: 30px;" class="fas fa-music fa-2x"></i></a>
         <a href="/settings"><i style="color: white; margin-left: 30px;" class="fas fa-cog fa-2x"></i></a>
     </nav>
     <script>

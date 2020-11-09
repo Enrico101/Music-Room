@@ -14,8 +14,8 @@ router.get('/', redirectDashboard, (req, res) => {
     var request = unirest('GET', 'http://localhost:3003/api/checkUser').send({"uniqueToken": req.fingerprint.hash, "deviceOS": req.fingerprint.components.useragent.os});
 
     request.end((response) => {
-        console.log(response.body);
         if (response) {
+            // console.log(response.body)
             if (response.body == 'An error has occured in Device Manager') {
                 req.session.deviceToken = req.fingerprint.hash;
                 req.session.deviceMakeAndModel = req.fingerprint.components.useragent.os;
@@ -28,11 +28,15 @@ router.get('/', redirectDashboard, (req, res) => {
                 req.session.deviceToken = req.fingerprint.hash;
                 req.session.deviceMakeAndModel = req.fingerprint.components.useragent.os;
                 return res.render('login');
-            } else if (response.body == 'The user logged in to more than one account') {
+            } else if (response.body.resp == 'The user logged in to more than one account') {
                 req.session.deviceToken = req.fingerprint.hash;
                 req.session.deviceMakeAndModel = req.fingerprint.components.useragent.os;
+                let user = req.session;
                 // display a popup that shows multiple accounts
-                return res.render('index');
+                return res.render('verifyUsersData', {
+                    data: user,
+                    users: response.body.result
+                });
             } else if (response.body == 'The user is not linked to an account') {
                 req.session.deviceToken = req.fingerprint.hash;
                 req.session.deviceMakeAndModel = req.fingerprint.components.useragent.os;
@@ -42,7 +46,7 @@ router.get('/', redirectDashboard, (req, res) => {
                 req.session.deviceMakeAndModel = req.fingerprint.components.useragent.os;
                 return res.render('index');
             } else {
-                req.session.userInfo = response.body;
+                /*req.session.userInfo = response.body;
                 req.session.userId = req.session.userInfo.user[0].id;
                 req.session.username = req.session.userInfo.user[0].username;
                 req.session.email = req.session.userInfo.user[0].email;
@@ -79,6 +83,14 @@ router.get('/', redirectDashboard, (req, res) => {
                     })              
                 }
                 //-----------------------------------------
+                */
+                req.session.deviceToken = req.fingerprint.hash;
+                req.session.deviceMakeAndModel = req.fingerprint.components.useragent.os;
+                let user = req.session;
+                return res.render('verifyUsersData', {
+                    data: user,
+                    users: response.body
+                });
             }
         }
     });

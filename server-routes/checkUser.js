@@ -19,7 +19,7 @@ router.get('/', (req, res) => {
         con.query(`SELECT * FROM deviceManager WHERE deviceToken = ?`, [uniqueToken], (err, result) => {
             if (err) return res.send(`An error has occured in Device Manager`);
             if (result.length === 1) {
-                con.query("SELECT * FROM users WHERE username = ?", [result[0].username], (err, user) => {
+                /*con.query("SELECT * FROM users WHERE username = ?", [result[0].username], (err, user) => {
                     if (err)
                         res.send("An error has occured in Users");
                     else if (user.length > 0)
@@ -34,10 +34,13 @@ router.get('/', (req, res) => {
                     {
                         res.send("No user found");
                     }
-                })
+                });*/
+                return res.send(result);
             }else if (result.length > 1)
             {
-                return res.send('The user logged in to more than one account');
+                // console.log('There are more than one users: ', result);
+                var resp = 'The user logged in to more than one account';
+                return res.send({resp, result});
             }else{
                 return res.send('The user is not linked to an account');
             }
