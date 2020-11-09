@@ -50,6 +50,10 @@ router.post('/playlist/tracks', (req, res) => {
             }
         })
     }
+    else
+    {
+        res.send("An error has occured");
+    }
 })
 router.post('/global_playlist/tracks', (req, res) => {
     var playlist_id = req.body.playlist_id;
@@ -90,6 +94,10 @@ router.post('/global_playlist/tracks', (req, res) => {
                 res.send("An error has occured");
             }
         })
+    }
+    else
+    {
+        res.send("An error occured");
     }
 })
 router.post('/private_playlist/tracks', (req, res) => {

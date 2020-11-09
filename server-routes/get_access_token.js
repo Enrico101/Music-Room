@@ -26,6 +26,10 @@ router.get('/:playlist_owner', (req, res) => {
             }
         })
     }
+    else
+    {
+        res.send('error');
+    }
 })
 
 module.exports = router;

@@ -32,12 +32,20 @@ router.post('/', redirectDashboard, (req, res) => {
             var url = 'http://localhost:3003/api/post_new_password';
             var request = unirest('POST', url).send({"password": hash, "email": email});
             request.end((response) => {
-                if (response.body == "succ")
+                if (response.body == "success")
                 {
                     res.redirect('login');
                 }
+                else
+                {
+                    res.redirect('http://localhost:3002/');
+                }
             })
         }
+    }
+    else
+    {
+        res.redirect('http://localhost:3002/');
     }
 })
 

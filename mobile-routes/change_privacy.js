@@ -61,6 +61,8 @@ router.post('/', (req, res) => {
             })
         }
     }
+    else
+        res.send('error');
 })
 
 module.exports = router;
