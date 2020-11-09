@@ -31,6 +31,9 @@ router.post('/', (req, res) => {
     var privacy = req.body.privacy; //check up on this
     var playlist_id = req.body.playlist_id;
 
+    console.log("track_title: "+track_title);
+    console.log("track_id: "+track_id);
+    console.log("cover_image: "+cover_image);
     if (playlist_id != undefined && track_id != undefined)
     {
         //this statement is triggered if the user once to add a track to a playlist.

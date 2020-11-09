@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Font awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+
+    <!-- Sokcet io-->
+    <script src = "/socket.io/socket.io.js"></script>
+  </head>
+  <body>
+      <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <a class="navbar-brand" href="#">Docs</a>
+      </nav>
+      <div class="container-fluid" style="padding-left: 40px; padding-right: 40px; padding-top: 20px;">
+          <div class="row">
+              <div class="col-sm-1">
+                  <h4 style="font-weight: 600;">Api's</h4>
+              </div>
+              <div class="col-sm-11">
+                  <p style="margin-top: 5px;">Everything needed to understand the sever</p>
+              </div>
+            </div>
+          <hr>
+          <div class="row" style="border: 1px solid green; border-radius: 8px; background-color: lightgreen; box-shadow: 100px;">
+            <div class="col-sm-1">
+                <button type="button" class="btn btn-success" style="margin-top: 6px;">POST</button>
+            </div>
+            <div class="col-sm-1">
+                <p style="font-weight: 600; margin-top: 11px;">/api/post_user</p>
+            </div>
+            <div class="col-sm-2">
+                <p style="font-weight: 0; margin-top: 11px; margin-left: 10px;">Used to add a new user</p>
+            </div>
+            <div class="col-sm-8">
+                <button class="btn btn-success" style="margin-top: 6px; float: right" data-toggle="collapse" data-target="#demo">View more</button>
+            </div>
+            <div class="row">
+                <div id="demo" class="collapse">
+                    <table class="table table-dark table-hover" style="margin-top: 5px; width: 500px; margin-left: 30px; border-radius: 10px;">
+                        <thead>
+                          <tr>
+                            <th>Body</th>
+                            <th>Succ response</th>
+                            <th>Error response</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>Parameters of username(string), password(string), email(string) are required</td>
+                            <td>Users has been added(string)</td>
+                            <td>Unkown error has occured(string)/ There are missing fields(string)/ Username already exists(string)</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                </div>
+            </div>
+          </div>
+          <br>
+          <div class="row" style="border: 1px solid blue; border-radius: 8px; background-color: lightblue; box-shadow: 100px;">
+            <div class="col-sm-1">
+                <button type="button" class="btn btn-primary" style="margin-top: 6px;">GET</button>
+            </div>
+            <div class="col-sm-1">
+                <p style="font-weight: 600; margin-top: 11px;">/api/verifyUser</p>
+            </div>
+            <div class="col-sm-3">
+                <p style="font-weight: 0; margin-top: 11px; margin-left: 10px;">Used to verify if a user has an account</p>
+            </div>
+            <div class="col-sm-7">
+                <button class="btn btn-primary" style="margin-top: 6px; float: right" data-toggle="collapse" data-target="#t2">View more</button>
+            </div>
+            <div class="row">
+                <div id="t2" class="collapse">
+                    <table class="table table-dark table-hover" style="margin-top: 5px; width: 500px; margin-left: 30px; border-radius: 10px;">
+                        <thead>
+                          <tr>
+                            <th>Body</th>
+                            <th>Succ response</th>
+                            <th>Error response</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>Parameters of username(string), password(string) are required</td>
+                            <td>An object containing the users account details(object)</td>
+                            <td>Unkown error has occured(string)/ Incorrect password(string)/ User accound does not exist(string)</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                </div>
+            </div>
+          </div>
+          <br>
+          <div class="row" style="border: 1px solid green; border-radius: 8px; background-color: lightgreen; box-shadow: 100px;">
+            <div class="col-sm-1">
+                <button type="button" class="btn btn-success" style="margin-top: 6px;">POST</button>
+            </div>
+            <div class="col-sm-1">
+                <p style="font-weight: 600; margin-top: 11px;">/api/post_playlist</p>
+            </div>
+            <div class="col-sm-4">
+                <p style="font-weight: 0; margin-top: 11px; margin-left: 26px;">Used to add a new playlist to a users accouns</p>
+            </div>
+            <div class="col-sm-6">
+                <button class="btn btn-success" style="margin-top: 6px; float: right" data-toggle="collapse" data-target="#t3">View more</button>
+            </div>
+            <div class="row">
+                <div id="t3" class="collapse">
+                    <table class="table table-dark table-hover" style="margin-top: 5px; width: 500px; margin-left: 30px; border-radius: 10px;">
+                        <thead>
+                          <tr>
+                            <th>Body</th>
+                            <th>Succ response</th>
+                            <th>Error response</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>Parameters of playlist_id(string), playlist_name(string), playlist_creator_name(string), privacy(string), cover_image_url(string), playlist_rights(string) are required</td>
+                            <td>Playlist data has been strored()string</td>
+                            <td>Unkown error has occured(string)/ Playlist data not stored due to an error(string)</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                </div>
+            </div>
+          </div>
+          <br>
+          <div class="row" style="border: 1px solid blue; border-radius: 8px; background-color: lightblue; box-shadow: 100px;">
+            <div class="col-sm-1">
+                <button type="button" class="btn btn-primary" style="margin-top: 6px;">GET</button>
+            </div>
+            <div class="col-sm-1">
+                <p style="font-weight: 600; margin-top: 11px;">/api/get_playlist</p>
+            </div>
+            <div class="col-sm-3">
+                <p style="font-weight: 0; margin-top: 11px; margin-left: 18px;">Used to get information on a playlist</p>
+            </div>
+            <div class="col-sm-7">
+                <button class="btn btn-primary" style="margin-top: 6px; float: right" data-toggle="collapse" data-target="#t4">View more</button>
+            </div>
+            <div class="row">
+                <div id="t4" class="collapse">
+                    <table class="table table-dark table-hover" style="margin-top: 5px; width: 500px; margin-left: 30px; border-radius: 10px;">
+                        <thead>
+                          <tr>
+                            <th>Body</th>
+                            <th>Succ response</th>
+                            <th>Error response</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>Parameters of username(string) are required</td>
+                            <td>An object containing the information about the playlist</td>
+                            <td>Unkown error has occured(string)/ No data found(string)</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                </div>
+            </div>
+          </div>
+          <br>
+          <div class="row" style="border: 1px solid blue; border-radius: 8px; background-color: lightblue; box-shadow: 100px;">
+            <div class="col-sm-1">
+                <button type="button" class="btn btn-primary" style="margin-top: 6px;">GET</button>
+            </div>
+            <div class="col-sm-1">
+                <p style="font-weight: 600; margin-top: 11px;">/api/get_my_playlist</p>
+            </div>
+            <div class="col-sm-3">
+                <p style="font-weight: 0; margin-top: 11px; margin-left: 45px;">Used to get current users playlists</p>
+            </div>
+            <div class="col-sm-7">
+                <button class="btn btn-primary" style="margin-top: 6px; float: right" data-toggle="collapse" data-target="#t5">View more</button>
+            </div>
+            <div class="row">
+                <div id="t5" class="collapse">
+                    <table class="table table-dark table-hover" style="margin-top: 5px; width: 500px; margin-left: 30px; border-radius: 10px;">
+                        <thead>
+                          <tr>
+                            <th>Body</th>
+                            <th>Succ response</th>
+                            <th>Error response</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>Parameters of username(string) are required</td>
+                            <td>An object containing the current users playlist details(object)</td>
+                            <td>Unkown error has occured(string)/ No data found(string)</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                </div>
+            </div>
+          </div>
+          <br>
+          <div class="row" style="border: 1px solid green; border-radius: 8px; background-color: lightgreen; box-shadow: 100px;">
+            <div class="col-sm-1">
+                <button type="button" class="btn btn-success" style="margin-top: 6px;">POST</button>
+            </div>
+            <div class="col-sm-1">
+                <p style="font-weight: 600; margin-top: 11px;">/api/post_access_token</p>
+            </div>
+            <div class="col-sm-4">
+                <p style="font-weight: 0; margin-top: 11px; margin-left: 66px;">Used to add an access token to a users account</p>
+            </div>
+            <div class="col-sm-6">
+                <button class="btn btn-success" style="margin-top: 6px; float: right" data-toggle="collapse" data-target="#t6">View more</button>
+            </div>
+            <div class="row">
+                <div id="t6" class="collapse">
+                    <table class="table table-dark table-hover" style="margin-top: 5px; width: 500px; margin-left: 30px; border-radius: 10px;">
+                        <thead>
+                          <tr>
+                            <th>Body</th>
+                            <th>Succ response</th>
+                            <th>Error response</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>username(string), access_token(string) are required</td>
+                            <td>Access token updated(string)</td>
+                            <td>Unkown error has occured(string)/ There are missing fields(string)</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                </div>
+            </div>
+          </div>
+          <br>
+          <div class="row" style="border: 1px solid blue; border-radius: 8px; background-color: lightblue; box-shadow: 100px;">
+            <div class="col-sm-1">
+                <button type="button" class="btn btn-primary" style="margin-top: 6px;">GET</button>
+            </div>
+            <div class="col-sm-1">
+                <p style="font-weight: 600; margin-top: 11px;">/api/get_access_token</p>
+            </div>
+            <div class="col-sm-4">
+                <p style="font-weight: 0; margin-top: 11px; margin-left: 65px;">Used to get a users access token</p>
+            </div>
+            <div class="col-sm-6">
+                <button class="btn btn-primary" style="margin-top: 6px; float: right" data-toggle="collapse" data-target="#t7">View more</button>
+            </div>
+            <div class="row">
+                <div id="t7" class="collapse">
+                    <table class="table table-dark table-hover" style="margin-top: 5px; width: 500px; margin-left: 30px; border-radius: 10px;">
+                        <thead>
+                          <tr>
+                            <th>Body</th>
+                            <th>Succ response</th>
+                            <th>Error response</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>Parameters of username(string) are required</td>
+                            <td>The access token(array)</td>
+                            <td>Unkown error has occured(string)</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                </div>
+            </div>
+          </div>
+          <br>
+          <div class="row" style="border: 1px solid blue; border-radius: 8px; background-color: lightblue; box-shadow: 100px;">
+            <div class="col-sm-1">
+                <button type="button" class="btn btn-primary" style="margin-top: 6px;">GET</button>
+            </div>
+            <div class="col-sm-1">
+                <p style="font-weight: 600; margin-top: 11px;">/api/get_playlist_invites</p>
+            </div>
+            <div class="col-sm-3">
+                <p style="font-weight: 0; margin-top: 11px; margin-left: 45px;">Used to get all the private playlists that a user was added to</p>
+            </div>
+            <div class="col-sm-7">
+                <button class="btn btn-primary" style="margin-top: 6px; float: right" data-toggle="collapse" data-target="#t8">View more</button>
+            </div>
+            <div class="row">
+                <div id="t8" class="collapse">
+                    <table class="table table-dark table-hover" style="margin-top: 5px; width: 500px; margin-left: 30px; border-radius: 10px;">
+                        <thead>
+                          <tr>
+                            <th>Body</th>
+                            <th>Succ response</th>
+                            <th>Error response</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>Parameters of username(string) are required</td>
+                            <td>An array containing all the playlist invites</td>
+                            <td>Unkown error has occured(string)/ No data found(string)</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                </div>
+            </div>
+          </div>
+          <br>
+          <div class="row" style="border: 1px solid green; border-radius: 8px; background-color: lightgreen; box-shadow: 100px;">
+            <div class="col-sm-1">
+                <button type="button" class="btn btn-success" style="margin-top: 6px;">POST</button>
+            </div>
+            <div class="col-sm-1">
+                <p style="font-weight: 600; margin-top: 11px;">/api/post_playlist_invite</p>
+            </div>
+            <div class="col-sm-4">
+                <p style="font-weight: 0; margin-top: 11px; margin-left: 66px;">Used to add a playlist invite</p>
+            </div>
+            <div class="col-sm-6">
+                <button class="btn btn-success" style="margin-top: 6px; float: right" data-toggle="collapse" data-target="#t9">View more</button>
+            </div>
+            <div class="row">
+                <div id="t9" class="collapse">
+                    <table class="table table-dark table-hover" style="margin-top: 5px; width: 500px; margin-left: 30px; border-radius: 10px;">
+                        <thead>
+                          <tr>
+                            <th>Body</th>
+                            <th>Succ response</th>
+                            <th>Error response</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>username_invite(string), username(string), , playlist_id(string), cover_image(string), playlist_name(string), room_name(string), access_token(string) are required</td>
+                            <td>Data posted(string)</td>
+                            <td>Unkown error has occured(string)/ There are missing fields(string)</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                </div>
+            </div>
+          </div>
+          <br>
+          <div class="row" style="border: 1px solid green; border-radius: 8px; background-color: lightgreen; box-shadow: 100px;">
+            <div class="col-sm-1">
+                <button type="button" class="btn btn-success" style="margin-top: 6px;">POST</button>
+            </div>
+            <div class="col-sm-1">
+                <p style="font-weight: 600; margin-top: 11px;">/api/post_playlist_privacy</p>
+            </div>
+            <div class="col-sm-4">
+                <p style="font-weight: 0; margin-top: 11px; margin-left: 66px;">Used to update the privacy of a playlist</p>
+            </div>
+            <div class="col-sm-6">
+                <button class="btn btn-success" style="margin-top: 6px; float: right" data-toggle="collapse" data-target="#t10">View more</button>
+            </div>
+            <div class="row">
+                <div id="t10" class="collapse">
+                    <table class="table table-dark table-hover" style="margin-top: 5px; width: 500px; margin-left: 30px; border-radius: 10px;">
+                        <thead>
+                          <tr>
+                            <th>Body</th>
+                            <th>Succ response</th>
+                            <th>Error response</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>playlist_privacy(string), playlist_id(string) are required</td>
+                            <td>Playlist privacu has been updated(string)</td>
+                            <td>Unkown error has occured(string)</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                </div>
+            </div>
+          </div>
+          <br>
+          <div class="row" style="border: 1px solid green; border-radius: 8px; background-color: lightgreen; box-shadow: 100px;">
+            <div class="col-sm-1">
+                <button type="button" class="btn btn-success" style="margin-top: 6px;">POST</button>
+            </div>
+            <div class="col-sm-1">
+                <p style="font-weight: 600; margin-top: 11px;">/api/post_rights</p>
+            </div>
+            <div class="col-sm-4">
+                <p style="font-weight: 0; margin-top: 11px; margin-left: 66px;">Used to update the editing rights of users on a playlist</p>
+            </div>
+            <div class="col-sm-6">
+                <button class="btn btn-success" style="margin-top: 6px; float: right" data-toggle="collapse" data-target="#t11">View more</button>
+            </div>
+            <div class="row">
+                <div id="t11" class="collapse">
+                    <table class="table table-dark table-hover" style="margin-top: 5px; width: 500px; margin-left: 30px; border-radius: 10px;">
+                        <thead>
+                          <tr>
+                            <th>Body</th>
+                            <th>Succ response</th>
+                            <th>Error response</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>playlist_id(string), rights(string) are required</td>
+                            <td>rights have been updated(string)</td>
+                            <td>Unkown error has occured(string)</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                </div>
+            </div>
+          </div>
+          <br>
+          <div class="row" style="border: 1px solid blue; border-radius: 8px; background-color: lightblue; box-shadow: 100px;">
+            <div class="col-sm-1">
+                <button type="button" class="btn btn-primary" style="margin-top: 6px;">GET</button>
+            </div>
+            <div class="col-sm-1">
+                <p style="font-weight: 600; margin-top: 11px;">/api/get_rights</p>
+            </div>
+            <div class="col-sm-3">
+                <p style="font-weight: 0; margin-top: 11px; margin-left: 45px;">Used to get the editing rights of a playlist</p>
+            </div>
+            <div class="col-sm-7">
+                <button class="btn btn-primary" style="margin-top: 6px; float: right" data-toggle="collapse" data-target="#t12">View more</button>
+            </div>
+            <div class="row">
+                <div id="t12" class="collapse">
+                    <table class="table table-dark table-hover" style="margin-top: 5px; width: 500px; margin-left: 30px; border-radius: 10px;">
+                        <thead>
+                          <tr>
+                            <th>Body</th>
+                            <th>Succ response</th>
+                            <th>Error response</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>Parameters of paylist_id(string) are required</td>
+                            <td>An array of the rights to the playlists</td>
+                            <td>Unable to retrieve playlist rights(string)</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                </div>
+            </div>
+          </div>
+          <br>
+          <div class="row" style="border: 1px solid green; border-radius: 8px; background-color: lightgreen; box-shadow: 100px;">
+            <div class="col-sm-1">
+                <button type="button" class="btn btn-success" style="margin-top: 6px;">POST</button>
+            </div>
+            <div class="col-sm-1">
+                <p style="font-weight: 600; margin-top: 11px;">/api/post_new_password</p>
+            </div>
+            <div class="col-sm-4">
+                <p style="font-weight: 0; margin-top: 11px; margin-left: 56px;">Used to update the password if a user forgets there password</p>
+            </div>
+            <div class="col-sm-6">
+                <button class="btn btn-success" style="margin-top: 6px; float: right" data-toggle="collapse" data-target="#t13">View more</button>
+            </div>
+            <div class="row">
+                <div id="t13" class="collapse">
+                    <table class="table table-dark table-hover" style="margin-top: 5px; width: 500px; margin-left: 30px; border-radius: 10px;">
+                        <thead>
+                          <tr>
+                            <th>Body</th>
+                            <th>Succ response</th>
+                            <th>Error response</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>Parameters of playlist_id(string), email(string) are required</td>
+                            <td>success(string)</td>
+                            <td>error(string)</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                </div>
+            </div>
+          </div>
+      </div>
+  </body>
+</html>

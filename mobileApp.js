@@ -87,6 +87,8 @@ var playlist_invite = require('./mobile-routes/playlist_invite');
 var forgot_password = require('./mobile-routes/forgot_password');
 var verifyUser = require('./mobile-routes/verifyUsers');
 var getUser = require('./mobile-routes/getUser');
+var reset_pass = require('./mobile-routes/reset_password');
+
 
 
 app.use(index);
@@ -108,6 +110,7 @@ app.use('/forgot_password', forgot_password);
 app.use('/verifyUsers', verifyUser);
 app.use('/getUser', getUser);
 
+app.use('/reset_password', reset_pass);
 
 var server = app.listen(Port, (err) => {
     if (err)

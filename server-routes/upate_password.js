@@ -2,6 +2,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var db = require('../database')
 var validator = require('validator');
+var util = require('util');
 
 router = express.Router();
 
@@ -17,7 +18,7 @@ router.post('/', (req, res) => {
     console.log("email: "+email);
     if (password != undefined && email != undefined)
     {
-        db.query("UPDATE users SET password = ? WHERE email = ?;", [password, email], (err, succ) => {
+        db.query("UPDATE users SET password = ? WHERE email = ?", [password, email], (err, succ) => {
             if (err)
             {
                 console.log("err: "+err);
@@ -25,7 +26,7 @@ router.post('/', (req, res) => {
             }
             else
             {
-                console.log("succcccccc: "+succ);
+                console.log("lookdsadsa: "+util.inspect(succ));
                 res.send("success");
             }
         })

@@ -5,6 +5,7 @@ var unirest = require('unirest');
 var validator = require('validator');
 const nodemailer = require("nodemailer");
 var bodyParser = require('body-parser');
+var bcrypt = require('bcrypt-nodejs');
 
 router = express.Router();
 
@@ -13,7 +14,7 @@ router.use(bodyParser.urlencoded({
 }));
 
 router.get('/', redirectDashboard, (req, res) => {
-    res.render('reste_password', {});
+    res.render('reset_password');
 })
 
 router.post('/', redirectDashboard, (req, res) => {
@@ -26,13 +27,18 @@ router.post('/', redirectDashboard, (req, res) => {
         {
             var salt_rounds = 5;
             var salt = bcrypt.genSaltSync(salt_rounds);
-            var hash = bcrypt.hashSync(userRegistration.password, salt);
+            var hash = bcrypt.hashSync(password, salt);
 
             var url = 'http://localhost:3003/api/post_new_password';
             var request = unirest('POST', url).send({"password": hash, "email": email});
             request.end((response) => {
-
+                if (response.body == "succ")
+                {
+                    res.redirect('login');
+                }
             })
         }
     }
 })
+
+module.exports = router;

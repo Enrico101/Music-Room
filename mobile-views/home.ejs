@@ -34,7 +34,9 @@
             {
                 //tracks.innerHTML += '<a>'+data.data[x].title+'</a>';
                 //tracks.innerHTML += '<img src="'+data.data[x].artist.picture+'">'
-                tracks.innerHTML += `<div class="card" style="background-color: rgba(0, 0, 0, 0); border-color: rgba(0, 0, 0, 0);"><form action="/music_player" method="POST"><input type="hidden" value="`+data.data[x].artist.picture_big+`" name="cover_image"><input type="hidden" name="track" value="`+data.data[x].preview+`"><input type="image" name="submit" class="shadow-lg p-3 bg-white mb-5" src="`+data.data[x].artist.picture_medium+`"></form><br/><p style="font-size: 30px; color: white; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;"">`+data.data[x].title+`</p></div>`
+                console.log('track_tdadsa: '+data.data[x].title);
+                console.log("track_idkdlks: "+data.data[x].id);
+                tracks.innerHTML += `<div class="card" style="background-color: rgba(0, 0, 0, 0); border-color: rgba(0, 0, 0, 0);"><form action="/music_player" method="POST"><input type="hidden" value="`+data.data[x].album.cover_medium+`" name="cover_image"><input type="hidden" value="`+data.data[x].title+`" name="track_title"><input type="hidden" name="track_id" value="`+data.data[x].id+`"><input type="image" name="submit" class="shadow-lg p-3 bg-white mb-5" src="`+data.data[x].artist.picture_medium+`"></form><br/><p style="font-size: 30px; color: white; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;"">`+data.data[x].title+`</p></div>`
                 x++;
             }
             closeSignal++;

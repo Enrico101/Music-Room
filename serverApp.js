@@ -34,6 +34,8 @@ var get_rights = require('./server-routes/get_rights');
 var update_password = require('./server-routes/upate_password');
 var deleteDevice = require('./server-routes/deleteDevice');
 var getUsers = require('./server-routes/getUsers');
+var path = require('path');
+var docs = require('./server-routes/docs');
 
 app.set('view engine', 'ejs');
 app.use('/api/post_user', newUser);
@@ -54,6 +56,10 @@ app.use('/api/get_rights', get_rights);
 app.use('/api/post_new_password', update_password);
 app.use('/api/deleteDevice', deleteDevice);
 app.use('/api/getUsers', getUsers);
+app.use('/docs', docs);
+
+app.set('views', path.join(__dirname, 'server-views'));
+app.set('view engine', 'ejs');
 
 app.listen(Port, (err) => {
     if (err)
