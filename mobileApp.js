@@ -85,6 +85,8 @@ const { response } = require('express');
 var change_privacy = require('./mobile-routes/change_privacy');
 var playlist_invite = require('./mobile-routes/playlist_invite');
 var forgot_password = require('./mobile-routes/forgot_password');
+var reset_pass = require('./mobile-routes/reset_password');
+
 
 
 app.use(index);
@@ -103,6 +105,7 @@ app.use('/settings', settings);
 app.use('/change_privacy', change_privacy);
 app.use('/playlist_invite', playlist_invite);
 app.use('/forgot_password', forgot_password);
+app.use('/reset_password', reset_pass);
 
 var server = app.listen(Port, (err) => {
     if (err)
