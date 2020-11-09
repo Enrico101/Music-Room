@@ -10,38 +10,32 @@ var staffSql = "CREATE TABLE staff (username varchar(500) NOT NULL, password var
 conInit.query(`CREATE DATABASE IF NOT EXISTS musicroom`, (err, result) => {
     if (err) throw err;
     console.log('Musicroom database created');
-});
-
-con.query(userSql, (err, result) => {
-    if (err) throw err;
-    console.log("Users Table created");
-});
-
-con.query(imagesSql, (err, result) => {
-    if (err) throw err;
-    console.log("images Table created");
-});
-
-con.query(playlistSql, (err, result) => {
-    if (err) throw err;
-    console.log("playlist table created");
-});
-
-con.query(playlistInvitesSql, (err, result) => {
-    if (err) throw err;
-    console.log("playlist invites table created");
-})
-
-con.query(deviceSql, (err, result) => {
-    if (err) throw err;
-    console.log("Device Manager table created");
-});
-
-con.query(staffSql, (err, result) => {
-    if (err) throw err;
-    console.log("Staff table created, inserting auto users");
-    con.query("INSERT INTO staff (username, password) VALUES (?, ?)", ["admin, admin"], (err, succ) => {
+    con.query(userSql, (err, result) => {
         if (err) throw err;
-        console.log("Default user inserted");
-    })
-})
+        console.log("Users Table created");
+        con.query(imagesSql, (err, result) => {
+            if (err) throw err;
+            console.log("images Table created");
+            con.query(playlistSql, (err, result) => {
+                if (err) throw err;
+                console.log("playlist table created");
+                con.query(playlistInvitesSql, (err, result) => {
+                    if (err) throw err;
+                    console.log("playlist invites table created");
+                    con.query(deviceSql, (err, result) => {
+                        if (err) throw err;
+                        console.log("Device Manager table created");
+                        con.query(staffSql, (err, result) => {
+                            if (err) throw err;
+                            console.log("Staff table created, inserting auto users");
+                            con.query("INSERT INTO staff (username, password) VALUES (?, ?)", ["admin, admin"], (err, succ) => {
+                                if (err) throw err;
+                                console.log("Default user inserted");
+                            })
+                        })
+                    });
+                })
+            });
+        });
+    });
+});
