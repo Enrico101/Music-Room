@@ -57,7 +57,7 @@ router.get('/:username', (req, res) => {
                     var url_2 = "https://developers.deezer.com/api/explorer?url=user/me?access_token=";
                     var request_2 = unirest('GET', url_2+req.session.access_token);
                     request_2.end((response_2) => {
-                        req.session.userDeezerId = response_2.body.id;
+                        // req.session.userDeezerId = response_2.body.id;
                         res.redirect('/home');
                     })              
                 }

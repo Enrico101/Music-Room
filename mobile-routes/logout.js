@@ -5,7 +5,6 @@ var unirest = require('unirest');
 
 router.get('/', redirectLogin,  (req, res) => {
     let username = req.session.username;
-    console.log("SUPER USER: ",username)
     req.session.destroy( (err) => {
         if (err) return res.redirect('/home');
         var request = unirest('GET', 'http://localhost:3003/api/deleteDevice').send({"uniqueToken": req.fingerprint.hash, "deviceOS": req.fingerprint.components.useragent.os.family + " " + req.fingerprint.components.useragent.os.major, "username": username});
