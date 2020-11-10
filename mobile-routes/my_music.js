@@ -107,7 +107,7 @@ router.post('/private_playlist/tracks', (req, res) => {
 
     if (playlist_id != undefined && room_number != undefined && playlist_owner != undefined)
     {
-        var url_1 = 'http://localhost:3003/get_playlist_invites'
+        var url_1 = 'http://localhost:3003/api/get_playlist_invites'
         var owner_access_token_url = 'http://localhost:3003/api/get_access_token/'+playlist_owner;
         var get_rights = 'http://localhost:3003/api/get_rights/'+playlist_id;
 
@@ -123,7 +123,8 @@ router.post('/private_playlist/tracks', (req, res) => {
                         var x = 0;
                         var list = response_1.body;
                         
-                        while (list[x])
+                        console.log("white: "+util.inspect(list));
+                        /*while (list[x])
                         {
                             if (list[x].invited_user == req.session.username && list[x].playlist_id == playlist_id)
                             {
@@ -144,7 +145,7 @@ router.post('/private_playlist/tracks', (req, res) => {
                             {
                                 res.send("An error has occured");
                             }
-                        })
+                        })*/
                     })
                 })
             }
